@@ -1,0 +1,20 @@
+[
+  {
+    "enemy_uid": 1,
+    "enemy_type": "spider_web",
+    "item_sub_id": 1,
+    "name": "spider_web_1",
+    "desc": "A magic spider web",
+    "health": 1,
+    "award": "/"
+  },
+  {
+    "enemy_uid": 2,
+    "enemy_type": "spider",
+    "item_sub_id": 1,
+    "name": "spider",
+    "desc": "A powerul spider web",
+    "health": 1,
+    "award": "/"
+  }
+]

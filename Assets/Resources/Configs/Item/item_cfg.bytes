@@ -1,0 +1,56 @@
+[
+  {
+    "item_uid": 1,
+    "item_type": "book",
+    "item_sub_id": 1,
+    "name": "book_1",
+    "desc": "A magic book",
+    "accessbility": "princess",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 2,
+    "item_type": "pedal_switch",
+    "item_sub_id": 1,
+    "name": "pedal_princess",
+    "desc": "Pedal switch for princess",
+    "accessbility": "princess",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 3,
+    "item_type": "pedal_switch",
+    "item_sub_id": 2,
+    "name": "pedal_knight",
+    "desc": "Pedal switch for knight",
+    "accessbility": "knight",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 4,
+    "item_type": "gate",
+    "item_sub_id": 1,
+    "name": "gate_left",
+    "desc": "The left half of the gate",
+    "accessbility": "both",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 5,
+    "item_type": "gate",
+    "item_sub_id": 2,
+    "name": "gate_right",
+    "desc": "The right half of the gate",
+    "accessbility": "both",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 6,
+    "item_type": "spider_web",
+    "item_sub_id": 1,
+    "name": "spider_web_1",
+    "desc": "Spider web",
+    "accessbility": "knight",
+    "init_interactable": "no"
+  }
+]

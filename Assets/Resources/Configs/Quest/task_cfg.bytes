@@ -1,0 +1,41 @@
+[
+  {
+    "task_chain_id": 1,
+    "task_sub_id": 1,
+    "assign": "princess",
+    "icon": "default",
+    "desc": "Read the book",
+    "start_action": "[\n  {\n    \"type\": \"item\",\n    \"uid\":\"1\",\n    \"interactable\": true\n  }\n]",
+    "end_action": "[]",
+    "task_target": "read_book",
+    "target_amount": 1,
+    "award": "/",
+    "open_chain": "/"
+  },
+  {
+    "task_chain_id": 1,
+    "task_sub_id": 2,
+    "assign": "both",
+    "icon": "default",
+    "desc": "Unlock the gate",
+    "start_action": "[\n  {\n    \"type\": \"item\",\n    \"uid\":\"2\",\n    \"interactable\": true\n  },\n  {\n    \"type\": \"item\",\n    \"uid\":\"3\",\n    \"interactable\": true\n  }\n]",
+    "end_action": "[]",
+    "task_target": "unlock_gate",
+    "target_amount": 2,
+    "award": "/",
+    "open_chain": "2|1"
+  },
+  {
+    "task_chain_id": 2,
+    "task_sub_id": 1,
+    "assign": "knight",
+    "icon": "default",
+    "desc": "Open the gate",
+    "start_action": "[\n  {\n    \"type\": \"item\",\n    \"uid\":\"6\",\n    \"interactable\": true\n  }\n]",
+    "end_action": "[]",
+    "task_target": "open_gate",
+    "target_amount": 1,
+    "award": "/",
+    "open_chain": "/"
+  }
+]

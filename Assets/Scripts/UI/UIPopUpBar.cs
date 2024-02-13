@@ -10,7 +10,7 @@ using UnityEngine;
 namespace UI
 {
     [UISaveDic(false)]
-    [UILayer(UIPanelLayer.TopBar)]
+    [UILayer(UIPanelLayer.PopUp)]
     public class UIPopUpBar : UIBase
     {
         [SerializeField]
@@ -28,6 +28,15 @@ namespace UI
         public override void OnUIDisable()
         {
             gameObject.SetActive(false);
+        }
+
+        public override void SetData(object data)
+        {
+            base.SetData(data);
+            if (data is string)
+            {
+                SetPopUpText((string)data);
+            }
         }
 
         public void SetPopUpText(string text)

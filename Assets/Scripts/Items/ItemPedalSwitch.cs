@@ -20,14 +20,14 @@ namespace Items
         {
             Debug.Log("ItemPedalSwitch OnNetworkSpawn");
             SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe("ItemSetInteractableEvent", DoItemSetInteractableEventServer);
+            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             emissionPlne.SetActive(false);
             base.OnNetworkSpawn();
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe("ItemSetInteractableEvent", DoItemSetInteractableEventServer);
+            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkDespawn();
         }
 

@@ -12,19 +12,17 @@ namespace Items
     {
         public int item_uid;
         public ItemType item_type;
-        public FixedString32Bytes item_type_name;
         public int item_sub_id;
-        public FixedString32Bytes name;
-        public FixedString128Bytes desc;
+        public ForceNetworkSerializeByMemcpy<FixedString32Bytes> name;
+        public ForceNetworkSerializeByMemcpy<FixedString128Bytes> desc;
         public ItemAccessbility accessbility;
-        public FixedString32Bytes init_interactable;
+        public ForceNetworkSerializeByMemcpy<FixedString32Bytes> init_interactable;
         public bool interactable;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref item_uid);
             serializer.SerializeValue(ref item_type);
-            serializer.SerializeValue(ref item_type_name);
             serializer.SerializeValue(ref item_sub_id);
             serializer.SerializeValue(ref name);
             serializer.SerializeValue(ref desc);
@@ -66,12 +64,12 @@ namespace Items
                 //itemDataItem.item_type_name = itemCfgItem.item_type_name;
                 itemDataItem.item_type = (ItemType)Enum.Parse(typeof(ItemType), itemCfgItem.item_type);
                 itemDataItem.item_sub_id = itemCfgItem.item_sub_id;
-                itemDataItem.name = itemCfgItem.name;
-                itemDataItem.desc = itemCfgItem.desc;
+                itemDataItem.name = new FixedString32Bytes(itemCfgItem.name);
+                itemDataItem.desc = new FixedString128Bytes(itemCfgItem.desc);
                 //itemDataItem.accessbility = itemCfgItem.accessbility;
                 itemDataItem.accessbility = (ItemAccessbility)Enum.Parse(typeof(ItemAccessbility), itemCfgItem.accessbility);
-                itemDataItem.init_interactable = itemCfgItem.init_interactable;
-                if(itemDataItem.init_interactable == "yes")
+                itemDataItem.init_interactable = new FixedString32Bytes(itemCfgItem.init_interactable);
+                if (itemDataItem.init_interactable.Value.ToString() == "yes")
                 {
                     itemDataItem.interactable = true;
                 }

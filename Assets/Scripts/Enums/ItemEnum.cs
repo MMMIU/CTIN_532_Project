@@ -6,6 +6,7 @@ namespace Items
         pedal_switch = 1,
         gate = 2,
         spider_web = 3,
+        key = 4,
     }
 
     public enum ItemAccessbility

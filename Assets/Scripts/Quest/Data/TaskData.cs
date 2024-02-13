@@ -22,16 +22,8 @@ namespace Quest
         public int task_chain_id;
         // task sub id
         public int task_sub_id;
-        // desc
-        public FixedString128Bytes desc;
-        // assign
-        public FixedString32Bytes assign;
-        // target amount
-        public int target_amout;
         // progress
         public int progress;
-        // has award
-        public bool hasAward;
         // 0 = not get, 1 = get
         public int completed;
 
@@ -39,12 +31,17 @@ namespace Quest
         {
             serializer.SerializeValue(ref task_chain_id);
             serializer.SerializeValue(ref task_sub_id);
-            serializer.SerializeValue(ref desc);
-            serializer.SerializeValue(ref assign);
-            serializer.SerializeValue(ref target_amout);
             serializer.SerializeValue(ref progress);
-            serializer.SerializeValue(ref hasAward);
             serializer.SerializeValue(ref completed);
+        }
+
+        public bool HasAward
+        {
+            get
+            {
+                var cfg = TaskCfg.Instance.GetCfgItem(task_chain_id, task_sub_id);
+                return !string.IsNullOrEmpty(cfg.award) && cfg.award != "/";
+            }
         }
     }
 
@@ -65,7 +62,7 @@ namespace Quest
         /// <summary>
         /// add or update task data
         /// </summary>
-        public void AddOrUpdateData(TaskDataItem itemData)
+        public void AddOrUpdateData(TaskDataItem itemData, int delayRound)
         {
             bool isUpdate = false;
             for (int i = 0, cnt = m_taskDatas.Count; i < cnt; ++i)
@@ -84,7 +81,7 @@ namespace Quest
             {
                 Debug.Log("AddOrUpdateData " + itemData.task_chain_id + " " + itemData.task_sub_id);
                 m_taskDatas.Add(itemData);
-                new TaskAssignEvent(itemData);
+                new TaskAssignEvent(itemData, delayRound);
             }
             // sort, ensure main chain is first
             m_taskDatas.Sort((a, b) =>

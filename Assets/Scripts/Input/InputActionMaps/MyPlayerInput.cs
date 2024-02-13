@@ -109,6 +109,15 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpecialSkillOne"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e9fde9e-a414-473b-b5a7-4211a5338f46"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -298,6 +307,17 @@ namespace UnityEngine.InputSystem
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e0c23ae-d7dc-4982-b6f3-5265b5d517e9"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SpecialSkillOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -403,6 +423,24 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ESC"",
+                    ""type"": ""Button"",
+                    ""id"": ""2ecaa053-05f1-4bfc-9352-27b276dbe8f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""VCamMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""8789a0da-51af-43e0-877d-4fdc732aba9f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -614,6 +652,116 @@ namespace UnityEngine.InputSystem
                     ""action"": ""CloseTaskPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""369221c8-467d-48ea-9558-078be8ce0291"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ESC"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""32898c33-e112-46da-b443-2b167831bd22"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c4862457-9b64-4516-9c3c-4c9df57980de"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""15864fee-1c0a-4eed-bf5c-d7385af6793f"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""4ffd41e9-c2b0-4d21-b598-39d389c011f7"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""8430d68e-fa60-4d53-8e0f-5462d95be42e"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2b29b25c-4a2c-43c2-b06e-eca1c8d82183"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""e87c03a7-2a59-4c25-80fe-a4848a90644b"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""22da7dc4-c526-47dd-859c-36fa014f517e"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""d5b5bcf7-88a8-4dd3-a8b4-479c9e0ca86d"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""VCamMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -648,6 +796,7 @@ namespace UnityEngine.InputSystem
             m_Player_OpenDevPanel = m_Player.FindAction("OpenDevPanel", throwIfNotFound: true);
             m_Player_OpenQuestPanel = m_Player.FindAction("OpenQuestPanel", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+            m_Player_SpecialSkillOne = m_Player.FindAction("SpecialSkillOne", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -661,6 +810,8 @@ namespace UnityEngine.InputSystem
             m_UI_CloseUIPanel = m_UI.FindAction("CloseUIPanel", throwIfNotFound: true);
             m_UI_CloseDevPanel = m_UI.FindAction("CloseDevPanel", throwIfNotFound: true);
             m_UI_CloseTaskPanel = m_UI.FindAction("CloseTaskPanel", throwIfNotFound: true);
+            m_UI_ESC = m_UI.FindAction("ESC", throwIfNotFound: true);
+            m_UI_VCamMove = m_UI.FindAction("VCamMove", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -731,6 +882,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_OpenDevPanel;
         private readonly InputAction m_Player_OpenQuestPanel;
         private readonly InputAction m_Player_Jump;
+        private readonly InputAction m_Player_SpecialSkillOne;
         public struct PlayerActions
         {
             private @MyPlayerInput m_Wrapper;
@@ -744,6 +896,7 @@ namespace UnityEngine.InputSystem
             public InputAction @OpenDevPanel => m_Wrapper.m_Player_OpenDevPanel;
             public InputAction @OpenQuestPanel => m_Wrapper.m_Player_OpenQuestPanel;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
+            public InputAction @SpecialSkillOne => m_Wrapper.m_Player_SpecialSkillOne;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -780,6 +933,9 @@ namespace UnityEngine.InputSystem
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @SpecialSkillOne.started += instance.OnSpecialSkillOne;
+                @SpecialSkillOne.performed += instance.OnSpecialSkillOne;
+                @SpecialSkillOne.canceled += instance.OnSpecialSkillOne;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -811,6 +967,9 @@ namespace UnityEngine.InputSystem
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @SpecialSkillOne.started -= instance.OnSpecialSkillOne;
+                @SpecialSkillOne.performed -= instance.OnSpecialSkillOne;
+                @SpecialSkillOne.canceled -= instance.OnSpecialSkillOne;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -843,6 +1002,8 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_UI_CloseUIPanel;
         private readonly InputAction m_UI_CloseDevPanel;
         private readonly InputAction m_UI_CloseTaskPanel;
+        private readonly InputAction m_UI_ESC;
+        private readonly InputAction m_UI_VCamMove;
         public struct UIActions
         {
             private @MyPlayerInput m_Wrapper;
@@ -858,6 +1019,8 @@ namespace UnityEngine.InputSystem
             public InputAction @CloseUIPanel => m_Wrapper.m_UI_CloseUIPanel;
             public InputAction @CloseDevPanel => m_Wrapper.m_UI_CloseDevPanel;
             public InputAction @CloseTaskPanel => m_Wrapper.m_UI_CloseTaskPanel;
+            public InputAction @ESC => m_Wrapper.m_UI_ESC;
+            public InputAction @VCamMove => m_Wrapper.m_UI_VCamMove;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -900,6 +1063,12 @@ namespace UnityEngine.InputSystem
                 @CloseTaskPanel.started += instance.OnCloseTaskPanel;
                 @CloseTaskPanel.performed += instance.OnCloseTaskPanel;
                 @CloseTaskPanel.canceled += instance.OnCloseTaskPanel;
+                @ESC.started += instance.OnESC;
+                @ESC.performed += instance.OnESC;
+                @ESC.canceled += instance.OnESC;
+                @VCamMove.started += instance.OnVCamMove;
+                @VCamMove.performed += instance.OnVCamMove;
+                @VCamMove.canceled += instance.OnVCamMove;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -937,6 +1106,12 @@ namespace UnityEngine.InputSystem
                 @CloseTaskPanel.started -= instance.OnCloseTaskPanel;
                 @CloseTaskPanel.performed -= instance.OnCloseTaskPanel;
                 @CloseTaskPanel.canceled -= instance.OnCloseTaskPanel;
+                @ESC.started -= instance.OnESC;
+                @ESC.performed -= instance.OnESC;
+                @ESC.canceled -= instance.OnESC;
+                @VCamMove.started -= instance.OnVCamMove;
+                @VCamMove.performed -= instance.OnVCamMove;
+                @VCamMove.canceled -= instance.OnVCamMove;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -974,6 +1149,7 @@ namespace UnityEngine.InputSystem
             void OnOpenDevPanel(InputAction.CallbackContext context);
             void OnOpenQuestPanel(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnSpecialSkillOne(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {
@@ -988,6 +1164,8 @@ namespace UnityEngine.InputSystem
             void OnCloseUIPanel(InputAction.CallbackContext context);
             void OnCloseDevPanel(InputAction.CallbackContext context);
             void OnCloseTaskPanel(InputAction.CallbackContext context);
+            void OnESC(InputAction.CallbackContext context);
+            void OnVCamMove(InputAction.CallbackContext context);
         }
     }
 }

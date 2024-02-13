@@ -1,10 +1,12 @@
 using Events;
+using Manager;
 using Managers;
 using Players;
 using Quest;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
@@ -18,13 +20,13 @@ namespace Items
         {
             Debug.Log("ItemBookOne OnNetworkSpawn");
             SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe("ItemSetInteractableEvent", DoItemSetInteractableEventServer);
+            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkSpawn();
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe("ItemSetInteractableEvent", DoItemSetInteractableEventServer);
+            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkDespawn();
         }
 
@@ -66,8 +68,8 @@ namespace Items
 
         private void OnInteract()
         {
-            QuestManager.Instance.AddProgressServerRpc(1, 1, 1);
             SetInteractableServerRpc(false);
+            UIManager.Instance.OpenPanel<UIBookReadPanel>();
         }
     }
 }

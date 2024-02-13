@@ -19,7 +19,6 @@ namespace Manager
         public List<UIBase> blockPanelStack = null;
 
         public Dictionary<Type, UIBase> panelDic = null;
-
         public Canvas Canvas { get; private set; }
 
         private static UIManager instance = null;
@@ -84,6 +83,18 @@ namespace Manager
             Debug.Log("UIManager Init");
         }
 
+        private void OnEnable()
+        {
+            Debug.Log("UIManager OnEnable");
+            inputReader.EscEvent += ShowPausePanel;
+        }
+
+        private void OnDisable()
+        {
+            Debug.Log("UIManager OnDisable");
+            inputReader.EscEvent -= ShowPausePanel;
+        }
+
         private void OnDestroy()
         {
             if (Camera.main != null)
@@ -91,6 +102,17 @@ namespace Manager
                 var cameraData = Camera.main.GetUniversalAdditionalCameraData();
                 cameraData.cameraStack.Remove(UICamera);
             }
+        }
+
+        public void DelayOpenPanel<T>(float delay, object data = null) where T : UIBase
+        {
+            StartCoroutine(DelayOpenPanelCoroutine<T>(delay, data));
+        }
+
+        private IEnumerator DelayOpenPanelCoroutine<T>(float delay, object data = null) where T : UIBase
+        {
+            yield return new WaitForSeconds(delay);
+            OpenPanel<T>(data);
         }
 
         public T OpenPanel<T>(object data = null) where T : UIBase
@@ -234,11 +256,11 @@ namespace Manager
 
         public void Destroy(UIBase panel)
         {
-            panel?.OnUIDestroy();
             if (panelDic.ContainsValue(panel))
             {
                 panelDic.Remove(panel.GetType());
             }
+            panel?.OnUIDestroy();
         }
 
         public void CloseAndDestroyAll()
@@ -271,9 +293,12 @@ namespace Manager
             callback?.Invoke();
         }
 
-        public void OpenNotification()
+        private void ShowPausePanel()
         {
-
+            if(blockPanelStack.Count == 0)
+            {
+                OpenPanel<UIPauseMenu>();
+            }
         }
     }
 

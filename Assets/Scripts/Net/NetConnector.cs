@@ -88,16 +88,18 @@ public class NetConnector : MonoBehaviour
         if (result)
         {
             Debug.Log("Client started");
+            new JoinCodeAssignEvent(true, joinCode);
             return true;
         }
         else
         {
             Debug.Log("Client failed to start");
+            new JoinCodeAssignEvent(false, "Client failed to start");
             return false;
         }
     }
 
-    public async Task<string> StartHost()
+    public async Task<bool> StartHost()
     {
         if (!useInternet)
         {
@@ -105,24 +107,26 @@ public class NetConnector : MonoBehaviour
             if (NetworkManager.Singleton.StartHost())
             {
                 Debug.Log("Host started");
-                return "Host started";
+                return true;
             }
             else
             {
                 Debug.Log("Host failed to start");
-                return "Host failed to start";
+                return false;
             }
         }
         string code = await StartHostWithRelay();
         if (code != null)
         {
             Debug.Log("Host started");
-            return code;
+            new JoinCodeAssignEvent(true, code);
+            return true;
         }
         else
         {
             Debug.Log("Host failed to start");
-            return "Host failed to start";
+            new JoinCodeAssignEvent(false, "Host failed to start");
+            return false;
         }
     }
 

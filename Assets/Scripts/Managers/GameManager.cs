@@ -25,6 +25,9 @@ namespace Managers
         // player
         [SerializeField]
         Player localPlayer;
+        [SerializeField]
+        string localPlayerName;
+        public string LocalPlayerName { get => localPlayerName; set => localPlayerName = value; }
         public Player LocalPlayer { get => localPlayer; set => localPlayer = value; }
 
         private static GameManager instance;
@@ -49,6 +52,7 @@ namespace Managers
             {
                 UIManager.Instance.OpenPanel<UIDev>();
             }
+            UIManager.Instance.OpenPanel<UIStartMenu>();
         }
 
         private void Update()

@@ -44,57 +44,47 @@ namespace Quest
         {
             foreach (var item in m_taskData.taskDatas)
             {
-                Debug.Log("Task: " + item.task_chain_id + " " + item.task_sub_id + " " + item.progress + " " + item.assign);
+                Debug.Log("Task: " + item.task_chain_id + " " + item.task_sub_id + " " + item.progress);
             }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void AssignTaskServerRpc(int chainId, int subId)
+        public void AssignTaskServerRpc(int chainId, int subId, int delayRound = 0)
         {
+            Debug.Log("QuestManager.AssignTask(" + chainId + ", " + subId + ")");
             var newCfg = TaskCfg.Instance.GetCfgItem(chainId, subId);
-            AssignTaskServerRpc(newCfg);
-        }
-
-        [ServerRpc]
-        public void AssignTaskServerRpc(TaskCfgItem newCfg)
-        {
-            Debug.Log("QuestManager.AssignTask(" + newCfg.task_chain_id + ", " + newCfg.task_sub_id + ")");
             if (newCfg != null)
             {
                 TaskDataItem dataItem = new();
                 dataItem.task_chain_id = newCfg.task_chain_id;
                 dataItem.task_sub_id = newCfg.task_sub_id;
-                dataItem.desc = newCfg.desc;
-                dataItem.assign = newCfg.assign;
-                dataItem.target_amout = newCfg.target_amount;
                 dataItem.progress = 0;
-                dataItem.hasAward = !string.IsNullOrEmpty(newCfg.award.ToString()) && newCfg.award.ToString() != "/";
                 dataItem.completed = 0;
                 DoStartActionClientRpc(newCfg.start_action.ToString());
 
                 // add or update task data
-                AddOrUpdateTaskDataServerRpc(dataItem);
+                AddOrUpdateTaskDataServerRpc(dataItem, delayRound);
             }
         }
 
         [ServerRpc]
-        public void AddOrUpdateTaskDataServerRpc(TaskDataItem taskDataItem)
+        public void AddOrUpdateTaskDataServerRpc(TaskDataItem taskDataItem, int delayRond = 0)
         {
             Debug.Log("QuestManager.AddOrUpdateTaskDataServerRpc(" + taskDataItem.task_chain_id + ", " + taskDataItem.task_sub_id + ")");
             if (taskDataItem != null)
             {
-                m_taskData.AddOrUpdateData(taskDataItem);
-                AddOrUpdateTaskDataClientRpc(taskDataItem);
+                m_taskData.AddOrUpdateData(taskDataItem, delayRond);
+                AddOrUpdateTaskDataClientRpc(taskDataItem, delayRond);
             }
         }
 
         [ClientRpc]
-        private void AddOrUpdateTaskDataClientRpc(TaskDataItem taskDataItem)
+        private void AddOrUpdateTaskDataClientRpc(TaskDataItem taskDataItem, int delayRound)
         {
             Debug.Log("QuestManager.AddOrUpdateTaskDataClientRpc(" + taskDataItem.task_chain_id + ", " + taskDataItem.task_sub_id + ")");
             if (taskDataItem != null)
             {
-                m_taskData.AddOrUpdateData(taskDataItem);
+                m_taskData.AddOrUpdateData(taskDataItem, delayRound);
             }
         }
 
@@ -150,7 +140,7 @@ namespace Quest
                 {
                     Debug.Log("Task complete: " + data.task_chain_id + " " + data.task_sub_id);
                     // if data has no award, process to completion
-                    if (!data.hasAward)
+                    if (!data.HasAward)
                         GetAwardServerRpc(data.task_chain_id, data.task_sub_id);
                 }
             }
@@ -195,23 +185,23 @@ namespace Quest
             data.completed = 1;
             AddOrUpdateTaskDataServerRpc(data);
             GoNextServerRpc(chainId, subId);
-            var cfg = TaskCfg.Instance.GetCfgItem(data.task_chain_id, data.task_sub_id);
-            if (cfg == null)
-            {
-                Debug.LogError("TaskCfg.instance.GetCfgItem(" + data.task_chain_id + ", " + data.task_sub_id + ") is null");
-            }
-            else
-            {
-                GetAwardClientRpc(cfg);
-            }
+            GetAwardClientRpc(data.task_chain_id, data.task_sub_id);
         }
 
         [ClientRpc]
-        public void GetAwardClientRpc(TaskCfgItem taskCfg)
+        public void GetAwardClientRpc(int chain, int sub)
         {
-            Debug.Log("QuestManager.GetAwardClientRpc(" + taskCfg.task_chain_id + ", " + taskCfg.task_sub_id + ")");
-            DoEndActionClientRpc(taskCfg.end_action.ToString());
-            new TaskCompleteEvent(taskCfg);
+            Debug.Log("QuestManager.GetAwardClientRpc(" + chain + ", " + sub + ")");
+            var cfg = TaskCfg.Instance.GetCfgItem(chain, sub);
+            if (cfg == null)
+            {
+                Debug.LogError("TaskCfg.instance.GetCfgItem(" + chain + ", " + sub + ") is null");
+            }
+            else
+            {
+                DoEndActionClientRpc(cfg.end_action);
+                new TaskCompleteEvent(cfg);
+            }
         }
 
         [ClientRpc]
@@ -279,7 +269,6 @@ namespace Quest
         {
             var data = m_taskData.GetData(chainId, subId);
             var cfg = TaskCfg.Instance.GetCfgItem(data.task_chain_id, data.task_sub_id);
-            var nextCfg = TaskCfg.Instance.GetCfgItem(data.task_chain_id, data.task_sub_id + 1);
 
             if (data.completed == 1)
             {
@@ -287,10 +276,7 @@ namespace Quest
                 RemoveTaskDataServerRpc(data.task_chain_id, data.task_sub_id);
 
                 // assign next task
-                if (nextCfg != null)
-                {
-                    AssignTaskServerRpc(nextCfg);
-                }
+                AssignTaskServerRpc(data.task_chain_id, data.task_sub_id + 1, 1);
 
                 // assign new chain task
                 string openChain = cfg.open_chain.ToString();
@@ -304,7 +290,7 @@ namespace Quest
                         var task = chains[i].Split('|');
                         int chain = int.Parse(task[0]);
                         int sub = int.Parse(task[1]);
-                        AssignTaskServerRpc(chain, sub);
+                        AssignTaskServerRpc(chain, sub, 1);
                     }
                 }
             }

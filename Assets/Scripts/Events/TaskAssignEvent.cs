@@ -4,17 +4,22 @@ using UnityEngine;
 using UI;
 using Quest;
 using Manager;
-namespace Events {
+namespace Events
+{
     public class TaskAssignEvent : BaseEvent
     {
+        const float oneRoundDelay = 3f;
         TaskDataItem taskDataItem;
-        public TaskAssignEvent(TaskDataItem task, string name = "TaskAssignEvent", float delay = 0.1f) : base(name, delay)
+        int delayRound = 0;
+        public TaskAssignEvent(TaskDataItem task, int delayRound = 0, string name = nameof(TaskAssignEvent), float delay = 0f) : base(name, delay)
         {
             taskDataItem = task;
+            this.delayRound = delayRound;
+
             postEvent += (BaseEvent e) =>
             {
-                string popUpText = "Task Assigned: " + taskDataItem.desc.ToString();
-                UIManager.Instance.OpenPanel<UIPopUpBar>().SetPopUpText(popUpText);
+                string popUpText = "Task Assigned: " + TaskCfg.Instance.GetCfgItem(taskDataItem.task_chain_id, taskDataItem.task_sub_id).desc;
+                UIManager.Instance.DelayOpenPanel<UIPopUpBar>(oneRoundDelay * delayRound, popUpText);
             };
         }
     }

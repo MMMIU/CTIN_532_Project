@@ -9,7 +9,7 @@ namespace Events {
     {
         public int enemyId;
         public int spawnPlace;
-        public EnemySpawnEvent(int enemyId = -1, int spawnPlace = -1, float delay = 0f, string name = "EnemySpawnEvent") : base(name, delay)
+        public EnemySpawnEvent(int enemyId = -1, int spawnPlace = -1, float delay = 0f, string name = nameof(EnemySpawnEvent)) : base(name, delay)
         {
             this.enemyId = enemyId;
             this.spawnPlace = spawnPlace;

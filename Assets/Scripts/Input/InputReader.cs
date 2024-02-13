@@ -7,8 +7,10 @@ namespace Inputs
     [CreateAssetMenu(fileName = "InputReader", menuName = "MMMIU/Input Reader")]
     public class InputReader : ScriptableObject, MyPlayerInput.IPlayerActions, MyPlayerInput.IUIActions
     {
-        // Player
+        // Both
         public event UnityAction EscEvent;
+
+        // Player
         public event UnityAction<Vector2> MoveEvent;
         public event UnityAction<Vector2> LookEvent;
         public event UnityAction AttackEvent;
@@ -17,6 +19,7 @@ namespace Inputs
         public event UnityAction OpenDevPanelEvent;
         public event UnityAction OpenQuestPanelEvent;
         public event UnityAction JumpEvent;
+        public event UnityAction SpecialSkillOneEvent;
 
 
         // UI
@@ -31,6 +34,7 @@ namespace Inputs
         public event UnityAction CloseUIPanelEvent;
         public event UnityAction CloseDevPanelEvent;
         public event UnityAction UI_CloseQuestPanelEvent;
+        public event UnityAction<Vector2> VCamMoveEvent;
 
         private MyPlayerInput playerInput;
 
@@ -41,7 +45,6 @@ namespace Inputs
                 playerInput = new MyPlayerInput();
                 playerInput.Player.SetCallbacks(this);
                 playerInput.UI.SetCallbacks(this);
-                EnablePlayerInput();
             }
         }
 
@@ -216,6 +219,19 @@ namespace Inputs
             {
                 UI_CloseQuestPanelEvent?.Invoke();
             }
+        }
+
+        public void OnSpecialSkillOne(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                SpecialSkillOneEvent?.Invoke();
+            }
+        }
+
+        public void OnVCamMove(InputAction.CallbackContext context)
+        {
+            VCamMoveEvent?.Invoke(context.ReadValue<Vector2>());
         }
     }
 }

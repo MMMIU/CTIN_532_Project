@@ -52,5 +52,14 @@
     "desc": "Spider web",
     "accessbility": "knight",
     "init_interactable": "no"
+  },
+  {
+    "item_uid": 7,
+    "item_type": "key",
+    "item_sub_id": 1,
+    "name": "key_1",
+    "desc": "First Key",
+    "accessbility": "both",
+    "init_interactable": "yes"
   }
 ]

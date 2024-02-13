@@ -13,6 +13,14 @@ public class HitDetection : MonoBehaviour
     [SerializeField]
     private Player player;
 
+    [SerializeField]
+    private Collider coll;
+
+    private void Start()
+    {
+        coll.enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (player.IsLocalPlayer && other.gameObject.CompareTag("Enemy") && playerAnimator.GetBool("Attacking"))
@@ -20,6 +28,15 @@ public class HitDetection : MonoBehaviour
             Debug.Log("Hit");
             new KnightAttackEvent(other.gameObject);
         }
+    }
 
+    public void EnableTrigger()
+    {
+        coll.enabled = true;
+    }
+
+    public void DisableTrigger()
+    {
+        coll.enabled = false;
     }
 }

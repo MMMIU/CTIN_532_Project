@@ -9,7 +9,7 @@ namespace Events
     {
         public ulong playerId;
 
-        public SpawnPlayerEvent(ulong playerId, string name = "SpawnPlayerEvent", float delay = 0f) : base(name, delay)
+        public SpawnPlayerEvent(ulong playerId, string name = nameof(SpawnPlayerEvent), float delay = 0f) : base(name, delay)
         {
             this.playerId = playerId;
         }

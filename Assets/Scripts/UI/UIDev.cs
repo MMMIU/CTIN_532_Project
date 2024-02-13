@@ -1,3 +1,4 @@
+using Events;
 using Inputs;
 using Manager;
 using Managers;
@@ -43,14 +44,12 @@ namespace UI
             }
         }
 
-        private void Start()
-        {
-            closablePanel.SetActive(false);
-            NetConnector.Instance.useInternet = useInternetToggle.isOn;
-        }
 
         public override void OnUIEnable()
         {
+            closablePanel.SetActive(false);
+            NetConnector.Instance.useInternet = useInternetToggle.isOn;
+            EventManager.Instance.Subscribe(nameof(JoinCodeAssignEvent), OnJoinCodeAssign);
             inputReader.OpenDevPanelEvent += ShowHideFloat;
             inputReader.CloseDevPanelEvent += ShowHideFloat;
         }
@@ -59,19 +58,25 @@ namespace UI
         {
             inputReader.OpenDevPanelEvent -= ShowHideFloat;
             inputReader.CloseDevPanelEvent -= ShowHideFloat;
+            EventManager.Instance.Unsubscribe(nameof(JoinCodeAssignEvent), OnJoinCodeAssign);
+        }
+
+
+        private void OnJoinCodeAssign(BaseEvent e)
+        {
+            JoinCodeAssignEvent realEvent = e as JoinCodeAssignEvent;
+            joinCodeText.text = realEvent.joinCode;
         }
 
         public async void OnStartClientBtnClick()
         {
-            bool result = await NetConnector.Instance.StartClient(joinCodeInputField.text);
-            joinCodeText.text = result ? "Client started" : "Client failed to start";
+            await NetConnector.Instance.StartClient(joinCodeInputField.text);
             ShowHideFloat();
         }
 
         public async void OnStartHostBtnClick()
         {
-            string result = await NetConnector.Instance.StartHost();
-            joinCodeText.text = "Code: " + result;
+            await NetConnector.Instance.StartHost();
             ShowHideFloat();
         }
 
@@ -95,7 +100,7 @@ namespace UI
             {
                 Cursor.lockState = previousLockMode;
                 Cursor.visible = previousCursorVisible;
-                if(UIManager.Instance.blockPanelStack.Count == 0)
+                if (UIManager.Instance.blockPanelStack.Count == 0)
                 {
                     inputReader.EnablePlayerInput();
                 }
@@ -152,6 +157,20 @@ namespace UI
             NetConnector.Instance.useInternet = useInternetToggle.isOn;
         }
 
+        public void HurtLocalPlayer()
+        {
+            GameManager.Instance.LocalPlayer.PlayerTakeDamageServerRpc(10);
+        }
+
+        public void HealLocalPlayer()
+        {
+            GameManager.Instance.LocalPlayer.PlayerHealServerRpc(10);
+        }
+
+        public void RespawnLocalPlayer()
+        {
+            GameManager.Instance.LocalPlayer.PlayerRespawnServerRpc();
+        }
     }
 
 }

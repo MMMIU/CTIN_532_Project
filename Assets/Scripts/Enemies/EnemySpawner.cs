@@ -31,13 +31,13 @@ namespace Enemies
         public override void OnNetworkSpawn()
         {
             instance = this;
-            EventManager.Instance.Subscribe("EnemySpawnEvent", OnSpawnEnemyEvent);
+            EventManager.Instance.Subscribe(nameof(EnemySpawnEvent), OnSpawnEnemyEvent);
             base.OnNetworkSpawn();
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe("EnemySpawnEvent", OnSpawnEnemyEvent);
+            EventManager.Instance.Unsubscribe(nameof(EnemySpawnEvent), OnSpawnEnemyEvent);
             base.OnNetworkDespawn();
         }
 

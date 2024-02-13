@@ -28,6 +28,7 @@ public class enemyController : NetworkBehaviour
 
 
     public Animator playerAnimator;
+    public Animator selfAnimator;
     public int attacked = 0;
     #endregion
 
@@ -51,6 +52,7 @@ public class enemyController : NetworkBehaviour
                 targetPlayer = players[1].transform;
             }
         }
+        selfAnimator = this.GetComponent<Animator>();
         Debug.Log(targetPlayer);
     }
 
@@ -62,7 +64,7 @@ public class enemyController : NetworkBehaviour
 
 
         if (!targetInSightRange && !targetInAttackRange) Patroling();
-        if (targetInSightRange && !targetInAttackRange) Chasing();
+        if (targetInSightRange && !targetInAttackRange) ChasingServerRpc();
         if (targetInAttackRange && targetInSightRange) AttackTarget();
     }
 
@@ -75,6 +77,7 @@ public class enemyController : NetworkBehaviour
         if (walkPointSet)
         {
             agent.SetDestination(walkPoint);
+            selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
         }
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
@@ -96,21 +99,26 @@ public class enemyController : NetworkBehaviour
 
     }
 
-    private void Chasing()
+    [ServerRpc(RequireOwnership = false)]
+    private void ChasingServerRpc()
     {
         agent.SetDestination(targetPlayer.position);
+        selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
     }
 
     private void AttackTarget()
     {
         //make sure enemy doesn't move
         agent.SetDestination(transform.position);
+        selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
 
         transform.LookAt(targetPlayer);
 
         if (!alreadyAttacked)
         {
             //Attack
+            selfAnimator.Play("Stab Attack");
+            selfAnimator.SetBool("Attack", true);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);

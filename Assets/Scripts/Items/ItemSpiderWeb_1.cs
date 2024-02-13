@@ -18,13 +18,13 @@ namespace Items
         {
             Debug.Log("ItemSpiderWeb_1 OnNetworkSpawn");
             SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe("ItemSetInteractableEvent", DoItemSetInteractableEventServer);
+            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkSpawn();
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe("ItemSetInteractableEvent", DoItemSetInteractableEventServer);
+            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkDespawn();
         }
 

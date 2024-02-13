@@ -25,9 +25,9 @@ namespace UI
         public void SetTaskData(TaskDataItem taskDataItem)
         {
             taskIdText.text = taskDataItem.task_chain_id.ToString() + "-" + taskDataItem.task_sub_id.ToString();
-            assignText.text = taskDataItem.assign.ToString();
-            descText.text = taskDataItem.desc.ToString();
-            progressText.text = taskDataItem.progress.ToString() + "/" + taskDataItem.target_amout;
+            assignText.text = TaskCfg.Instance.GetCfgItem(taskDataItem.task_chain_id, taskDataItem.task_sub_id).assign;
+            descText.text = TaskCfg.Instance.GetCfgItem(taskDataItem.task_chain_id, taskDataItem.task_sub_id).desc;
+            progressText.text = taskDataItem.progress.ToString() + "/" + TaskCfg.Instance.GetCfgItem(taskDataItem.task_chain_id, taskDataItem.task_sub_id).target_amount.ToString();
         }
     }
 }

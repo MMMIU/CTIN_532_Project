@@ -77,34 +77,19 @@ namespace Quest
         }
     }
 
-    public class TaskCfgItem: INetworkSerializable
+    public class TaskCfgItem
     {
         public int task_chain_id;
         public int task_sub_id;
-        public FixedString32Bytes assign;
-        public FixedString32Bytes icon;
-        public FixedString128Bytes desc;
-        public FixedString512Bytes start_action;
-        public FixedString512Bytes end_action;
-        public FixedString32Bytes task_target;
+        public string assign;
+        public string icon;
+        public string desc;
+        public string start_action;
+        public string end_action;
+        public string task_target;
         public int target_amount;
-        public FixedString128Bytes award;
-        public FixedString32Bytes open_chain;
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref task_chain_id);
-            serializer.SerializeValue(ref task_sub_id);
-            serializer.SerializeValue(ref assign);
-            serializer.SerializeValue(ref icon);
-            serializer.SerializeValue(ref desc);
-            serializer.SerializeValue(ref start_action);
-            serializer.SerializeValue(ref end_action);
-            serializer.SerializeValue(ref task_target);
-            serializer.SerializeValue(ref target_amount);
-            serializer.SerializeValue(ref award);
-            serializer.SerializeValue(ref open_chain);
-        }
+        public string award;
+        public string open_chain;
 
         public TaskCfgItem()
         {

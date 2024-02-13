@@ -13,10 +13,14 @@ public class ItemFloatingPrompt : NetworkBehaviour
     [SerializeField]
     private ItemBase itemBase;
 
+    [SerializeField]
+    private bool disableOnInteract = true;
+
     public override void OnNetworkSpawn()
     {
         itemBase.Interactable.OnValueChanged += OnInteractableChanged;
-        floatingPrompt.SetActive(itemBase.itemDataItem.interactable);
+        floatingPrompt.SetActive(false);
+        Debug.Log("ItemFloatingPrompt OnNetworkSpawn: " + itemBase.itemDataItem.interactable);
     }
 
     public override void OnNetworkDespawn()
@@ -27,7 +31,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
     private void OnInteractableChanged(bool oldValue, bool newValue)
     {
         Debug.Log("OnInteractableChanged: " + newValue);
-        if (newValue == false)
+        if (disableOnInteract && newValue == false)
         {
             floatingPrompt.SetActive(false);
         }
@@ -35,7 +39,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (itemBase.Interactable.Value && other.CompareTag("Player"))
+        if ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))
         {
             Player p = other.GetComponent<Player>();
             if (p.IsLocalPlayer && (itemBase.itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemBase.itemDataItem.accessbility))
@@ -47,7 +51,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (itemBase.Interactable.Value && other.CompareTag("Player"))
+        if ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))
         {
             Player p = other.GetComponent<Player>();
             if (p.IsLocalPlayer && (itemBase.itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemBase.itemDataItem.accessbility))

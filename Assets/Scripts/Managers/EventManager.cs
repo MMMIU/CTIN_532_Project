@@ -78,6 +78,11 @@ namespace Events
             DealWithHandlersToBeAddedOrRemoved();
         }
 
+        public void Subscribe<T>(Action<T> handler) where T : BaseEvent
+        {
+            Subscribe(typeof(T).Name, (e) => handler((T)e));
+        }
+
         public void Subscribe(string eventName, Action<BaseEvent> handler)
         {
             Debug.Log("Subscribing to event: " + eventName);
@@ -91,6 +96,11 @@ namespace Events
                 eventHandlers[eventName] = new();
             }
             eventHandlers[eventName].Add(handler);
+        }
+
+        public void Unsubscribe<T>(Action<T> handler) where T : BaseEvent
+        {
+            Unsubscribe(typeof(T).Name, (e) => handler((T)e));
         }
 
         public void Unsubscribe(string eventName, Action<BaseEvent> handler)

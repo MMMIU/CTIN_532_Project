@@ -11,35 +11,54 @@ using UI;
 using Quest;
 using Managers;
 using Items;
+using TMPro;
+using Unity.Collections;
+using Events;
 
 namespace Players
 {
-    public class Player : NetworkBehaviour
+    public partial class Player : NetworkBehaviour
     {
         [SerializeField]
         private InputReader inputReader;
-
-        public NetworkVariable<PlayerData> playerData;
+        public NetworkVariable<PlayerData> playerData = new(new PlayerData());
 
         [SerializeField]
         private CinemachineVirtualCamera cinemachineVirtualCamera;
 
+        [SerializeField]
+        private TextMeshProUGUI playerNameText;
+
         public ItemAccessbility playerType;
+
+        public Sprite playerSprite;
 
 
         public override void OnNetworkSpawn()
         {
-            if (IsLocalPlayer)
+            base.OnNetworkSpawn();
+            if (IsClient && IsOwner)
             {
+                InitPlayerServerRpc(GameManager.Instance.LocalPlayerName);
                 GameManager.Instance.LocalPlayer = this;
                 cinemachineVirtualCamera.Priority = 10;
+                inputReader.DisableAllInput();
                 RegisterInputEvents();
+                StartCoroutine(EnablePlayerInput());
+                playerNameText.text = GameManager.Instance.LocalPlayerName;
             }
             else
             {
                 cinemachineVirtualCamera.Priority = 0;
+                playerNameText.text = playerData.Value.PlayerName;
             }
-            base.OnNetworkSpawn();
+        }
+
+        IEnumerator EnablePlayerInput()
+        {
+            yield return new WaitForSeconds(2);
+            inputReader.EnablePlayerInput();
+            UIManager.Instance.OpenPanel<UIPlayerInGamePanel>();
         }
 
         public override void OnNetworkDespawn()
@@ -53,26 +72,30 @@ namespace Players
 
         private void RegisterInputEvents()
         {
-            inputReader.EscEvent += ShowPausePanel;
             inputReader.OpenQuestPanelEvent += ShowQuestPanel;
+            inputReader.SpecialSkillOneEvent += UseSpecialSkillOne;
             inputReader.EnablePlayerInput();
         }
 
         private void UnregisterInputEvents()
         {
-            inputReader.EscEvent -= ShowPausePanel;
             inputReader.OpenQuestPanelEvent -= ShowQuestPanel;
+            inputReader.SpecialSkillOneEvent -= UseSpecialSkillOne;
             inputReader.DisableAllInput();
-        }
-
-        private void ShowPausePanel()
-        {
-            UIManager.Instance.OpenPanel<UIPauseMenu>();
         }
 
         private void ShowQuestPanel()
         {
             UIManager.Instance.OpenPanel<UIQuestPanel>();
+        }
+
+        private void UseSpecialSkillOne()
+        {
+            Debug.Log("UseSpecialSkill");
+            if (playerType == ItemAccessbility.princess)
+            {
+                PrincessSkillOne();
+            }
         }
     }
 }

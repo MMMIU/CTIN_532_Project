@@ -9,7 +9,7 @@ namespace Events
         public int item_uid;
         public bool interactable;
 
-        public ItemSetInteractableEvent(int item_uid, bool interactable, string name = "ItemSetInteractableEvent", float delay = 0f) : base(name, delay)
+        public ItemSetInteractableEvent(int item_uid, bool interactable, string name = nameof(ItemSetInteractableEvent), float delay = 0f) : base(name, delay)
         {
             this.item_uid = item_uid;
             this.interactable = interactable;

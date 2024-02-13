@@ -8,7 +8,7 @@ namespace Events {
     public class TaskCompleteEvent : BaseEvent
     {
         TaskCfgItem taskDataItem;
-        public TaskCompleteEvent(TaskCfgItem task, string name = "TaskAssignEvent", float delay = 0f) : base(name, delay)
+        public TaskCompleteEvent(TaskCfgItem task, string name = nameof(TaskAssignEvent), float delay = 0f) : base(name, delay)
         {
             taskDataItem = new(task);
             postEvent += (BaseEvent e) =>

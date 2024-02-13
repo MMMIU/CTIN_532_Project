@@ -37,13 +37,13 @@ public class PlayerSpawner : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        EventManager.Instance.Subscribe("SpawnPlayerEvent", OnSpawnPlayerEvent);
+        EventManager.Instance.Subscribe(nameof(SpawnPlayerEvent), OnSpawnPlayerEvent);
         base.OnNetworkSpawn();
     }
 
     public override void OnNetworkDespawn()
     {
-        EventManager.Instance.Unsubscribe("SpawnPlayerEvent", OnSpawnPlayerEvent);
+        EventManager.Instance.Unsubscribe(nameof(SpawnPlayerEvent), OnSpawnPlayerEvent);
         base.OnNetworkDespawn();
     }
 

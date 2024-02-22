@@ -14,7 +14,7 @@
     "item_sub_id": 1,
     "name": "spider",
     "desc": "A powerul spider web",
-    "health": 1,
+    "health": 10,
     "award": "/"
   }
 ]

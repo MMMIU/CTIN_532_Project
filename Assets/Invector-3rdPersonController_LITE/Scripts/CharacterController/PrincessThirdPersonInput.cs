@@ -1,4 +1,5 @@
 ﻿using Inputs;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace Invector.vCharacterController
 
         private Vector2 movementValue = Vector2.zero;
         private Vector2 cameraValue = Vector2.zero;
+
+        public bool healing = false;
 
         #endregion
 
@@ -62,7 +65,9 @@ namespace Invector.vCharacterController
             inputReader.SprintEvent += SprintInput;
             //inputReader.EscEvent += InteractWithUI;
             inputReader.JumpEvent += JumpInput;
+            inputReader.HealSkillEvent += HealInput;
         }
+
 
         public void UnRegisterEvent()
         {
@@ -71,6 +76,7 @@ namespace Invector.vCharacterController
             inputReader.SprintEvent -= SprintInput;
             //inputReader.EscEvent -= InteractWithUI;
             inputReader.JumpEvent -= JumpInput;
+            inputReader.HealSkillEvent -= HealInput;
         }
 
         //public void InteractWithUI()
@@ -153,7 +159,7 @@ namespace Invector.vCharacterController
             float x = movementValue.x;
             float z = movementValue.y;
 
-            if (x != 0 || z != 0)
+            if (!healing && (x != 0 || z != 0))
             {
                 cc.input.x = x;
                 cc.input.z = z;
@@ -193,6 +199,18 @@ namespace Invector.vCharacterController
 
             tpCamera.RotateCamera(X, Y);
         }
+
+
+        private void HealInput()
+        {
+            animator.Play("Heal");
+            healing = true;
+        }
+        public void HealDone()
+        {
+            healing = false;
+        }
+
 
         protected virtual void StrafeInput()
         {

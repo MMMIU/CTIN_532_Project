@@ -15,10 +15,9 @@ public class HitDetectionForEnemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.gameObject.CompareTag("Player") && m_Animator.GetBool("Attack"))
         {
-            Debug.Log("Hit Player!");
+            Debug.Log("Enemy Hit Player!");
             new EnemyAttackEvent(other.gameObject.GetComponentInParent<Player>().playerType);
         }
     }

@@ -118,6 +118,15 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HealSkill"",
+                    ""type"": ""Button"",
+                    ""id"": ""00d9b935-e2d6-445b-b3ec-19f522260e3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -316,6 +325,17 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SpecialSkillOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd39672c-9f18-4066-8ad2-d8b9403ef2cb"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HealSkill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -797,6 +817,7 @@ namespace UnityEngine.InputSystem
             m_Player_OpenQuestPanel = m_Player.FindAction("OpenQuestPanel", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_SpecialSkillOne = m_Player.FindAction("SpecialSkillOne", throwIfNotFound: true);
+            m_Player_HealSkill = m_Player.FindAction("HealSkill", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -883,6 +904,7 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_OpenQuestPanel;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_SpecialSkillOne;
+        private readonly InputAction m_Player_HealSkill;
         public struct PlayerActions
         {
             private @MyPlayerInput m_Wrapper;
@@ -897,6 +919,7 @@ namespace UnityEngine.InputSystem
             public InputAction @OpenQuestPanel => m_Wrapper.m_Player_OpenQuestPanel;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @SpecialSkillOne => m_Wrapper.m_Player_SpecialSkillOne;
+            public InputAction @HealSkill => m_Wrapper.m_Player_HealSkill;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -936,6 +959,9 @@ namespace UnityEngine.InputSystem
                 @SpecialSkillOne.started += instance.OnSpecialSkillOne;
                 @SpecialSkillOne.performed += instance.OnSpecialSkillOne;
                 @SpecialSkillOne.canceled += instance.OnSpecialSkillOne;
+                @HealSkill.started += instance.OnHealSkill;
+                @HealSkill.performed += instance.OnHealSkill;
+                @HealSkill.canceled += instance.OnHealSkill;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -970,6 +996,9 @@ namespace UnityEngine.InputSystem
                 @SpecialSkillOne.started -= instance.OnSpecialSkillOne;
                 @SpecialSkillOne.performed -= instance.OnSpecialSkillOne;
                 @SpecialSkillOne.canceled -= instance.OnSpecialSkillOne;
+                @HealSkill.started -= instance.OnHealSkill;
+                @HealSkill.performed -= instance.OnHealSkill;
+                @HealSkill.canceled -= instance.OnHealSkill;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1150,6 +1179,7 @@ namespace UnityEngine.InputSystem
             void OnOpenQuestPanel(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnSpecialSkillOne(InputAction.CallbackContext context);
+            void OnHealSkill(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

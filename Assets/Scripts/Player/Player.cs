@@ -21,7 +21,7 @@ namespace Players
     {
         [SerializeField]
         private InputReader inputReader;
-        public NetworkVariable<PlayerData> playerData = new(new PlayerData());
+        public NetworkVariable<PlayerData> playerData = new();
 
         [SerializeField]
         private CinemachineVirtualCamera cinemachineVirtualCamera;
@@ -36,7 +36,6 @@ namespace Players
 
         public override void OnNetworkSpawn()
         {
-            base.OnNetworkSpawn();
             if (IsClient && IsOwner)
             {
                 InitPlayerServerRpc(GameManager.Instance.LocalPlayerName);
@@ -44,21 +43,23 @@ namespace Players
                 cinemachineVirtualCamera.Priority = 10;
                 inputReader.DisableAllInput();
                 RegisterInputEvents();
-                StartCoroutine(EnablePlayerInput());
                 playerNameText.text = GameManager.Instance.LocalPlayerName;
+                RegisterEvents();
+                inputReader.DisableAllInput();
+                StartCoroutine(EnablePlayerOps());
             }
             else
             {
                 cinemachineVirtualCamera.Priority = 0;
-                playerNameText.text = playerData.Value.PlayerName;
+                StartCoroutine(RefreshName());
             }
+            base.OnNetworkSpawn();
         }
 
-        IEnumerator EnablePlayerInput()
+        IEnumerator RefreshName()
         {
-            yield return new WaitForSeconds(2);
-            inputReader.EnablePlayerInput();
-            UIManager.Instance.OpenPanel<UIPlayerInGamePanel>();
+            yield return new WaitForSeconds(1f);
+            playerNameText.text = playerData.Value.PlayerName;
         }
 
         public override void OnNetworkDespawn()
@@ -66,8 +67,41 @@ namespace Players
             if (IsClient && IsOwner)
             {
                 UnregisterInputEvents();
+                UnRegisterEvents();
             }
             base.OnNetworkDespawn();
+        }
+
+        private void RegisterEvents()
+        {
+            playerData.OnValueChanged += OnPlayerDataChanged;
+            EventManager.Instance.Subscribe<EnemyAttackEvent>(OnEnemyAttack);
+            EventManager.Instance.Subscribe<PlayerHealEvent>(OnPlayerHeal);
+        }
+
+        private void UnRegisterEvents()
+        {
+            playerData.OnValueChanged -= OnPlayerDataChanged;
+            EventManager.Instance.Unsubscribe<EnemyAttackEvent>(OnEnemyAttack);
+            EventManager.Instance.Unsubscribe<PlayerHealEvent>(OnPlayerHeal);
+        }
+
+        private void OnPlayerDataChanged(PlayerData oldValue, PlayerData newValue)
+        {
+            if (newValue.playerType != playerType)
+            {
+                return;
+            }
+            Debug.Log("OnPlayerDataChanged: " + newValue.playerType);
+            playerNameText.text = newValue.PlayerName;
+            new PlayerDataUpdateEvent();
+        }
+
+        IEnumerator EnablePlayerOps()
+        {
+            yield return new WaitForSeconds(2);
+            inputReader.EnablePlayerInput();
+            UIManager.Instance.OpenPanel<UIPlayerInGamePanel>();
         }
 
         private void RegisterInputEvents()

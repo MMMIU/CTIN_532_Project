@@ -20,6 +20,7 @@ namespace Inputs
         public event UnityAction OpenQuestPanelEvent;
         public event UnityAction JumpEvent;
         public event UnityAction SpecialSkillOneEvent;
+        public event UnityAction HealSkillEvent;
 
 
         // UI
@@ -226,6 +227,14 @@ namespace Inputs
             if (context.performed)
             {
                 SpecialSkillOneEvent?.Invoke();
+            }
+        }
+
+        public void OnHealSkill(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                HealSkillEvent?.Invoke();
             }
         }
 

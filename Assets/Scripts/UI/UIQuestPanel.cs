@@ -10,7 +10,7 @@ using Quest;
 namespace UI
 {
     [UIBlock]
-    [UILayer(UIPanelLayer.Fixed)]
+    [UILayer(UIPanelLayer.Normal)]
     public partial class UIQuestPanel : UIBase
     {
         [SerializeField]

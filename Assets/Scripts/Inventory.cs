@@ -1,3 +1,5 @@
+using Events;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +12,12 @@ public class Inventory : MonoBehaviour
     void Awake()
     {
         main = this;
+        EventManager.Instance.Subscribe(nameof(KeyCollectEvent), CollectKey);
+    }
+
+    private void CollectKey(BaseEvent baseEvent)
+    {
+        GetKey1();
     }
 
     public bool HasKey1()

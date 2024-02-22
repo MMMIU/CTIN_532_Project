@@ -8,7 +8,15 @@ public class LockedDoor : MonoBehaviour
 
     public void Update()
     {
-        TryOpen();
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            TryOpen();
+        }
     }
 
     public void TryOpen()

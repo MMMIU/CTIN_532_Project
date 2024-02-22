@@ -1,3 +1,4 @@
+using Events;
 using Items;
 using Players;
 using Unity.Netcode;
@@ -34,9 +35,15 @@ public class enemyController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         Debug.Log("Number of players: " + players.Length);
         agent = GetComponent<NavMeshAgent>();
+        agent.enabled = true;
+        Debug.Log("Agent enabled: " + agent.enabled);
         if (players.Length == 1)
         {
             targetPlayer = players[0].transform;
@@ -54,17 +61,33 @@ public class enemyController : NetworkBehaviour
         }
         selfAnimator = this.GetComponent<Animator>();
         Debug.Log(targetPlayer);
+
+
+        EventManager.Instance.Subscribe(nameof(KnightAttackEvent), ResetTargetPlayer);
     }
 
+    public override void OnNetworkDespawn()
+    {
+        EventManager.Instance.Unsubscribe(nameof(KnightAttackEvent), ResetTargetPlayer);
+        base.OnNetworkDespawn();
+    }
     void Update()
     {
+        if (!IsServer||!IsSpawned||targetPlayer==null)
+        {
+            return;
+        }
         //check for sight and attack range
         targetInSightRange = (transform.position - targetPlayer.position).magnitude < sightRange;
         targetInAttackRange = (transform.position - targetPlayer.position).magnitude < attackRange;
 
 
         if (!targetInSightRange && !targetInAttackRange) Patroling();
-        if (targetInSightRange && !targetInAttackRange) ChasingServerRpc();
+        if (targetInSightRange && !targetInAttackRange)
+        {
+            agent.SetDestination(targetPlayer.position);
+            selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
+        }
         if (targetInAttackRange && targetInSightRange) AttackTarget();
     }
 
@@ -73,6 +96,10 @@ public class enemyController : NetworkBehaviour
 
     private void Patroling()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         if (!walkPointSet) SearchWalkPoint();
         if (walkPointSet)
         {
@@ -90,6 +117,10 @@ public class enemyController : NetworkBehaviour
 
     private void SearchWalkPoint()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         //calculate random point in range
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
@@ -99,15 +130,12 @@ public class enemyController : NetworkBehaviour
 
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void ChasingServerRpc()
-    {
-        agent.SetDestination(targetPlayer.position);
-        selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
-    }
-
     private void AttackTarget()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         //make sure enemy doesn't move
         agent.SetDestination(transform.position);
         selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
@@ -127,32 +155,63 @@ public class enemyController : NetworkBehaviour
 
     private void ResetAttack()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         alreadyAttacked = false;
     }
 
 
-    public void attackedByPlayer(GameObject attacker)
-    {
-        targetPlayer = attacker.transform.root;
-        transform.LookAt(targetPlayer);
-        this.GetComponent<Animator>().Play("HitReaction");
-        attacked++;
-        if (attacked > 2)
-        {
-            Death();
-        }
+    //public void attackedByPlayer(GameObject attacker)
+    //{
+    //    if (!IsServer)
+    //    {
+    //        return;
+    //    }
+    //    targetPlayer = attacker.transform.root;
+    //    transform.LookAt(targetPlayer);
+    //    this.GetComponent<Animator>().Play("Take Damage");
 
-    }
+    //}
 
     void Death()
     {
+        if (!IsServer)
+        {
+            return;
+        }
         Destroy(this.GetComponent<CapsuleCollider>());
         this.GetComponent<Animator>().Play("Death");
     }
 
-    void Destory()
+    public void ResetTargetPlayer(BaseEvent baseE)
     {
-        Destroy(gameObject);
+        KnightAttackEvent e = baseE as KnightAttackEvent;
+        if (e.other == gameObject)
+        {
+            if (targetPlayer.gameObject.GetComponent<Player>().playerType != ItemAccessbility.knight)
+            {
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                if (players.Length == 1)
+                {
+                    targetPlayer = players[0].transform;
+                }
+                else
+                {
+                    if (players[0].GetComponent<Player>().playerType == ItemAccessbility.knight)
+                    {
+                        targetPlayer = players[0].transform;
+                    }
+                    else
+                    {
+                        targetPlayer = players[1].transform;
+                    }
+                }
+                playerAnimator = targetPlayer.gameObject.GetComponent<Animator>();
+
+            }
+        }
     }
 
     //private void OnDrawGizmosSelected()

@@ -43,7 +43,7 @@ namespace Enemies
 
         private void OnSpawnEnemyEvent(BaseEvent ev)
         {
-            if (ev is EnemySpawnEvent enemySpawnEvent)
+            if (ev is EnemySpawnEvent enemySpawnEvent && enemySpawnEvent.playerType == GameManager.Instance.LocalPlayer.playerType)
             {
                 SpawnEnemyServerRpc(enemySpawnEvent.enemyId, enemySpawnEvent.spawnPlace);
             }

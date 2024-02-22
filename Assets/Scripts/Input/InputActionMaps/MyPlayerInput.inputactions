@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "HealSkill",
+                    "type": "Button",
+                    "id": "00d9b935-e2d6-445b-b3ec-19f522260e3b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -292,6 +301,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "SpecialSkillOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bd39672c-9f18-4066-8ad2-d8b9403ef2cb",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HealSkill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

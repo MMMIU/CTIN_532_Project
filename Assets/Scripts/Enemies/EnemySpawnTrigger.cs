@@ -1,4 +1,6 @@
 using Events;
+using Managers;
+using Players;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -9,7 +11,10 @@ namespace Enemies
     public class EnemySpawnTrigger : NetworkBehaviour
     {
         [SerializeField]
-        private NetworkVariable<bool> isActive = new NetworkVariable<bool>(true);
+        bool devActive = false;
+
+        [SerializeField]
+        private NetworkVariable<bool> isActive;
 
         [SerializeField]
         private Collider coll;
@@ -25,6 +30,7 @@ namespace Enemies
             base.OnNetworkSpawn();
             coll = GetComponent<Collider>();
             isActive.OnValueChanged += OnActiveChanged;
+            SetActiveServerRpc(true);
         }
 
         public override void OnNetworkDespawn()
@@ -35,15 +41,16 @@ namespace Enemies
 
         private void OnActiveChanged(bool previousValue, bool newValue)
         {
+            Debug.Log("OnActiveChanged: " + newValue);
             coll.enabled = newValue;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (!(GameManager.Instance.DevMode && !devActive) && other.CompareTag("Player"))
             {
-                new EnemySpawnEvent(enemyId, spawnPlace);
                 SetActiveServerRpc(false);
+                new EnemySpawnEvent(other.GetComponent<Player>().playerType, enemyId, spawnPlace);
             }
         }
 

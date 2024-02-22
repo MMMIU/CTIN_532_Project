@@ -53,6 +53,7 @@ namespace Managers
                 UIManager.Instance.OpenPanel<UIDev>();
             }
             UIManager.Instance.OpenPanel<UIStartMenu>();
+            SFXManager.Instance.PlayMusic("bgm_normal");
         }
 
         private void Update()

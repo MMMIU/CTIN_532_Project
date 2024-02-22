@@ -10,9 +10,8 @@ namespace Events
         private static EventManager instance = null;
 
         private bool isDealingWithHandler = false;
-
-        private Dictionary<string, Action<BaseEvent>> handlersToBeAdded = new();
-        private Dictionary<string, Action<BaseEvent>> handlersToBeRemoved = new();
+        private List<KeyValuePair<string, Action<BaseEvent>>> handlersToBeAdded = new();
+        private List<KeyValuePair<string, Action<BaseEvent>>> handlersToBeRemoved = new();
 
 
         public static EventManager Instance
@@ -88,7 +87,7 @@ namespace Events
             Debug.Log("Subscribing to event: " + eventName);
             if (isDealingWithHandler)
             {
-                handlersToBeAdded.Add(eventName, handler);
+                handlersToBeAdded.Add(new(eventName, handler));
                 return;
             }
             if (!eventHandlers.ContainsKey(eventName))
@@ -108,7 +107,7 @@ namespace Events
             Debug.Log("Unsubscribing from event: " + eventName);
             if (isDealingWithHandler)
             {
-                handlersToBeRemoved.Add(eventName, handler);
+                handlersToBeRemoved.Add(new(eventName, handler));
                 return;
             }
             if (eventHandlers.ContainsKey(eventName))

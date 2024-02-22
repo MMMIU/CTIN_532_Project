@@ -1,4 +1,5 @@
 using Events;
+using Items;
 using Managers;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,17 +11,39 @@ namespace Players
 {
     public partial class Player : NetworkBehaviour
     {
-        [ServerRpc(RequireOwnership = false)]
+        private void OnEnemyAttack(EnemyAttackEvent e)
+        {
+            if (IsLocalPlayer && playerType == e.playerType)
+            {
+                Debug.Log("OnEnemyAttack: " + e.damage);
+                PlayerTakeDamageServerRpc(e.damage);
+            }
+        }
+
+        private void OnPlayerHeal(PlayerHealEvent e)
+        {
+            if (IsLocalPlayer && playerType == e.playerType)
+            {
+                Debug.Log("OnPlayerHeal: " + e.amount);
+                PlayerHealServerRpc(e.amount);
+            }
+        }
+
+        [ServerRpc]
         public void InitPlayerServerRpc(string name)
         {
             Debug.Log("InitPlayerServerRpc: " + name);
-            PlayerData oldValue = playerData.Value;
-            playerData.Value.PlayerName = name;
-            playerData.Value.playerHealth = 100;
-            playerData.Value.playerMaxHealth = 100;
-            playerData.Value.playerEnergy = 100;
-            playerData.Value.playerMaxEnergy = 100;
-            playerData.OnValueChanged?.Invoke(oldValue, playerData.Value);
+            playerData.Value = new()
+            {
+                PlayerName = name,
+                playerType = playerType,
+                playerHealth = playerType == ItemAccessbility.knight ? 100 : 50,
+                playerMaxHealth = playerType == ItemAccessbility.knight ? 100 : 50,
+                playerEnergy = playerType == ItemAccessbility.knight ? 50 : 100,
+                playerMaxEnergy = playerType == ItemAccessbility.knight ? 50 : 100
+            };
+            playerData.SetDirty(true);
+            playerData.OnValueChanged?.Invoke(null, playerData.Value);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -31,56 +54,64 @@ namespace Players
                 Debug.Log("PlayerTakeDamageServerRpc: Player is dead");
                 return;
             }
-            Debug.Log("PlayerTakeDamageServerRpc: " + damage);
-            PlayerData oldValue = playerData.Value;
+            Debug.Log("PlayerTakeDamageServerRpc: " + playerData.Value.PlayerName + " " + damage);
             playerData.Value.playerHealth -= damage;
             if (playerData.Value.playerHealth <= 0)
             {
                 playerData.Value.playerDead = true;
-                PlayerDeadServerRpc();
+                PlayerDeadClientRpc(playerType);
             }
-            playerData.OnValueChanged?.Invoke(oldValue, playerData.Value);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void PlayerDeadServerRpc()
-        {
-            PlayerData oldValue = playerData.Value;
-            playerData.Value.playerDead = true;
-            playerData.OnValueChanged?.Invoke(oldValue, playerData.Value);
+            Debug.Log("PlayerTakeDamageServerRpc: " + playerData.Value.PlayerName + " " + playerData.Value.playerHealth);
+            playerData.SetDirty(true);
+            playerData.OnValueChanged?.Invoke(null,playerData.Value);
         }
 
         [ClientRpc]
-        public void PlayerDeadClientRpc()
+        public void PlayerDeadClientRpc(ItemAccessbility playerType)
         {
-            Debug.Log("PlayerDeadClientRpc");
-            new PlayerDeadEvent(playerType);
+            if(playerType == playerData.Value.playerType)
+            {
+                new PlayerDeadEvent(playerType);
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void PlayerRespawnServerRpc()
         {
-            PlayerData oldValue = playerData.Value;
             playerData.Value.playerHealth = playerData.Value.playerMaxHealth;
             playerData.Value.playerEnergy = playerData.Value.playerMaxEnergy;
             playerData.Value.playerDead = false;
-            playerData.OnValueChanged?.Invoke(oldValue, playerData.Value);
+            playerData.SetDirty(true);
+            playerData.OnValueChanged?.Invoke(null, playerData.Value);
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void PlayerHealServerRpc(int heal)
         {
+            Debug.Log("PlayerHealServerRpc: " + heal);
             if (playerData.Value.playerDead)
             {
                 return;
             }
-            PlayerData oldValue = playerData.Value;
+            if(playerData.Value.playerHealth == playerData.Value.playerMaxHealth)
+            {
+                return;
+            }
             playerData.Value.playerHealth += heal;
+            PlayHealParticleClientRpc();
             if (playerData.Value.playerHealth > playerData.Value.playerMaxHealth)
             {
                 playerData.Value.playerHealth = playerData.Value.playerMaxHealth;
             }
-            playerData.OnValueChanged?.Invoke(oldValue, playerData.Value);
+            playerData.SetDirty(true);
+            playerData.OnValueChanged?.Invoke(null, playerData.Value);
+        }
+
+        [ClientRpc]
+        public void PlayHealParticleClientRpc()
+        {
+            ParticleSystem particleSystem = GetComponentInChildren<ParticleSystem>();
+            particleSystem.Play();
         }
     }
 }

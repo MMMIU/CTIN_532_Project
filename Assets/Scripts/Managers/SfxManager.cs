@@ -13,10 +13,13 @@ public class SFXManager : MonoBehaviour
     }
 
     [SerializeField]
-    private List<SFXPair> sfxList;
+    private List<SFXPair> audioClipList;
 
     [SerializeField]
     private AudioSource musicAudioSource;
+
+    [SerializeField]
+    private AudioSource soundAudioSource;
 
     [SerializeField]
     private AudioMixer mixer;
@@ -45,9 +48,9 @@ public class SFXManager : MonoBehaviour
             Debug.LogWarning("No audio source set for SFXManager");
             return;
         }
-        if (sfxList.Exists(sfx => sfx.name == name))
+        if (audioClipList.Exists(sfx => sfx.name == name))
         {
-            musicAudioSource.clip = sfxList.Find(sfx => sfx.name == name).file;
+            musicAudioSource.clip = audioClipList.Find(sfx => sfx.name == name).file;
             musicAudioSource.Play();
         }
         else
@@ -66,21 +69,32 @@ public class SFXManager : MonoBehaviour
         musicAudioSource.Stop();
     }
 
-    public void PlayOneShot(string name)
+    public void PlaySFX(string name)
     {
-        if (musicAudioSource == null)
+        if (soundAudioSource == null)
         {
             Debug.LogWarning("No audio source set for SFXManager");
             return;
         }
-        if (sfxList.Exists(sfx => sfx.name == name))
+        if (audioClipList.Exists(sfx => sfx.name == name))
         {
-            musicAudioSource.PlayOneShot(sfxList.Find(sfx => sfx.name == name).file);
+            soundAudioSource.clip = audioClipList.Find(sfx => sfx.name == name).file;
+            soundAudioSource.Play();
         }
         else
         {
             Debug.LogWarning("No SFX found with name: " + name);
         }
+    }
+
+    public void StopSFX()
+    {
+        if (soundAudioSource == null)
+        {
+            Debug.LogWarning("No audio source set for SFXManager");
+            return;
+        }
+        soundAudioSource.Stop();
     }
 
     public void SetMusicVolume(float volume)

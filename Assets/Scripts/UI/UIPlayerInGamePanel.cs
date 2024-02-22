@@ -1,3 +1,4 @@
+using Events;
 using Managers;
 using Players;
 using System.Collections;
@@ -11,24 +12,28 @@ namespace UI
         [SerializeField]
         UIPlayerInGamePanel_PlayerStats playerStats;
 
-        public override void OnUIAwake()
+        public override void OnUIEnable()
         {
-            base.OnUIAwake();
+            base.OnUIEnable();
             playerStats.UpdatePlayerImage(GameManager.Instance.LocalPlayer.playerSprite);
-            OnPlayerDataUpdate(null, GameManager.Instance.LocalPlayer.playerData.Value);
-            GameManager.Instance.LocalPlayer.playerData.OnValueChanged += OnPlayerDataUpdate;
+            //OnPlayerDataUpdate(null, GameManager.Instance.LocalPlayer.playerData.Value);
+            EventManager.Instance.Subscribe<PlayerDataUpdateEvent>(OnPlayerDataUpdate);
         }
 
-        public override void OnUIDestroy()
+        public override void OnUIDisable()
         {
-            GameManager.Instance.LocalPlayer.playerData.OnValueChanged -= OnPlayerDataUpdate;
-            base.OnUIDestroy();
+            EventManager.Instance.Unsubscribe<PlayerDataUpdateEvent>(OnPlayerDataUpdate);
+            base.OnUIDisable();
         }
 
-        public void OnPlayerDataUpdate(PlayerData old, PlayerData updated)
+        public void OnPlayerDataUpdate(PlayerDataUpdateEvent e)
         {
-            Debug.Log("OnPlayerDataUpdate: " + updated.playerHealth + " " + updated.playerMaxHealth + " " + updated.playerEnergy + " " + updated.playerMaxEnergy);
-            playerStats.UpdatePlayerStats(updated.playerHealth, updated.playerMaxHealth, updated.playerEnergy, updated.playerMaxEnergy);
+            playerStats.UpdatePlayerStats(GameManager.Instance.LocalPlayer.playerData.Value.playerHealth, GameManager.Instance.LocalPlayer.playerData.Value.playerMaxHealth, GameManager.Instance.LocalPlayer.playerData.Value.playerEnergy, GameManager.Instance.LocalPlayer.playerData.Value.playerMaxEnergy);
         }
+
+        //private void Update()
+        //{
+        //    playerStats.UpdatePlayerStats(GameManager.Instance.LocalPlayer.playerData.Value.playerHealth, GameManager.Instance.LocalPlayer.playerData.Value.playerMaxHealth, GameManager.Instance.LocalPlayer.playerData.Value.playerEnergy, GameManager.Instance.LocalPlayer.playerData.Value.playerMaxEnergy);
+        //}
     }
 }

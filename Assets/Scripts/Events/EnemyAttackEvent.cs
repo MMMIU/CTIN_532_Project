@@ -11,10 +11,11 @@ namespace Events {
         public ItemAccessbility playerType;
         public int damage;
 
-        public EnemyAttackEvent(ItemAccessbility playerType, int demage = 10, string name = nameof(EnemyAttackEvent), float delay = 0f) : base(name, delay)
+        public EnemyAttackEvent(ItemAccessbility playerType, int damage = 10, string name = nameof(EnemyAttackEvent), float delay = 0f) : base(name, delay)
         {
             this.playerType = playerType;
-            this.damage = demage;
+            this.damage = damage;
+            Debug.Log("EnemyAttackEvent::" + playerType + " " + damage);
         }
     }
 }

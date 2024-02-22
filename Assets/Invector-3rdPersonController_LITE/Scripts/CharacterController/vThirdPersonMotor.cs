@@ -187,6 +187,36 @@ namespace Invector.vCharacterController
             _rigidbody.velocity = targetVelocity;
         }
 
+        //public virtual void MoveCharacter(Vector3 _direction)
+        //{
+        //    // 计算输入平滑
+        //    inputSmooth = Vector3.Lerp(inputSmooth, input, (isStrafing ? strafeSpeed.movementSmooth : freeSpeed.movementSmooth) * Time.deltaTime);
+
+        //    if (!isGrounded || isJumping) return;
+
+        //    _direction.y = 0;
+        //    _direction.x = Mathf.Clamp(_direction.x, -1f, 1f);
+        //    _direction.z = Mathf.Clamp(_direction.z, -1f, 1f);
+        //    // 限制输入
+        //    if (_direction.magnitude > 1f)
+        //        _direction.Normalize();
+
+        //    // 计算目标位置和基于当前位置的目标速度，保持原有逻辑不变
+        //    Vector3 targetPosition = (useRootMotion ? animator.rootPosition : _rigidbody.position) + _direction * (stopMove ? 0 : moveSpeed) * Time.deltaTime;
+        //    Vector3 targetVelocity = (targetPosition - transform.position) / Time.deltaTime;
+
+        //    // 保持垂直速度不变
+        //    bool useVerticalVelocity = true;
+        //    if (useVerticalVelocity) targetVelocity.y = _rigidbody.velocity.y;
+
+        //    // 计算需要应用的力，以实现目标速度。这里使用目标速度减去当前速度，得到速度改变量
+        //    Vector3 velocityChange = targetVelocity - _rigidbody.velocity;
+        //    // 将速度改变量转换为力，这里可以直接使用因为在VelocityChange模式下，加的是速度改变量
+        //    _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+        //}
+
+
+
         public virtual void CheckSlopeLimit()
         {
             if (input.sqrMagnitude < 0.1) return;

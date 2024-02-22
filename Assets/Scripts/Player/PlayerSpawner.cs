@@ -11,6 +11,9 @@ using Utils;
 public class PlayerSpawner : NetworkBehaviour
 {
     [SerializeField]
+    ItemAccessbility hostPlayerType;
+
+    [SerializeField]
     GameObject knightPrefab;
 
     [SerializeField]
@@ -27,9 +30,15 @@ public class PlayerSpawner : NetworkBehaviour
     {
         GameObject newPlayer;
         if (playerType == ItemAccessbility.knight)
+        {
+            Debug.Log("Spawning knight at: "+knightSpawnPoint.position);
             newPlayer = Instantiate(knightPrefab, knightSpawnPoint.position, knightSpawnPoint.rotation);
+        }
         else
+        {
+            Debug.Log("Spawning princess at: " + princessSpawnPoint.position);
             newPlayer = Instantiate(princessPrefab, princessSpawnPoint.position, princessSpawnPoint.rotation);
+        }
         newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
         //newPlayer.GetComponent<Player>().playerData.Value.ResetAll(true);
         newPlayer.SetActive(true);
@@ -54,11 +63,17 @@ public class PlayerSpawner : NetworkBehaviour
         {
             if (e.playerId == 0)
             {
-                SpawnPlayerServerRpc(e.playerId, ItemAccessbility.knight);
+                if(hostPlayerType == ItemAccessbility.knight)
+                    SpawnPlayerServerRpc(NetworkManager.LocalClientId, ItemAccessbility.knight);
+                else
+                    SpawnPlayerServerRpc(NetworkManager.LocalClientId, ItemAccessbility.princess);
             }
             else
             {
-                SpawnPlayerServerRpc(e.playerId, ItemAccessbility.princess);
+                if (hostPlayerType == ItemAccessbility.knight)
+                    SpawnPlayerServerRpc(e.playerId, ItemAccessbility.princess);
+                else
+                    SpawnPlayerServerRpc(e.playerId, ItemAccessbility.knight);
             }
         }
 

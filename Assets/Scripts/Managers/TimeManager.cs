@@ -26,17 +26,25 @@ namespace Managers
         public const float startingHour = 8f;
 
         [SerializeField]
+        private float timeElapsedUnScaled = 0f;
+        [SerializeField]
         private float timeElapsed = 0f;
 
         public void Tick()
         {
-            timeElapsed += Time.unscaledDeltaTime;
+            timeElapsedUnScaled += Time.unscaledDeltaTime;
+            timeElapsed += Time.deltaTime;
         }
 
         /// <summary>
         /// Returns the time elapsed since Game begin
         /// </summary>
         /// <returns></returns>
+        public float GetTimeUnScaled()
+        {
+            return timeElapsedUnScaled;
+        }
+
         public float GetTime()
         {
             return timeElapsed;

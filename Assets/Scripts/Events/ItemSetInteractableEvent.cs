@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Events
 {
-    public class ItemSetInteractableEvent : BaseEvent
+    public class ItemSetInteractableEvent : EventBase
     {
         public int item_uid;
         public bool interactable;
 
-        public ItemSetInteractableEvent(int item_uid, bool interactable, string name = nameof(ItemSetInteractableEvent), float delay = 0f) : base(name, delay)
+        public ItemSetInteractableEvent(int item_uid, bool interactable, float delay = 0f, string name = nameof(ItemSetInteractableEvent)) : base(name, delay)
         {
             this.item_uid = item_uid;
             this.interactable = interactable;

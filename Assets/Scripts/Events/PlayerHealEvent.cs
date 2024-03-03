@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Events
 {
-    public class PlayerHealEvent : BaseEvent
+    public class PlayerHealEvent : EventBase
     {
         public ItemAccessbility playerType;
         public int amount = 0;

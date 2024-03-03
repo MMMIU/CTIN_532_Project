@@ -127,6 +127,33 @@ namespace UnityEngine.InputSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlayerRightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""c75e22c9-eb14-4c9b-a41f-1f183c6f9120"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlayerPoint"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""2df89776-e72c-46b7-94f4-4532d01bd9aa"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PlayerScrollWheel"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""a57015f1-3a2a-4655-85df-090d6c105925"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -338,6 +365,39 @@ namespace UnityEngine.InputSystem
                     ""action"": ""HealSkill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ef88cfb-c914-4ee5-b011-0479f643b1cf"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PlayerRightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33cea61b-9df4-4e46-9509-d8356ea2c6b4"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PlayerPoint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3501fca1-45e9-4eb4-9c03-268738075655"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PlayerScrollWheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -383,12 +443,12 @@ namespace UnityEngine.InputSystem
                 },
                 {
                     ""name"": ""Click"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""3c7022bf-7922-4f7c-a998-c437916075ad"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""ScrollWheel"",
@@ -818,6 +878,9 @@ namespace UnityEngine.InputSystem
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_SpecialSkillOne = m_Player.FindAction("SpecialSkillOne", throwIfNotFound: true);
             m_Player_HealSkill = m_Player.FindAction("HealSkill", throwIfNotFound: true);
+            m_Player_PlayerRightClick = m_Player.FindAction("PlayerRightClick", throwIfNotFound: true);
+            m_Player_PlayerPoint = m_Player.FindAction("PlayerPoint", throwIfNotFound: true);
+            m_Player_PlayerScrollWheel = m_Player.FindAction("PlayerScrollWheel", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -905,6 +968,9 @@ namespace UnityEngine.InputSystem
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_SpecialSkillOne;
         private readonly InputAction m_Player_HealSkill;
+        private readonly InputAction m_Player_PlayerRightClick;
+        private readonly InputAction m_Player_PlayerPoint;
+        private readonly InputAction m_Player_PlayerScrollWheel;
         public struct PlayerActions
         {
             private @MyPlayerInput m_Wrapper;
@@ -920,6 +986,9 @@ namespace UnityEngine.InputSystem
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @SpecialSkillOne => m_Wrapper.m_Player_SpecialSkillOne;
             public InputAction @HealSkill => m_Wrapper.m_Player_HealSkill;
+            public InputAction @PlayerRightClick => m_Wrapper.m_Player_PlayerRightClick;
+            public InputAction @PlayerPoint => m_Wrapper.m_Player_PlayerPoint;
+            public InputAction @PlayerScrollWheel => m_Wrapper.m_Player_PlayerScrollWheel;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -962,6 +1031,15 @@ namespace UnityEngine.InputSystem
                 @HealSkill.started += instance.OnHealSkill;
                 @HealSkill.performed += instance.OnHealSkill;
                 @HealSkill.canceled += instance.OnHealSkill;
+                @PlayerRightClick.started += instance.OnPlayerRightClick;
+                @PlayerRightClick.performed += instance.OnPlayerRightClick;
+                @PlayerRightClick.canceled += instance.OnPlayerRightClick;
+                @PlayerPoint.started += instance.OnPlayerPoint;
+                @PlayerPoint.performed += instance.OnPlayerPoint;
+                @PlayerPoint.canceled += instance.OnPlayerPoint;
+                @PlayerScrollWheel.started += instance.OnPlayerScrollWheel;
+                @PlayerScrollWheel.performed += instance.OnPlayerScrollWheel;
+                @PlayerScrollWheel.canceled += instance.OnPlayerScrollWheel;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -999,6 +1077,15 @@ namespace UnityEngine.InputSystem
                 @HealSkill.started -= instance.OnHealSkill;
                 @HealSkill.performed -= instance.OnHealSkill;
                 @HealSkill.canceled -= instance.OnHealSkill;
+                @PlayerRightClick.started -= instance.OnPlayerRightClick;
+                @PlayerRightClick.performed -= instance.OnPlayerRightClick;
+                @PlayerRightClick.canceled -= instance.OnPlayerRightClick;
+                @PlayerPoint.started -= instance.OnPlayerPoint;
+                @PlayerPoint.performed -= instance.OnPlayerPoint;
+                @PlayerPoint.canceled -= instance.OnPlayerPoint;
+                @PlayerScrollWheel.started -= instance.OnPlayerScrollWheel;
+                @PlayerScrollWheel.performed -= instance.OnPlayerScrollWheel;
+                @PlayerScrollWheel.canceled -= instance.OnPlayerScrollWheel;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1180,6 +1267,9 @@ namespace UnityEngine.InputSystem
             void OnJump(InputAction.CallbackContext context);
             void OnSpecialSkillOne(InputAction.CallbackContext context);
             void OnHealSkill(InputAction.CallbackContext context);
+            void OnPlayerRightClick(InputAction.CallbackContext context);
+            void OnPlayerPoint(InputAction.CallbackContext context);
+            void OnPlayerScrollWheel(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

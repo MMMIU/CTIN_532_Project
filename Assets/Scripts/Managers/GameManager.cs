@@ -36,6 +36,8 @@ namespace Managers
         public float timeElapsed = 0f;
         public float timeScale = 1f;
 
+        public bool useQuestManager = true;
+
         private void Awake()
         {
             if (instance == null)
@@ -52,14 +54,17 @@ namespace Managers
             {
                 UIManager.Instance.OpenPanel<UIDev>();
             }
+            else
+            {
+                SFXManager.Instance.PlayMusic("bgm_normal");
+            }
             UIManager.Instance.OpenPanel<UIStartMenu>();
-            SFXManager.Instance.PlayMusic("bgm_normal");
         }
 
         private void Update()
         {
             Time.timeScale = timeScale;
-            timeElapsed = TimeManager.Instance.GetTime();
+            timeElapsed = TimeManager.Instance.GetTimeUnScaled();
             // time manager and event manager does not affected to time scale
             TimeManager.Instance.Tick();
             EventManager.Instance.Tick();
@@ -73,7 +78,10 @@ namespace Managers
         public void StarGame()
         {
             NetConnector.Instance.acceptIncomingConnections = false;
-            QuestManager.Instance.StartQuestSequenceServerRpc();
+            if(useQuestManager)
+            {
+                QuestManager.Instance.StartQuestSequenceServerRpc();
+            }
         }
 
         public void QuitGame()

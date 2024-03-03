@@ -10,8 +10,8 @@ namespace Events
         private static EventManager instance = null;
 
         private bool isDealingWithHandler = false;
-        private List<KeyValuePair<string, Action<BaseEvent>>> handlersToBeAdded = new();
-        private List<KeyValuePair<string, Action<BaseEvent>>> handlersToBeRemoved = new();
+        private List<KeyValuePair<string, Action<EventBase>>> handlersToBeAdded = new();
+        private List<KeyValuePair<string, Action<EventBase>>> handlersToBeRemoved = new();
 
 
         public static EventManager Instance
@@ -33,13 +33,13 @@ namespace Events
             handlersToBeRemoved = new();
         }
 
-        private List<BaseEvent> eventList = new();
-        private Dictionary<string, List<Action<BaseEvent>>> eventHandlers = new();
+        private List<EventBase> eventList = new();
+        private Dictionary<string, List<Action<EventBase>>> eventHandlers = new();
 
         public void Tick()
         {
-            float currentTime = TimeManager.Instance.GetTime();
-            List<BaseEvent> eventsToTrigger = new();
+            float currentTime = TimeManager.Instance.GetTimeUnScaled();
+            List<EventBase> eventsToTrigger = new();
 
             foreach (var e in eventList)
             {
@@ -77,12 +77,12 @@ namespace Events
             DealWithHandlersToBeAddedOrRemoved();
         }
 
-        public void Subscribe<T>(Action<T> handler) where T : BaseEvent
+        public void Subscribe<T>(Action<T> handler) where T : EventBase
         {
             Subscribe(typeof(T).Name, (e) => handler((T)e));
         }
 
-        public void Subscribe(string eventName, Action<BaseEvent> handler)
+        public void Subscribe(string eventName, Action<EventBase> handler)
         {
             Debug.Log("Subscribing to event: " + eventName);
             if (isDealingWithHandler)
@@ -97,12 +97,12 @@ namespace Events
             eventHandlers[eventName].Add(handler);
         }
 
-        public void Unsubscribe<T>(Action<T> handler) where T : BaseEvent
+        public void Unsubscribe<T>(Action<T> handler) where T : EventBase
         {
             Unsubscribe(typeof(T).Name, (e) => handler((T)e));
         }
 
-        public void Unsubscribe(string eventName, Action<BaseEvent> handler)
+        public void Unsubscribe(string eventName, Action<EventBase> handler)
         {
             Debug.Log("Unsubscribing from event: " + eventName);
             if (isDealingWithHandler)
@@ -130,7 +130,7 @@ namespace Events
             handlersToBeRemoved.Clear();
         }
 
-        public void ScheduleEvent(BaseEvent newEvent)
+        public void ScheduleEvent(EventBase newEvent)
         {
             Debug.Log("Scheduling event: " + newEvent.name);
             eventList.Add(newEvent);

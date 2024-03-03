@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Events
 {
-    public class SpawnPlayerEvent : BaseEvent
+    public class SpawnPlayerEvent : EventBase
     {
         public ulong playerId;
 

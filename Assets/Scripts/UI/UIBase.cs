@@ -56,7 +56,6 @@ namespace UI
 
         public virtual void Close()
         {
-            Debug.Log("Close");
             UIManager.Instance.Close(this);
         }
     }

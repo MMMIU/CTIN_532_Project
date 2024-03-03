@@ -30,7 +30,10 @@ namespace UI
 
         public override void Close()
         {
-            QuestManager.Instance.AddProgressServerRpc(1, 1, 1);
+            if(TryGetComponent<QuestProgressModifier>(out var qpm))
+            {
+                qpm.AddProgress();
+            }
             base.Close();
         }
     }

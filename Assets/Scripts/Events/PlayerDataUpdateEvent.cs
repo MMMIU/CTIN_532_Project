@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Events
 {
-    public class PlayerDataUpdateEvent : BaseEvent
+    public class PlayerDataUpdateEvent : EventBase
     {
         public PlayerDataUpdateEvent(float delay = 0f, string name = nameof(PlayerDataUpdateEvent)) : base(name, delay)
         {

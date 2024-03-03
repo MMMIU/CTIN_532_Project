@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -22,6 +23,9 @@ namespace UI
 
         [SerializeField]
         private TMP_InputField joinCodeInputField;
+
+        [SerializeField]
+        private Toggle useInternetToggle;
 
         public async void OnStartAsKnight()
         {
@@ -41,6 +45,11 @@ namespace UI
                 GameManager.Instance.LocalPlayerName = string.IsNullOrEmpty(playerNameInput.text) ? "Princess" : playerNameInput.text;
                 Close();
             }
+        }
+
+        public void SetUseInternet()
+        {
+            NetConnector.Instance.useInternet = useInternetToggle.isOn;
         }
     }
 }

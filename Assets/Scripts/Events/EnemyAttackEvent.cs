@@ -6,7 +6,7 @@ using Quest;
 using Players;
 using Items;
 namespace Events {
-    public class EnemyAttackEvent : BaseEvent
+    public class EnemyAttackEvent : EventBase
     {
         public ItemAccessbility playerType;
         public int damage;

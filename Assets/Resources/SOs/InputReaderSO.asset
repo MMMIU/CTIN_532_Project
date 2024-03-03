@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788116200a5d0d142891dcb3e3d6d6f9, type: 3}
   m_Name: InputReaderSO
   m_EditorClassIdentifier: 
+  hoverTex: {fileID: 2800000, guid: dd59c3eef4acfa3489382c91723687de, type: 3}
+  MouseCurrPosition: {x: 0, y: 0}

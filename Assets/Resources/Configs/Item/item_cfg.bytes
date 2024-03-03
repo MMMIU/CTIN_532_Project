@@ -10,7 +10,7 @@
   },
   {
     "item_uid": 2,
-    "item_type": "pedal_switch",
+    "item_type": "switch_button",
     "item_sub_id": 1,
     "name": "pedal_princess",
     "desc": "Pedal switch for princess",
@@ -19,29 +19,11 @@
   },
   {
     "item_uid": 3,
-    "item_type": "pedal_switch",
+    "item_type": "switch_button",
     "item_sub_id": 2,
     "name": "pedal_knight",
     "desc": "Pedal switch for knight",
     "accessbility": "knight",
-    "init_interactable": "no"
-  },
-  {
-    "item_uid": 4,
-    "item_type": "gate",
-    "item_sub_id": 1,
-    "name": "gate_left",
-    "desc": "The left half of the gate",
-    "accessbility": "both",
-    "init_interactable": "no"
-  },
-  {
-    "item_uid": 5,
-    "item_type": "gate",
-    "item_sub_id": 2,
-    "name": "gate_right",
-    "desc": "The right half of the gate",
-    "accessbility": "both",
     "init_interactable": "no"
   },
   {
@@ -60,6 +42,114 @@
     "name": "key_1",
     "desc": "First Key",
     "accessbility": "both",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 8,
+    "item_type": "switch_button",
+    "item_sub_id": 3,
+    "name": "pedal_maze",
+    "desc": "Pedal switch in maze",
+    "accessbility": "both",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 9,
+    "item_type": "gate",
+    "item_sub_id": 1,
+    "name": "maze_gate",
+    "desc": "Maze gate",
+    "accessbility": "both",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 10,
+    "item_type": "maze_eye",
+    "item_sub_id": 1,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 11,
+    "item_type": "maze_eye",
+    "item_sub_id": 2,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 12,
+    "item_type": "maze_eye",
+    "item_sub_id": 3,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 13,
+    "item_type": "maze_eye",
+    "item_sub_id": 4,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 14,
+    "item_type": "maze_eye",
+    "item_sub_id": 5,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 15,
+    "item_type": "maze_eye",
+    "item_sub_id": 6,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 16,
+    "item_type": "maze_eye",
+    "item_sub_id": 7,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 17,
+    "item_type": "maze_eye",
+    "item_sub_id": 8,
+    "name": "maze_eye",
+    "desc": "Top down cam",
+    "accessbility": "princess",
+    "init_interactable": "yes"
+  },
+  {
+    "item_uid": 18,
+    "item_type": "fence",
+    "item_sub_id": 1,
+    "name": "maze_fence",
+    "desc": "maze_fence",
+    "accessbility": "both",
+    "init_interactable": "no"
+  },
+  {
+    "item_uid": 19,
+    "item_type": "hanoi_control",
+    "item_sub_id": 1,
+    "name": "hanoi_control",
+    "desc": "hanoi_control",
+    "accessbility": "princess",
     "init_interactable": "yes"
   }
 ]

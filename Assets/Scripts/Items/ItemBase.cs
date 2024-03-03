@@ -4,6 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 using Inputs;
+using Events;
 
 namespace Items
 {
@@ -22,20 +23,31 @@ namespace Items
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void SetInteractableServerRpc(bool interactable)
+        protected void SetInteractableServerRpc(bool interactable)
         {
             this.interactable.Value = interactable;
+            this.interactable.SetDirty(true);
         }
 
 
-        protected virtual void Awake()
+        public override void OnNetworkSpawn()
         {
             itemDataItem = ItemLogic.Instance.GetItemData(item_uid);
+            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEvent);
+            SetInteractableServerRpc(itemDataItem.interactable);
         }
 
-        protected virtual void OnTriggerEnter(Collider other) { }
-        protected virtual void OnTriggerExit(Collider other) { }
+        public override void OnNetworkDespawn()
+        {
+            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEvent);
+        }
 
-
+        protected virtual void DoItemSetInteractableEvent(EventBase baseEvent)
+        {
+            if(baseEvent is ItemSetInteractableEvent e && e.item_uid == item_uid)
+            {
+                SetInteractableServerRpc(e.interactable);
+            }
+        }
     }
 }

@@ -11,16 +11,16 @@ namespace Players
         bool isSpecialSkillOneActive = false;
         public void PrincessSkillOne()
         {
-            if (isSpecialSkillOneActive)
-            {
-                isSpecialSkillOneActive = false;
-                new VCamChangeEvent("");
-            }
-            else
-            {
-                isSpecialSkillOneActive = true;
-                new VCamChangeEvent("overview");
-            }
+            //if (isSpecialSkillOneActive)
+            //{
+            //    isSpecialSkillOneActive = false;
+            //    new VCamChangeEvent("");
+            //}
+            //else
+            //{
+            //    isSpecialSkillOneActive = true;
+            //    new VCamChangeEvent("overview");
+            //}
         }
 
     }

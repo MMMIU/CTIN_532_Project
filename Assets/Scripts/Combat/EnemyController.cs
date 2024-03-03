@@ -31,49 +31,48 @@ public class enemyController : NetworkBehaviour
     public Animator playerAnimator;
     public Animator selfAnimator;
     public int attacked = 0;
+
+    public bool hitByPlayer = false;
     #endregion
 
     public override void OnNetworkSpawn()
     {
-        if (!IsServer)
-        {
-            return;
-        }
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        Debug.Log("Number of players: " + players.Length);
         agent = GetComponent<NavMeshAgent>();
-        agent.enabled = true;
-        Debug.Log("Agent enabled: " + agent.enabled);
-        if (players.Length == 1)
+        selfAnimator = this.GetComponent<Animator>();
+        if (IsServer)
         {
-            targetPlayer = players[0].transform;
-        }
-        else
-        {
-            if (players[0].GetComponent<Player>().playerType == ItemAccessbility.princess)
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            Debug.Log("Number of players: " + players.Length);
+            agent.enabled = true;
+            Debug.Log("Agent enabled: " + agent.enabled);
+            if (players.Length == 1)
             {
                 targetPlayer = players[0].transform;
             }
             else
             {
-                targetPlayer = players[1].transform;
+                if (players[0].GetComponent<Player>().playerType == ItemAccessbility.princess)
+                {
+                    targetPlayer = players[0].transform;
+                }
+                else
+                {
+                    targetPlayer = players[1].transform;
+                }
             }
         }
-        selfAnimator = this.GetComponent<Animator>();
+        EventManager.Instance.Subscribe<KnightAttackEvent>(ResetTargetPlayer);
         Debug.Log(targetPlayer);
-
-
-        EventManager.Instance.Subscribe(nameof(KnightAttackEvent), ResetTargetPlayer);
     }
 
     public override void OnNetworkDespawn()
     {
-        EventManager.Instance.Unsubscribe(nameof(KnightAttackEvent), ResetTargetPlayer);
+        EventManager.Instance.Unsubscribe<KnightAttackEvent>(ResetTargetPlayer);
         base.OnNetworkDespawn();
     }
     void Update()
     {
-        if (!IsServer||!IsSpawned||targetPlayer==null)
+        if (!IsServer || !IsSpawned || targetPlayer == null)
         {
             return;
         }
@@ -142,7 +141,7 @@ public class enemyController : NetworkBehaviour
 
         transform.LookAt(targetPlayer);
 
-        if (!alreadyAttacked)
+        if (!alreadyAttacked && !hitByPlayer)
         {
             //Attack
             selfAnimator.Play("Stab Attack");
@@ -162,6 +161,17 @@ public class enemyController : NetworkBehaviour
         alreadyAttacked = false;
     }
 
+    public void GotHit()
+    {
+        //selfAnimator.SetBool("Attack", false);
+        hitByPlayer = true;
+    }
+
+    public void HitReactionDone()
+    {
+        hitByPlayer = false;
+    }
+
 
     //public void attackedByPlayer(GameObject attacker)
     //{
@@ -175,18 +185,30 @@ public class enemyController : NetworkBehaviour
 
     //}
 
-    void Death()
+    [ServerRpc(RequireOwnership = false)]
+    void DeathServerRpc()
     {
         if (!IsServer)
         {
             return;
         }
-        Destroy(this.GetComponent<CapsuleCollider>());
-        this.GetComponent<Animator>().Play("Death");
+        GetComponent<CapsuleCollider>().enabled = false;
+        DeathAnimClientRpc();
     }
 
-    public void ResetTargetPlayer(BaseEvent baseE)
+    [ClientRpc]
+    void DeathAnimClientRpc()
     {
+        selfAnimator?.Play("Death");
+    }
+
+    public void ResetTargetPlayer(EventBase baseE)
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+
         KnightAttackEvent e = baseE as KnightAttackEvent;
         if (e.other == gameObject)
         {

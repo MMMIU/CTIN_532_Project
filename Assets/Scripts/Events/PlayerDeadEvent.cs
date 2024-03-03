@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Events
 {
-    public class PlayerDeadEvent : BaseEvent
+    public class PlayerDeadEvent : EventBase
     {
         ItemAccessbility playerType;
         public PlayerDeadEvent(ItemAccessbility playerType, float delay = 0f, string name = nameof(PlayerDeadEvent)) : base(name, delay)

@@ -16,19 +16,16 @@ namespace Items
     {
         public override void OnNetworkSpawn()
         {
-            Debug.Log("ItemSpiderWeb_1 OnNetworkSpawn");
-            SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkSpawn();
+            Debug.Log("ItemSpiderWeb_1 OnNetworkSpawn");
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkDespawn();
         }
 
-        private void DoItemSetInteractableEventServer(BaseEvent baseEvent)
+        private void DoItemSetInteractableEventServer(EventBase baseEvent)
         {
             if (!IsServer) return;
             ItemSetInteractableEvent e = baseEvent as ItemSetInteractableEvent;

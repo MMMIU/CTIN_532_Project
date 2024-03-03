@@ -1,3 +1,4 @@
+using Quest;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -33,10 +34,18 @@ namespace Enemies
         [ServerRpc(RequireOwnership = false)]
         public virtual void TakeDamageServerRpc(int damage)
         {
+            if (health.Value <= 0)
+            {
+                return;
+            }
             health.Value -= damage;
             if (health.Value <= 0)
             {
                 DieClientRpc();
+                if(TryGetComponent<QuestProgressModifier>(out var questProgressModifier))
+                {
+                    questProgressModifier.AddProgress();
+                }
             }
         }
 

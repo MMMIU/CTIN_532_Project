@@ -8,6 +8,7 @@ TagManager:
   - Item
   - Knight
   - Princess
+  - UICamera
   layers:
   - Default
   - TransparentFX
@@ -20,9 +21,9 @@ TagManager:
   - Princess
   - Knight
   - Ground
-  - 
-  - 
-  - 
+  - Clickable
+  - Wall
+  - HanoiRing
   - 
   - 
   - 

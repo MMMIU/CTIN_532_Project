@@ -6,7 +6,7 @@ using Quest;
 using Manager;
 namespace Events
 {
-    public class TaskAssignEvent : BaseEvent
+    public class TaskAssignEvent : EventBase
     {
         const float oneRoundDelay = 3f;
         TaskDataItem taskDataItem;
@@ -16,7 +16,7 @@ namespace Events
             taskDataItem = task;
             this.delayRound = delayRound;
 
-            postEvent += (BaseEvent e) =>
+            postEvent += (EventBase e) =>
             {
                 string popUpText = "Task Assigned: " + TaskCfg.Instance.GetCfgItem(taskDataItem.task_chain_id, taskDataItem.task_sub_id).desc;
                 UIManager.Instance.DelayOpenPanel<UIPopUpBar>(oneRoundDelay * delayRound, popUpText);

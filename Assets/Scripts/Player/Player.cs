@@ -120,7 +120,10 @@ namespace Players
 
         private void ShowQuestPanel()
         {
-            UIManager.Instance.OpenPanel<UIQuestPanel>();
+            if(GameManager.Instance.useQuestManager)
+            {
+                UIManager.Instance.OpenPanel<UIQuestPanel>();
+            }
         }
 
         private void UseSpecialSkillOne()

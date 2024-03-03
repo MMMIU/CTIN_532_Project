@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 3771118714581710642}
   - component: {fileID: 1441202688186779789}
   - component: {fileID: 5870838518286140683}
+  - component: {fileID: 2265259636098067983}
   m_Layer: 5
   m_Name: UIBookReadPanel
   m_TagString: Untagged
@@ -260,3 +261,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
+--- !u!114 &2265259636098067983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4436417472453310615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711e9a8c8e226414eb23693f834f055e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests:
+  - First: 1
+    Second: 1

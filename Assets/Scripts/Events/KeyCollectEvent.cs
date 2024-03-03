@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Events
 {
-    public class KeyCollectEvent : BaseEvent
+    public class KeyCollectEvent : EventBase
     {
         public int keyIndex;
         public ItemAccessbility playerType;

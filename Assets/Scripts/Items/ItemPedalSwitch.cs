@@ -16,13 +16,16 @@ namespace Items
         [SerializeField]
         ParticleSystem particles;
 
+        [SerializeField]
+        bool accessableByAll = false;
+
+        bool isActive = false;
+
         public override void OnNetworkSpawn()
         {
-            Debug.Log("ItemPedalSwitch OnNetworkSpawn");
-            SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
-            emissionPlne.SetActive(false);
             base.OnNetworkSpawn();
+            Debug.Log("ItemPedalSwitch OnNetworkSpawn");
+            emissionPlne.SetActive(false);
         }
 
         public override void OnNetworkDespawn()
@@ -31,41 +34,68 @@ namespace Items
             base.OnNetworkDespawn();
         }
 
-        protected override void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
-            if (Interactable.Value && other.CompareTag("Player"))
+            if (isActive)
             {
-                Player p = other.GetComponent<Player>();
-                if (p.playerType == itemDataItem.accessbility)
+                return;
+            }
+
+            if (Interactable.Value)
+            {
+                bool allowTrigger = accessableByAll;
+                if (!allowTrigger && other.TryGetComponent<Player>(out var p) && p.IsLocalPlayer)
                 {
+                    allowTrigger = itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility;
+                }
+
+                if (allowTrigger)
+                {
+                    isActive = true;
                     emissionPlne.SetActive(true);
                     particles.Play();
-                    if (p.IsLocalPlayer)
+                    if (TryGetComponent<QuestProgressModifier>(out var qpm))
                     {
-                        QuestManager.Instance.AddProgressServerRpc(1, 2, 1);
+                        qpm.AddProgress();
+                    }
+                    if (TryGetComponent<ItemInteractableModifier>(out var imf))
+                    {
+                        imf.SetInteractable(true);
                     }
                 }
+
             }
         }
 
-        protected override void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
-            if (Interactable.Value && other.CompareTag("Player"))
+            if (Interactable.Value)
             {
-                Player p = other.GetComponent<Player>();
-                if (p.playerType == itemDataItem.accessbility)
+                bool allowTrigger = accessableByAll;
+                if (!allowTrigger && other.TryGetComponent<Player>(out var p) && p.IsLocalPlayer)
                 {
+                    allowTrigger = itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility;
+                }
+
+                if (allowTrigger)
+                {
+                    isActive = false;
                     emissionPlne.SetActive(false);
                     particles.Stop();
-                    if (p.IsLocalPlayer)
+                    if (TryGetComponent<QuestProgressModifier>(out var qpm))
                     {
-                        QuestManager.Instance.DecreaseProgressServerRpc(1, 2, 1);
+                        qpm.DecreaseProgress();
+                    }
+                    if (TryGetComponent<ItemInteractableModifier>(out var imf))
+                    {
+                        imf.SetInteractable(false);
                     }
                 }
             }
+
         }
 
-        private void DoItemSetInteractableEventServer(BaseEvent baseEvent)
+        private void DoItemSetInteractableEventServer(EventBase baseEvent)
         {
             if (!IsServer) return;
             ItemSetInteractableEvent e = baseEvent as ItemSetInteractableEvent;

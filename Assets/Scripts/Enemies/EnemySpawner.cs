@@ -41,7 +41,7 @@ namespace Enemies
             base.OnNetworkDespawn();
         }
 
-        private void OnSpawnEnemyEvent(BaseEvent ev)
+        private void OnSpawnEnemyEvent(EventBase ev)
         {
             if (ev is EnemySpawnEvent enemySpawnEvent && enemySpawnEvent.playerType == GameManager.Instance.LocalPlayer.playerType)
             {

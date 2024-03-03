@@ -16,10 +16,17 @@ public class ItemFloatingPrompt : NetworkBehaviour
     [SerializeField]
     private bool disableOnInteract = true;
 
+    [SerializeField]
+    private bool reverseJudge = false;
+
+    private void Awake()
+    {
+        floatingPrompt.SetActive(false);
+    }
+
     public override void OnNetworkSpawn()
     {
         itemBase.Interactable.OnValueChanged += OnInteractableChanged;
-        floatingPrompt.SetActive(false);
         Debug.Log("ItemFloatingPrompt OnNetworkSpawn: " + itemBase.itemDataItem.interactable);
     }
 
@@ -31,15 +38,18 @@ public class ItemFloatingPrompt : NetworkBehaviour
     private void OnInteractableChanged(bool oldValue, bool newValue)
     {
         Debug.Log("OnInteractableChanged: " + newValue);
-        if (disableOnInteract && newValue == false)
+        bool judge = (disableOnInteract && !newValue) != reverseJudge;
+        if (judge)
         {
             floatingPrompt.SetActive(false);
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))
+        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))!= reverseJudge;
+        if (judge)
         {
             Player p = other.GetComponent<Player>();
             if (p.IsLocalPlayer && (itemBase.itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemBase.itemDataItem.accessbility))
@@ -51,7 +61,8 @@ public class ItemFloatingPrompt : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))
+        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player")) != reverseJudge;
+        if (judge)
         {
             Player p = other.GetComponent<Player>();
             if (p.IsLocalPlayer && (itemBase.itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemBase.itemDataItem.accessbility))

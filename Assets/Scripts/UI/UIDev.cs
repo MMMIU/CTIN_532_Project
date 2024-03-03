@@ -62,7 +62,7 @@ namespace UI
         }
 
 
-        private void OnJoinCodeAssign(BaseEvent e)
+        private void OnJoinCodeAssign(EventBase e)
         {
             JoinCodeAssignEvent realEvent = e as JoinCodeAssignEvent;
             joinCodeText.text = realEvent.joinCode;

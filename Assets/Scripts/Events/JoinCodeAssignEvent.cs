@@ -5,7 +5,7 @@ using UI;
 using Quest;
 using Manager;
 namespace Events {
-    public class JoinCodeAssignEvent : BaseEvent
+    public class JoinCodeAssignEvent : EventBase
     {
         public bool success;
         public string joinCode;

@@ -2000,7 +2000,7 @@ MonoBehaviour:
   limitFallVelocity: -15
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1024
   groundMinDistance: 0.25
   groundMaxDistance: 0.5
   slopeLimit: 75
@@ -10476,7 +10476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 5185
   m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2

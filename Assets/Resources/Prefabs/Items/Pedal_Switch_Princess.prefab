@@ -4928,6 +4928,7 @@ GameObject:
   - component: {fileID: 6658294261281447633}
   - component: {fileID: 6017438035972127192}
   - component: {fileID: 8364122737588127829}
+  - component: {fileID: 6984130494676679813}
   m_Layer: 0
   m_Name: Pedal_Switch_Princess
   m_TagString: Item
@@ -5037,7 +5038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3088295957
+  GlobalObjectIdHash: 939853828
   InScenePlacedSourceGlobalObjectIdHash: 663197495
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -5089,6 +5090,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.7063575, y: 1.2856786, z: 2.047875}
   m_Center: {x: -0.0053589344, y: 0.64281344, z: -0.19479966}
+--- !u!114 &6984130494676679813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6328424311856348059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711e9a8c8e226414eb23693f834f055e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests:
+  - First: 1
+    Second: 2
 --- !u!1 &8234855228403909774
 GameObject:
   m_ObjectHideFlags: 0

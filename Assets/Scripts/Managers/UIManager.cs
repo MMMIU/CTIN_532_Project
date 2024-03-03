@@ -196,7 +196,6 @@ namespace Manager
 
             if (blockPanelStack.Count > 0)
             {
-                Debug.Log("Block UI panels are opened");
                 inputReader.EnableUIInput();
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -225,7 +224,6 @@ namespace Manager
                 blockPanelStack.Remove(panel);
                 if (blockPanelStack.Count == 0)
                 {
-                    Debug.Log("All UI panels are closed");
                     inputReader.EnablePlayerInput();
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;

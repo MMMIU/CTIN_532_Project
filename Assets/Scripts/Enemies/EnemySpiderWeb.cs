@@ -27,7 +27,7 @@ namespace Enemies
             base.OnNetworkDespawn();
         }
 
-        private void DoTakeDamage(BaseEvent baseEvent)
+        private void DoTakeDamage(EventBase baseEvent)
         {
             KnightAttackEvent e = baseEvent as KnightAttackEvent;
             // if gameobject is this

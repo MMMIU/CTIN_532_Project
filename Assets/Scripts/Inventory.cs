@@ -15,7 +15,7 @@ public class Inventory : MonoBehaviour
         EventManager.Instance.Subscribe(nameof(KeyCollectEvent), CollectKey);
     }
 
-    private void CollectKey(BaseEvent baseEvent)
+    private void CollectKey(EventBase baseEvent)
     {
         GetKey1();
     }

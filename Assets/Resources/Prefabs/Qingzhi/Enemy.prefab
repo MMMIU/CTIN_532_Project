@@ -1279,7 +1279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3507369628
+  GlobalObjectIdHash: 2667206723
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1321,6 +1321,7 @@ MonoBehaviour:
   playerAnimator: {fileID: 0}
   selfAnimator: {fileID: 0}
   attacked: 0
+  hitByPlayer: 0
 --- !u!195 &8611875398874924449
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -7,6 +7,20 @@ namespace Inputs
     [CreateAssetMenu(fileName = "InputReader", menuName = "MMMIU/Input Reader")]
     public class InputReader : ScriptableObject, MyPlayerInput.IPlayerActions, MyPlayerInput.IUIActions
     {
+        [SerializeField]
+        private Texture2D hoverTex;
+
+        public void SetCursorHover()
+        {
+            Cursor.SetCursor(hoverTex, Vector2.zero, CursorMode.Auto);
+        }
+
+        public void SetCursorDefault()
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+
+
         // Both
         public event UnityAction EscEvent;
 
@@ -21,6 +35,10 @@ namespace Inputs
         public event UnityAction JumpEvent;
         public event UnityAction SpecialSkillOneEvent;
         public event UnityAction HealSkillEvent;
+        public event UnityAction PlayerRightClickStartEvent;
+        public event UnityAction PlayerRightClickEndEvent;
+        public event UnityAction<Vector2> PlayerPointEvent;
+        public event UnityAction<Vector2> PlayerScrollWheelEvent;
 
 
         // UI
@@ -28,7 +46,8 @@ namespace Inputs
         public event UnityAction SubmitEvent;
         public event UnityAction CancelEvent;
         public event UnityAction<Vector2> PointEvent;
-        public event UnityAction ClickEvent;
+        public event UnityAction LeftClickStartEvent;
+        public event UnityAction LeftClickEndEvent;
         public event UnityAction<Vector2> ScrollWheelEvent;
         public event UnityAction MiddleClickEvent;
         public event UnityAction RightClickEvent;
@@ -38,6 +57,8 @@ namespace Inputs
         public event UnityAction<Vector2> VCamMoveEvent;
 
         private MyPlayerInput playerInput;
+
+        public Vector2 MouseCurrPosition;
 
         private void OnEnable()
         {
@@ -59,6 +80,7 @@ namespace Inputs
             Debug.Log("EnablePlayerInput");
             playerInput.UI.Disable();
             playerInput.Player.Enable();
+            SetCursorDefault();
         }
 
         public void EnableUIInput()
@@ -66,6 +88,7 @@ namespace Inputs
             Debug.Log("EnableUIInput");
             playerInput.Player.Disable();
             playerInput.UI.Enable();
+            SetCursorDefault();
         }
 
         public void DisableAllInput()
@@ -108,14 +131,19 @@ namespace Inputs
 
         public void OnPoint(InputAction.CallbackContext context)
         {
-            PointEvent?.Invoke(context.ReadValue<Vector2>());
+            MouseCurrPosition = context.ReadValue<Vector2>();
+            PointEvent?.Invoke(MouseCurrPosition);
         }
 
         public void OnClick(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.started)
             {
-                ClickEvent?.Invoke();
+                LeftClickStartEvent?.Invoke();
+            }
+            else if (context.canceled)
+            {
+                LeftClickEndEvent?.Invoke();
             }
         }
 
@@ -241,6 +269,28 @@ namespace Inputs
         public void OnVCamMove(InputAction.CallbackContext context)
         {
             VCamMoveEvent?.Invoke(context.ReadValue<Vector2>());
+        }
+
+        public void OnPlayerRightClick(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                PlayerRightClickStartEvent?.Invoke();
+            }
+            else if (context.canceled)
+            {
+                PlayerRightClickEndEvent?.Invoke();
+            }
+        }
+
+        public void OnPlayerPoint(InputAction.CallbackContext context)
+        {
+            PlayerPointEvent?.Invoke(context.ReadValue<Vector2>());
+        }
+
+        public void OnPlayerScrollWheel(InputAction.CallbackContext context)
+        {
+            PlayerScrollWheelEvent?.Invoke(context.ReadValue<Vector2>());
         }
     }
 }

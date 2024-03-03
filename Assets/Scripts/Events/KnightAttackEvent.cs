@@ -5,7 +5,7 @@ using Enemies;
 using Quest;
 using Players;
 namespace Events {
-    public class KnightAttackEvent : BaseEvent
+    public class KnightAttackEvent : EventBase
     {
         public GameObject other;
         public int damage;

@@ -18,19 +18,16 @@ namespace Items
     {
         public override void OnNetworkSpawn()
         {
-            Debug.Log("ItemBookOne OnNetworkSpawn");
-            SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkSpawn();
+            Debug.Log("ItemBookOne OnNetworkSpawn");
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkDespawn();
         }
 
-        protected override void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (Interactable.Value && other.CompareTag("Player"))
             {
@@ -42,7 +39,7 @@ namespace Items
             }
         }
 
-        protected override void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
             if (Interactable.Value && other.CompareTag("Player"))
             {
@@ -51,18 +48,6 @@ namespace Items
                 {
                     inputReader.InteractionEvent -= OnInteract;
                 }
-            }
-        }
-
-        private void DoItemSetInteractableEventServer(BaseEvent baseEvent)
-        {
-            if (!IsServer) return;
-            ItemSetInteractableEvent e = baseEvent as ItemSetInteractableEvent;
-            Debug.Log("Try Set: " + e.item_uid + "::DoItemSetInteractableEventServer: " + e.interactable);
-            if (e.item_uid == item_uid)
-            {
-                Debug.Log("Item " + item_uid + "::DoItemSetInteractableEventServer: " + e.interactable);
-                SetInteractableServerRpc(e.interactable);
             }
         }
 

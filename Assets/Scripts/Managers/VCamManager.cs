@@ -1,5 +1,6 @@
 using Cinemachine;
 using Events;
+using Inputs;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,10 +11,14 @@ namespace Managers
     public class VCamManager : MonoBehaviour
     {
         [SerializeField]
+        InputReader inputReader;
+
+        [SerializeField]
         private string defaultVCam;
 
         [SerializeField]
         private Pair<string, CinemachineVirtualCamera> currentVCam;
+
 
         public static VCamManager Instance { get; private set; }
 
@@ -56,6 +61,12 @@ namespace Managers
             else
             {
                 EnableVCam(e.vCamName);
+                if(currentVCam != null && e.useCustomPos)
+                {
+                    // set xz
+                    currentVCam.Second.transform.position = new Vector3(e.customPos.x, currentVCam.Second.transform.position.y, e.customPos.z);
+                    Debug.Log("VCamManager: " + e.customPos);
+                }
             }
         }
 

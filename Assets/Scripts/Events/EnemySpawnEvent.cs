@@ -6,7 +6,7 @@ using Quest;
 using Manager;
 using Items;
 namespace Events {
-    public class EnemySpawnEvent : BaseEvent
+    public class EnemySpawnEvent : EventBase
     {
         public ItemAccessbility playerType;
         public int enemyId;

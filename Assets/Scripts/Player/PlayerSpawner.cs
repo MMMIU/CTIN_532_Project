@@ -56,7 +56,7 @@ public class PlayerSpawner : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-    private void OnSpawnPlayerEvent(BaseEvent ev)
+    private void OnSpawnPlayerEvent(EventBase ev)
     {
         SpawnPlayerEvent e = (SpawnPlayerEvent)ev;
         if (e != null)

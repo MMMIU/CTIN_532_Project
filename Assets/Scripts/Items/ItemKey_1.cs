@@ -14,31 +14,16 @@ namespace Items
     {
         public override void OnNetworkSpawn()
         {
-            Debug.Log("ItemKey_1 OnNetworkDespawn");
-            SetInteractableServerRpc(itemDataItem.interactable);
-            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkSpawn();
+            Debug.Log("ItemKey_1 OnNetworkDespawn");
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEventServer);
             base.OnNetworkDespawn();
         }
 
-        private void DoItemSetInteractableEventServer(BaseEvent baseEvent)
-        {
-            if (!IsServer) return;
-            ItemSetInteractableEvent e = baseEvent as ItemSetInteractableEvent;
-            Debug.Log("Server: Try Set: " + e.item_uid + "::DoItemSetInteractableEventServer: " + e.interactable);
-            if (e.item_uid == item_uid)
-            {
-                Debug.Log("Server: Item " + item_uid + "::DoItemSetInteractableEventServer: " + e.interactable);
-                SetInteractableServerRpc(e.interactable);
-            }
-        }
-
-        protected override void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             Debug.Log("OnTriggerEnter: " + other.tag);
             if (Interactable.Value && other.CompareTag("Player"))
@@ -53,7 +38,7 @@ namespace Items
             }
         }
 
-        protected override void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
             if (Interactable.Value && other.CompareTag("Player"))
             {

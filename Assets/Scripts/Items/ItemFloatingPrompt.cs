@@ -27,7 +27,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         itemBase.Interactable.OnValueChanged += OnInteractableChanged;
-        Debug.Log("ItemFloatingPrompt OnNetworkSpawn: " + itemBase.itemDataItem.interactable);
+        Debug.Log("ItemFloatingPrompt OnNetworkSpawn: " + itemBase.Interactable);
     }
 
     public override void OnNetworkDespawn()

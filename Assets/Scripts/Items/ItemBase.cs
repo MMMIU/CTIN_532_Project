@@ -34,7 +34,7 @@ namespace Items
         {
             itemDataItem = ItemLogic.Instance.GetItemData(item_uid);
             EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEvent);
-            SetInteractableServerRpc(itemDataItem.interactable);
+            SetInteractableServerRpc(itemDataItem.init_interactable);
         }
 
         public override void OnNetworkDespawn()

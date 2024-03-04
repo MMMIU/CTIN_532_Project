@@ -41,8 +41,10 @@ public class ClickableFence : ClickableBase
     [SerializeField]
     private Transform targetPos;
     [SerializeField]
+    RBConstraints movingConstraints;
+    [SerializeField]
     //RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation
-    private RBConstraints idleConstraints;
+    RBConstraints idleConstraints;
 
     Rigidbody rb;
     Tween fenceTween;
@@ -90,12 +92,25 @@ public class ClickableFence : ClickableBase
     {
         Debug.Log("Fence Clicked ServerRpc");
         fenceTween?.Kill();
-        fenceTween = DOTween.To(() => rb.position, x => rb.position = x, targetPosValue, liftDuration)
-            .SetEase(liftEase)
-            .OnComplete(() =>
-            {
-                rb.constraints = RigidbodyConstraints.FreezeAll;
-            });
+        rb.constraints = (RigidbodyConstraints)movingConstraints;
+        if(useTargetPos)
+        {
+            fenceTween = DOTween.To(() => rb.position, x => rb.position = x, targetPosValue, liftDuration)
+                .SetEase(liftEase)
+                .OnComplete(() =>
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                });
+        }
+        else
+        {
+            fenceTween = DOTween.To(() => rb.position, x => rb.position = x, move, liftDuration)
+                .SetEase(liftEase)
+                .OnComplete(() =>
+                {
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                });
+        }
     }
 
     public override void OnClickEnd()
@@ -108,11 +123,19 @@ public class ClickableFence : ClickableBase
     private void OnClickEndServerRpc()
     {
         fenceTween?.Kill();
-        rb.constraints = (RigidbodyConstraints)idleConstraints;
         if (restoreToStart)
         {
+            rb.constraints = (RigidbodyConstraints)movingConstraints;
             fenceTween = DOTween.To(() => rb.position, x => rb.position = x, startPosValue, restoreDuration)
-                .SetEase(liftEase);
+                .SetEase(liftEase)
+                .OnComplete(() =>
+                {
+                    rb.constraints = (RigidbodyConstraints)idleConstraints;
+                });
+        }
+        else
+        {
+            rb.constraints = (RigidbodyConstraints)idleConstraints;
         }
     }
 }

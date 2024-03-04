@@ -50,7 +50,6 @@ GameObject:
   - component: {fileID: 7167174844879190783}
   - component: {fileID: 1683163494253045362}
   - component: {fileID: 2569281334145986105}
-  - component: {fileID: 4099823648136648242}
   m_Layer: 11
   m_Name: Fence
   m_TagString: Untagged
@@ -185,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 890504389
+  GlobalObjectIdHash: 626445091
   InScenePlacedSourceGlobalObjectIdHash: 1472249835
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -257,7 +256,8 @@ MonoBehaviour:
   restoreDuration: 3
   useTargetPos: 0
   targetPos: {fileID: 4698612296207101947}
-  idleConstraints: 0
+  movingConstraints: 122
+  idleConstraints: 122
 --- !u!95 &1683163494253045362
 Animator:
   serializedVersion: 5
@@ -301,26 +301,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6441d847edf606a41916eca927648f3b, type: 3}
---- !u!114 &4099823648136648242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5301366854467007192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f1a4010192f2a6418072d4fae048fc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item_uid: 18
-  itemDataItem:
-    item_uid: 0
-    item_type: 0
-    item_sub_id: 0
-    accessbility: 0
-    interactable: 0
-  inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
 --- !u!1 &9157310040888631441
 GameObject:
   m_ObjectHideFlags: 0

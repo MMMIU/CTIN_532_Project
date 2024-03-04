@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: E To Interact
+  m_text: E To Start/Restart
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -457,8 +457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3251497515
-  InScenePlacedSourceGlobalObjectIdHash: 2496175908
+  GlobalObjectIdHash: 339112798
+  InScenePlacedSourceGlobalObjectIdHash: 3975557646
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -504,6 +504,8 @@ MonoBehaviour:
     item_uid: 0
     item_type: 0
     item_sub_id: 0
+    name: 
+    desc: 
     accessbility: 0
-    interactable: 0
+    init_interactable: 0
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}

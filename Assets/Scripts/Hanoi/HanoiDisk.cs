@@ -86,7 +86,7 @@ namespace Hanoi
 
         public void SetAsFreeDisk(bool free)
         {
-            if(!movable)
+            if (!movable)
             {
                 return;
             }
@@ -98,7 +98,7 @@ namespace Hanoi
             }
             else
             {
-                if (targetTower != null && targetTower.Push(this))
+                if (targetTower != null && targetTower != currentTower && targetTower.Push(this))
                 {
                     currentTower.Pop();
                     currentTower = targetTower;

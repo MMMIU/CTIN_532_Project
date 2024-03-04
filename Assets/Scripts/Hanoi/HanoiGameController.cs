@@ -55,10 +55,10 @@ namespace Hanoi
         TextMeshProUGUI moveLeftText;
         public int movesLeft;
 
-        [SerializeField]
-        GameObject winPanelGO;
-        [SerializeField]
-        GameObject losePanelGO;
+        //[SerializeField]
+        //GameObject winPanelGO;
+        //[SerializeField]
+        //GameObject losePanelGO;
 
         HanoiDisk selectedDisk;
 
@@ -75,11 +75,11 @@ namespace Hanoi
 
         public void StartGame()
         {
-            winPanelGO.SetActive(false);
-            losePanelGO.SetActive(false);
+            //winPanelGO.SetActive(false);
+            //losePanelGO.SetActive(false);
             for (int i = 0; i < disks.Length; i++)
             {
-                disks[i].transform.position = new Vector3(startTower.transform.position.x, startTower.transform.position.y + i, startTower.transform.position.z);
+                disks[i].transform.position = new Vector3(startTower.transform.position.x, startTower.transform.position.y + 0.1f + 0.5f * i, startTower.transform.position.z);
                 startTower.Push(disks[i]);
                 disks[i].Movable = false;
                 disks[i].SetCurrentTower(startTower);
@@ -112,20 +112,32 @@ namespace Hanoi
             if (endTower.DiskCount == disks.Length)
             {
                 Debug.Log("Game Over, You Win");
-                winPanelGO.SetActive(true);
+                //winPanelGO.SetActive(true);
+                timerText.text = "You";
+                moveLeftText.text = "Win";
+                StartCoroutine(WinRoutine());
             }
             else
             {
                 Debug.Log("Game Over, You Lose");
-                losePanelGO.SetActive(true);
+                //losePanelGO.SetActive(true);
+                timerText.text = "You";
+                moveLeftText.text = "Lose";
             }
-
             isStarted = false;
             for (int i = 0; i < disks.Length; i++)
             {
                 disks[i].Movable = false;
             }
             UnregisterEvents();
+        }
+
+        private IEnumerator WinRoutine()
+        {
+            yield return new WaitForSeconds(5f);
+            moveLeftText.text = "";
+            timerText.text = "";
+            new HanoiWinEvent();
         }
 
         public void UnregisterEvents()
@@ -198,7 +210,6 @@ namespace Hanoi
             if (freeDisk != null)
             {
                 // adjust diskCameraDistance
-                Debug.Log("OnScrollWheelEvent" + mv);
                 if (mv.y > 0)
                 {
                     diskCameraDistanceModifier += diskCameraDistanceSpeed;

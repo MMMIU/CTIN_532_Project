@@ -11,12 +11,16 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using Unity.Services.Relay;
 using UnityEngine;
+using Util;
 
 
 namespace Items
 {
     public class ItemHanoiControl : ItemBase
     {
+        [SerializeField]
+        bool hintShown = false;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -49,7 +53,15 @@ namespace Items
 
         private void OnInteract()
         {
-            new HanoiControlStartEvent();
+            if (!hintShown)
+            {
+                hintShown = true;
+                UIManager.Instance.OpenPanel<UIHintMenu>(itemDataItem.desc);
+            }
+            else
+            {
+                new HanoiControlStartEvent();
+            }
         }
     }
 }

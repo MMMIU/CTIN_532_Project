@@ -60,10 +60,6 @@ namespace Items
         [ServerRpc(RequireOwnership = false)]
         private void OnInteractServerRpc(ItemAccessbility playerType)
         {
-            if(!itemDataItem.interactable)
-            {
-                return;
-            }
             SetInteractableServerRpc(false);
             GiveKeyToClientRpc(playerType);
         }

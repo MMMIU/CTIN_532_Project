@@ -8,28 +8,28 @@ using UnityEngine;
 namespace Items
 {
     [Serializable]
-    public class ItemDataItem : INetworkSerializable
+    public class ItemDataItem
     {
         public int item_uid;
         public ItemType item_type;
         public int item_sub_id;
-        public ForceNetworkSerializeByMemcpy<FixedString32Bytes> name;
-        public ForceNetworkSerializeByMemcpy<FixedString128Bytes> desc;
+        public string name;
+        public string desc;
         public ItemAccessbility accessbility;
-        public ForceNetworkSerializeByMemcpy<FixedString32Bytes> init_interactable;
-        public bool interactable;
+        public bool init_interactable;
+        //public bool interactable;
 
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref item_uid);
-            serializer.SerializeValue(ref item_type);
-            serializer.SerializeValue(ref item_sub_id);
-            serializer.SerializeValue(ref name);
-            serializer.SerializeValue(ref desc);
-            serializer.SerializeValue(ref accessbility);
-            serializer.SerializeValue(ref init_interactable);
-            serializer.SerializeValue(ref interactable);
-        }
+        //public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        //{
+        //    serializer.SerializeValue(ref item_uid);
+        //    serializer.SerializeValue(ref item_type);
+        //    serializer.SerializeValue(ref item_sub_id);
+        //    serializer.SerializeValue(ref name);
+        //    serializer.SerializeValue(ref desc);
+        //    serializer.SerializeValue(ref accessbility);
+        //    serializer.SerializeValue(ref init_interactable);
+        //    serializer.SerializeValue(ref interactable);
+        //}
     }
 
     public class ItemData
@@ -64,18 +64,17 @@ namespace Items
                 //itemDataItem.item_type_name = itemCfgItem.item_type_name;
                 itemDataItem.item_type = (ItemType)Enum.Parse(typeof(ItemType), itemCfgItem.item_type);
                 itemDataItem.item_sub_id = itemCfgItem.item_sub_id;
-                itemDataItem.name = new FixedString32Bytes(itemCfgItem.name);
-                itemDataItem.desc = new FixedString128Bytes(itemCfgItem.desc);
+                itemDataItem.name = itemCfgItem.name;
+                itemDataItem.desc = itemCfgItem.desc;
                 //itemDataItem.accessbility = itemCfgItem.accessbility;
                 itemDataItem.accessbility = (ItemAccessbility)Enum.Parse(typeof(ItemAccessbility), itemCfgItem.accessbility);
-                itemDataItem.init_interactable = new FixedString32Bytes(itemCfgItem.init_interactable);
-                if (itemDataItem.init_interactable.Value.ToString() == "yes")
+                if (itemCfgItem.init_interactable == "yes")
                 {
-                    itemDataItem.interactable = true;
+                    itemDataItem.init_interactable = true;
                 }
                 else
                 {
-                    itemDataItem.interactable = false;
+                    itemDataItem.init_interactable = false;
                 }
                 m_itemDatas.Add(itemDataItem);
             }

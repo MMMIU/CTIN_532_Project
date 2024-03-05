@@ -25,8 +25,6 @@ public class ClickableFence : ClickableBase
     }
 
     [SerializeField]
-    private Vector3 move;
-    [SerializeField]
     private float liftDuration = 1.0f;
     [SerializeField]
     private Ease liftEase = Ease.InOutExpo;
@@ -37,13 +35,8 @@ public class ClickableFence : ClickableBase
     [SerializeField]
     private float restoreDuration = 3.0f;
     [SerializeField]
-    private bool useTargetPos = false;
-    [SerializeField]
     private Transform targetPos;
     [SerializeField]
-    RBConstraints movingConstraints;
-    [SerializeField]
-    //RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation
     RBConstraints idleConstraints;
 
     Rigidbody rb;
@@ -59,8 +52,8 @@ public class ClickableFence : ClickableBase
         rb.constraints = (RigidbodyConstraints)idleConstraints;
         animator = GetComponent<Animator>();
         EventManager.Instance.Subscribe<ClickableHintEvent>(OnHintEvent);
-        startPosValue = restoreToStart ? startPos.position : Vector3.zero;
-        targetPosValue = useTargetPos ? targetPos.position : Vector3.zero;
+        startPosValue = startPos.position;
+        targetPosValue = targetPos.position;
     }
 
     public override void OnNetworkDespawn()
@@ -92,25 +85,19 @@ public class ClickableFence : ClickableBase
     {
         Debug.Log("Fence Clicked ServerRpc");
         fenceTween?.Kill();
-        rb.constraints = (RigidbodyConstraints)movingConstraints;
-        if(useTargetPos)
-        {
-            fenceTween = DOTween.To(() => rb.position, x => rb.position = x, targetPosValue, liftDuration)
-                .SetEase(liftEase)
-                .OnComplete(() =>
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeAll;
-                });
-        }
-        else
-        {
-            fenceTween = DOTween.To(() => rb.position, x => rb.position = x, move, liftDuration)
-                .SetEase(liftEase)
-                .OnComplete(() =>
-                {
-                    rb.constraints = RigidbodyConstraints.FreezeAll;
-                });
-        }
+        rb.isKinematic = true;
+        //fenceTween = transform.DOMove(useTargetPos ? targetPosValue : move, liftDuration)
+        //    .SetEase(liftEase)
+        //    .OnComplete(() =>
+        //    {
+        //        rb.constraints = RigidbodyConstraints.FreezeAll;
+        //    });
+        fenceTween = DOTween.To(() => transform.position, x => transform.position = x, targetPosValue, liftDuration)
+            .SetEase(liftEase)
+            .OnComplete(() =>
+            {
+                rb.constraints = (RigidbodyConstraints)idleConstraints;
+            });
     }
 
     public override void OnClickEnd()
@@ -125,17 +112,26 @@ public class ClickableFence : ClickableBase
         fenceTween?.Kill();
         if (restoreToStart)
         {
-            rb.constraints = (RigidbodyConstraints)movingConstraints;
-            fenceTween = DOTween.To(() => rb.position, x => rb.position = x, startPosValue, restoreDuration)
+            rb.isKinematic = true;
+            //fenceTween = transform.DOMove(startPosValue, restoreDuration)
+            //    .SetEase(liftEase)
+            //    .OnComplete(() =>
+            //    {
+            //        rb.constraints = (RigidbodyConstraints)idleConstraints;
+            //        rb.isKinematic = false;
+            //    });
+            fenceTween = DOTween.To(() => transform.position, x => transform.position = x, startPosValue, restoreDuration)
                 .SetEase(liftEase)
                 .OnComplete(() =>
                 {
                     rb.constraints = (RigidbodyConstraints)idleConstraints;
+                    rb.isKinematic = false;
                 });
         }
         else
         {
             rb.constraints = (RigidbodyConstraints)idleConstraints;
+            rb.isKinematic = false;
         }
     }
 }

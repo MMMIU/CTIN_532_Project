@@ -13,6 +13,13 @@ namespace Hanoi
         private Stack<HanoiDisk> disks = new ();
         public Vector3 dropOffOffset;
 
+        [SerializeField]
+        Animator animator;
+        public void SetSelected(bool selected)
+        {
+            animator.SetBool("show", selected);
+        }
+
         public int DiskCount
         {
             get { return disks.Count; }
@@ -23,10 +30,21 @@ namespace Hanoi
             disks.Clear();
         }
 
-        public bool Push(HanoiDisk disk)
+        public bool CanShine(HanoiDisk disk)
         {
             if (disks.Count > 0 && disks.Peek().diskIndex > disk.diskIndex)
             {
+                Debug.Log("Invalid Move, top" + disks.Peek().diskIndex + " > incoming " + disk.diskIndex);
+                return false;
+            }
+            return true;
+        }
+
+        public bool Push(HanoiDisk disk)
+        {
+            if (disks.Count > 0 && disks.Peek().diskIndex >= disk.diskIndex)
+            {
+                Debug.Log("Invalid Move, top" + disks.Peek().diskIndex + " > incoming " + disk.diskIndex);
                 return false;
             }
             // set top disk not movable
@@ -38,6 +56,7 @@ namespace Hanoi
             disk.Movable = true;
             disk.SetPosition(transform.position + dropOffOffset);
             OnPushSccessfulEvent?.Invoke();
+            Debug.Log("Pushed " + disk.diskIndex + " to " + name + " count " + disks.Count);
             return true;
         }
 

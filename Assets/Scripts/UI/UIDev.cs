@@ -1,5 +1,6 @@
 using Events;
 using Inputs;
+using Items;
 using Manager;
 using Managers;
 using Quest;
@@ -170,6 +171,16 @@ namespace UI
         public void RespawnLocalPlayer()
         {
             GameManager.Instance.LocalPlayer.PlayerRespawnServerRpc();
+        }
+
+        public void SendPuzzleKngightSpawnEvent()
+        {
+            new PuzzleEnemyAttackEvent(ItemAccessbility.knight);
+        }
+
+        public void SendPuzzlePrincessSpawnEvent()
+        {
+            new PuzzleEnemyAttackEvent(ItemAccessbility.princess);
         }
     }
 

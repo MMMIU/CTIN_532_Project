@@ -20,17 +20,11 @@ namespace Hanoi
         void DoHanoiWin(HanoiWinEvent e)
         {
             animator.SetBool("hide", true);
-            StartCoroutine(DisableCollider());
         }
 
-        IEnumerator DisableCollider()
+        public void DisableCollAndPass()
         {
-            yield return new WaitForSeconds(2f);
-            coll.isTrigger = true;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
+            coll.enabled = false;
             new HanoiBarrierPassEvent();
         }
     }

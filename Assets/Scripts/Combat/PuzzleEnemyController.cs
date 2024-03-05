@@ -1,5 +1,6 @@
 using Events;
 using Items;
+using Managers;
 using Players;
 using Unity.Netcode;
 using UnityEngine;
@@ -22,9 +23,15 @@ public class PuzzleEnemyController : NetworkBehaviour
 
 
     //States
-    public float sightRange = 8f;
-    public bool targetInSightRange;
+    public float sightRange = 8f, attackRange = 1f;
+    public bool targetInSightRange, targetInAttackRange;
 
+
+    //Attacking
+    public float timeBetweenAttacks = 2f;
+    bool alreadyAttacked;
+    public int attacked = 0;
+    public bool hitByPlayer = false;
 
     public Animator playerAnimator;
     public Animator selfAnimator;
@@ -43,7 +50,7 @@ public class PuzzleEnemyController : NetworkBehaviour
 
     public float lostSightChaseTime = 1.5f;
     [SerializeField]
-    private float lostStightChaseTimeCount;
+    private float lostStightChaseTimeCount; // in use for checking
     #endregion
 
     public override void OnNetworkSpawn()
@@ -81,9 +88,14 @@ public class PuzzleEnemyController : NetworkBehaviour
 
         //TimeBetweenCheck = TimeIntervalForStuckCheck;
         currentWalkPointIndex = 0;
-        walkPoints = new Vector3[2];
-        walkPoints[0] = GameObject.Find("PuzzleEnemyStart").transform.position;
-        walkPoints[1] = GameObject.Find("PuzzleEnemyDestination").transform.position;
+        var points = GameObject.FindGameObjectsWithTag("WayPoints");
+        var wayPointsParentTransform = points[0].transform;
+        walkPoints = new Vector3[wayPointsParentTransform.childCount];
+        for (int i = 0; i < walkPoints.Length; i++)
+        {
+            walkPoints[i] = wayPointsParentTransform.GetChild(i).transform.position;
+        }
+        wayPointsParentTransform.gameObject.tag = "Untagged";
         lostStightChaseTimeCount = lostSightChaseTime;
 
     }
@@ -101,14 +113,16 @@ public class PuzzleEnemyController : NetworkBehaviour
         }
         //check for sight and attack range
         targetInSightRange = TargetInSightCheck();
+        targetInAttackRange = (transform.position - targetPlayer.position).magnitude < attackRange;
 
-        if (!targetInSightRange && lostStightChaseTimeCount <= 0f) Patroling();
-        if (targetInSightRange || lostStightChaseTimeCount > 0f)
+        if (!targetInSightRange && lostStightChaseTimeCount <= 0f && !targetInAttackRange) Patroling();
+        if ((targetInSightRange || lostStightChaseTimeCount > 0f) && !targetInAttackRange)
         {
             lostStightChaseTimeCount -=Time.deltaTime;
             agent.SetDestination(ChaseDestinationCreation());
             selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
         }
+        if (targetInAttackRange && targetInSightRange) AttackTarget();
     }
 
     private bool TargetInSightCheck()
@@ -122,7 +136,8 @@ public class PuzzleEnemyController : NetworkBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Player"))
                 {
-                    Debug.Log("find");
+                    Debug.Log(hit.transform.gameObject);
+                    targetPlayer = hit.transform;
                     lostStightChaseTimeCount = lostSightChaseTime;
                     return true;
                 }
@@ -222,6 +237,50 @@ public class PuzzleEnemyController : NetworkBehaviour
 
     }
 
+    private void AttackTarget()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+        //make sure enemy doesn't move
+        agent.SetDestination(transform.position);
+        selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
+
+        transform.LookAt(targetPlayer);
+        if (!alreadyAttacked && !hitByPlayer)
+        {
+            //Attack
+            
+            selfAnimator.Play("Stab Attack");
+            selfAnimator.SetBool("Attack", true);
+
+            alreadyAttacked = true;
+            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+        }
+    }
+
+    private void ResetAttack()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+        alreadyAttacked = false;
+    }
+
+    public void GotHit()
+    {
+        //selfAnimator.SetBool("Attack", false);
+        hitByPlayer = true;
+    }
+
+    public void HitReactionDone()
+    {
+        hitByPlayer = false;
+    }
+
+
     private bool IsXOutBound(float x)
     {
         return x < LeftBound.position.x || x > RightBound.position.x;
@@ -301,4 +360,5 @@ public class PuzzleEnemyController : NetworkBehaviour
     //    Gizmos.color = Color.red;
     //    Gizmos.DrawWireSphere(transform.position, sightRange);
     //}
+
 }

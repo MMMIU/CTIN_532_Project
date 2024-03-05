@@ -62,6 +62,18 @@ namespace Hanoi
 
         HanoiDisk selectedDisk;
 
+        [SerializeField]
+        Collider gameAreaCollider;
+
+        private void OnTriggerExit(Collider other)
+        {
+            // if player is out of game area, game over
+            if (other.CompareTag("Player"))
+            {
+                GameOver();
+            }
+        }
+
         private void Start()
         {
             EventManager.Instance.Subscribe<HanoiControlStartEvent>(OnHanoiControlStartEvent);
@@ -109,20 +121,36 @@ namespace Hanoi
 
         public void GameOver()
         {
+            if (!isStarted)
+            {
+                return;
+            }
+            // show player layer
+            Camera.main.cullingMask |= playerLayer;
+            if(selectedDisk!=null||freeDisk!=null)
+            {
+                UIManager.Instance.Close<UIAim>();
+            }
+
             if (endTower.DiskCount == disks.Length)
             {
                 Debug.Log("Game Over, You Win");
                 //winPanelGO.SetActive(true);
                 timerText.text = "You";
                 moveLeftText.text = "Win";
-                StartCoroutine(WinRoutine());
+                new HanoiWinEvent();
             }
             else
             {
-                Debug.Log("Game Over, You Lose");
+                Debug.Log("Game Over, You Lose " + endTower.DiskCount);
                 //losePanelGO.SetActive(true);
                 timerText.text = "You";
                 moveLeftText.text = "Lose";
+                if (freeDisk != null)
+                {
+                    freeDisk.SetAsFreeDisk(false, false);
+                    freeDisk = null;
+                }
             }
             isStarted = false;
             for (int i = 0; i < disks.Length; i++)
@@ -130,14 +158,6 @@ namespace Hanoi
                 disks[i].Movable = false;
             }
             UnregisterEvents();
-        }
-
-        private IEnumerator WinRoutine()
-        {
-            yield return new WaitForSeconds(5f);
-            moveLeftText.text = "";
-            timerText.text = "";
-            new HanoiWinEvent();
         }
 
         public void UnregisterEvents()
@@ -162,10 +182,10 @@ namespace Hanoi
         private void OnRightClickStartEvent()
         {
             Debug.Log("RightClickStartEvent");
+            // hide player layer
+            Camera.main.cullingMask &= ~playerLayer;
             if (freeDisk == null)
             {
-                // hide player layer
-                Camera.main.cullingMask &= ~playerLayer;
                 UIManager.Instance.OpenPanel<UIAim>();
                 inputReader.PlayerPointEvent += OnPointEvent;
             }
@@ -253,8 +273,6 @@ namespace Hanoi
             }
             if (freeDisk == null)
             {
-                // show player layer
-                Camera.main.cullingMask |= playerLayer;
                 UIManager.Instance.Close<UIAim>();
             }
         }

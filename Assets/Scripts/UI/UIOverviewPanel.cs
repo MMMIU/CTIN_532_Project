@@ -95,7 +95,6 @@ namespace UI
             {
                 if (hit.collider != null)
                 {
-                    Debug.Log("LeftClick Raycast hit: " + hit.collider);
                     if (hit.collider.gameObject.TryGetComponent(out ClickableBase clickable))
                     {
                         inputReader.SetCursorHover();

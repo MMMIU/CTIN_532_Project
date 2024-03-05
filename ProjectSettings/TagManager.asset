@@ -9,6 +9,7 @@ TagManager:
   - Knight
   - Princess
   - UICamera
+  - WayPoints
   layers:
   - Default
   - TransparentFX

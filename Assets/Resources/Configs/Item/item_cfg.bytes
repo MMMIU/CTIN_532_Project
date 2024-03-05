@@ -148,7 +148,7 @@
     "item_type": "hanoi_control",
     "item_sub_id": 1,
     "name": "hanoi_control",
-    "desc": "Object of this level is to move all the disks over to the right-most Tower.\n\nBut you cannot place a larger disk onto a smaller disk.\n\nPress and hold the right mouse button to enter the disk selection mode.\n\nRelease the right mouse button to select the disk at the screen's center crosshair. \n\nMove the disk to the target tower and click the right mouse button again to place it down. \n\nUse the mouse wheel to adjust the distance of the disk.\n\nComplete the level within the time and move limit.",
+    "desc": "Move all disks to the rightmost tower without placing larger disks on smaller ones. \n\nPress and hold, then release the right mouse button to select a disk at the center crosshair. Click again to drop it. Adjust disk distance with the mouse wheel. \n\nComplete within time and move limits.",
     "accessbility": "princess",
     "init_interactable": "yes"
   }

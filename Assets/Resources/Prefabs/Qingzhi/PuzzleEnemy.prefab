@@ -1068,14 +1068,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1482106894486090515}
   - component: {fileID: 8860823173792019875}
-  - component: {fileID: 699929163157981035}
+  - component: {fileID: 5956588483456026447}
   m_Layer: 0
   m_Name: Horn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1482106894486090515
 Transform:
   m_ObjectHideFlags: 0
@@ -1108,13 +1108,13 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &699929163157981035
+--- !u!114 &5956588483456026447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1123,7 +1123,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6325032338880850447}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 337d8b0748908274097e598784e063fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fe03b951de1fd1489387fbcce82147f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6818584342610542134
@@ -2167,7 +2167,12 @@ MonoBehaviour:
   currentWalkPointIndex: 0
   walkPointRange: 4
   sightRange: 8
+  attackRange: 2.5
   targetInSightRange: 0
+  targetInAttackRange: 0
+  timeBetweenAttacks: 2
+  attacked: 0
+  hitByPlayer: 0
   playerAnimator: {fileID: 0}
   selfAnimator: {fileID: 0}
   LeftBound: {fileID: 0}
@@ -2176,6 +2181,8 @@ MonoBehaviour:
   sightAngle: 120
   chasing: 0
   raycastStartPoint: {fileID: 3254259116005097950}
+  lostSightChaseTime: 1.5
+  lostStightChaseTimeCount: 0
 --- !u!1 &7388855489900275288
 GameObject:
   m_ObjectHideFlags: 0

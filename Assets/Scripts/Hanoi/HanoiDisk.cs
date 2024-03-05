@@ -31,6 +31,7 @@ namespace Hanoi
         public Rigidbody rb;
         public Collider col;
         bool movable = false;
+        bool freeDisk = false;
 
         public bool Movable
         {
@@ -54,7 +55,7 @@ namespace Hanoi
             animator.SetBool("show", selected);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             if (!movable)
             {
@@ -62,8 +63,13 @@ namespace Hanoi
             }
             if (other.gameObject.TryGetComponent(out HanoiTower tower))
             {
-                if (targetTower != currentTower)
+                if (freeDisk && tower.CanShine(this))
                 {
+                    tower.SetSelected(true);
+                }
+                if (tower != currentTower)
+                {
+                    currentTower.SetSelected(false);
                     targetTower = tower;
                 }
             }
@@ -79,17 +85,19 @@ namespace Hanoi
             {
                 if (tower == targetTower)
                 {
+                    tower.SetSelected(false);
                     targetTower = null;
                 }
             }
         }
 
-        public void SetAsFreeDisk(bool free)
+        public void SetAsFreeDisk(bool free, bool tryPush = true)
         {
             if (!movable)
             {
                 return;
             }
+            freeDisk = free;
             rb.isKinematic = free;
             col.isTrigger = free;
             if (free)
@@ -98,7 +106,16 @@ namespace Hanoi
             }
             else
             {
-                if (targetTower != null && targetTower != currentTower && targetTower.Push(this))
+                if (currentTower != null)
+                {
+                    currentTower.SetSelected(false);
+                }
+                if (targetTower != null)
+                {
+                    targetTower.SetSelected(false);
+                }
+
+                if (tryPush && targetTower != null && targetTower != currentTower && targetTower.Push(this))
                 {
                     currentTower.Pop();
                     currentTower = targetTower;

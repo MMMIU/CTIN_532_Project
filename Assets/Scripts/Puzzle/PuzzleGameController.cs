@@ -59,6 +59,7 @@ namespace Puzzle
             {
                 if (go.GetComponent<Player>().playerType == ItemAccessbility.princess)
                 {
+                    Debug.Log("teleport");
                     go.transform.position = princessSpawnPoint.position;
                 }
             }

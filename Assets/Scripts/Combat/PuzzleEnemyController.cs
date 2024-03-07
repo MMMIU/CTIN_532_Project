@@ -12,6 +12,7 @@ public class PuzzleEnemyController : NetworkBehaviour
     //AI Required
     public NavMeshAgent agent;
     public Transform targetPlayer;
+    public Transform potentialTarget;
     bool targetFind;
     public LayerMask Ground, Player;
 
@@ -63,19 +64,23 @@ public class PuzzleEnemyController : NetworkBehaviour
             Debug.Log("Number of players: " + players.Length);
             agent.enabled = true;
             Debug.Log("Agent enabled: " + agent.enabled);
+
             if (players.Length == 1)
             {
                 targetPlayer = players[0].transform;
+                potentialTarget = null;
             }
             else
             {
                 if (players[0].GetComponent<Player>().playerType == ItemAccessbility.princess)
                 {
                     targetPlayer = players[0].transform;
+                    potentialTarget = players[1].transform;
                 }
                 else
                 {
                     targetPlayer = players[1].transform;
+                    potentialTarget = players[0].transform;
                 }
             }
         }
@@ -127,22 +132,62 @@ public class PuzzleEnemyController : NetworkBehaviour
 
     private bool TargetInSightCheck()
     {
+        if (!IsServer)
+        {
+            return false;
+        }
         var directionToTarget = targetPlayer.position - raycastStartPoint.position;
         var direction = directionToTarget;
+        var directionToPotentialTarget = potentialTarget.position - raycastStartPoint.position;
+        var directionPotential = directionToTarget;
         direction.y = 0;
-        if (directionToTarget.magnitude < sightRange && Vector3.Angle(raycastStartPoint.forward, direction.normalized) < sightAngle / 2) {
-            RaycastHit hit;
-            if(Physics.Raycast(raycastStartPoint.position, directionToTarget.normalized, out hit, sightRange))
-            {
-                if (hit.transform.gameObject.CompareTag("Player"))
-                {
-                    Debug.Log(hit.transform.gameObject);
-                    targetPlayer = hit.transform;
-                    lostStightChaseTimeCount = lostSightChaseTime;
-                    return true;
-                }
-            }
+        directionPotential.y = 0;
+
+        RaycastHit hit;
+        //check in sight range
+        bool targetInSight = directionToTarget.magnitude < sightRange 
+            && Vector3.Angle(raycastStartPoint.forward, direction.normalized) < sightAngle / 2;
+        //check if it can be see
+        if (targetInSight)
+        {
+            Physics.Raycast(raycastStartPoint.position, directionToTarget.normalized, out hit, sightRange);
+            targetInSight = targetInSight && hit.transform.gameObject.CompareTag("Player");
         }
+        //check in sight range
+        bool potentialTargetInSight = directionToPotentialTarget.magnitude < sightRange 
+            && Vector3.Angle(raycastStartPoint.forward, directionPotential.normalized) < sightAngle / 2;
+        //check if it can be see
+        if (potentialTargetInSight)
+        {
+            Physics.Raycast(raycastStartPoint.position, directionToPotentialTarget.normalized, out hit, sightRange);
+            potentialTargetInSight = potentialTargetInSight && hit.transform.gameObject.CompareTag("Player");
+        }
+
+        if (potentialTargetInSight && targetInSight) 
+        {
+            if(directionToTarget.magnitude > directionToPotentialTarget.magnitude)
+            {
+                var temp = targetPlayer;
+                targetPlayer = potentialTarget;
+                potentialTarget = temp;
+            }
+            lostStightChaseTimeCount = lostSightChaseTime;
+            return true;
+        }
+        else if (potentialTargetInSight)
+        {
+            var temp = targetPlayer;
+            targetPlayer = potentialTarget;
+            potentialTarget = temp;
+            lostStightChaseTimeCount = lostSightChaseTime;
+            return true;
+        }
+        else if (targetInSight)
+        {
+            lostStightChaseTimeCount = lostSightChaseTime;
+            return true;
+        }
+
         return false;
     }
 

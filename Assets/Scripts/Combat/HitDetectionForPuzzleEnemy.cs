@@ -17,8 +17,7 @@ public class HitDetectionForPuzzleEnemy : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-        Debug.Log("trigger entered");
+        Debug.Log("Puzzle Enemt trigger entered");
         if (other.gameObject.CompareTag("Player") && m_Animator.GetBool("Attack"))
         {
             var type = other.gameObject.GetComponentInParent<Player>().playerType;

@@ -169,9 +169,13 @@ MonoBehaviour:
     item_uid: 0
     item_type: 0
     item_sub_id: 0
+    name: 
+    desc: 
     accessbility: 0
-    interactable: 0
+    init_interactable: 0
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
+  interactable:
+    m_InternalValue: 0
 --- !u!1001 &1684617870869380811
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -203,7 +207,7 @@ PrefabInstance:
     - target: {fileID: 2412291420207787414, guid: 4e668aa20fccde94da210b551db5340f,
         type: 3}
       propertyPath: disableOnInteract
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2785547636021874901, guid: 4e668aa20fccde94da210b551db5340f,
         type: 3}

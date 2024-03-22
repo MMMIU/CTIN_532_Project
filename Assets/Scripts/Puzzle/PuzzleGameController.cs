@@ -1,5 +1,6 @@
 using Events;
 using Items;
+using Managers;
 using Players;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,17 +31,19 @@ namespace Puzzle
         private void OnPuzzleEnemyAttack(PuzzleEnemyAttackEvent e)
         {
             Debug.Log("PuzzleGameController::OnPuzzleEnemyAttack::" + e.playerType);
-            if (e.playerType == ItemAccessbility.knight)
+            if (GameManager.Instance.LocalPlayer.playerType == ItemAccessbility.knight)
             {
-                SpawnKnightServerRpc();
+                //SpawnKnightServerRpc();
+                GameManager.Instance.LocalPlayer.transform.position = knightSpawnPoint.position;
             }
-            else if (e.playerType == ItemAccessbility.princess)
+            else if (GameManager.Instance.LocalPlayer.playerType == ItemAccessbility.princess)
             {
-                SpawnPrincessServerRpc();
+                //SpawnPrincessServerRpc();
+                GameManager.Instance.LocalPlayer.transform.position = princessSpawnPoint.position;
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         private void SpawnKnightServerRpc()
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
@@ -52,7 +55,7 @@ namespace Puzzle
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         private void SpawnPrincessServerRpc()
         {
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))

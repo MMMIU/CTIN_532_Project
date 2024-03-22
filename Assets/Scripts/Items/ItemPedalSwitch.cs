@@ -43,24 +43,22 @@ namespace Items
 
             if (Interactable.Value)
             {
-                bool allowTrigger = accessableByAll;
-                if (!allowTrigger && other.TryGetComponent<Player>(out var p) && p.IsLocalPlayer)
-                {
-                    allowTrigger = itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility;
-                }
-
-                if (allowTrigger)
+                if (accessableByAll || (other.TryGetComponent<Player>(out var p) && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility)))
                 {
                     isActive = true;
                     emissionPlne.SetActive(true);
                     particles.Play();
-                    if (TryGetComponent<QuestProgressModifier>(out var qpm))
+                    if (other.GetComponent<Player>().IsLocalPlayer)
                     {
-                        qpm.AddProgress();
-                    }
-                    if (TryGetComponent<ItemInteractableModifier>(out var imf))
-                    {
-                        imf.SetInteractable(true);
+                        if (TryGetComponent<QuestProgressModifier>(out var qpm))
+                        {
+                            qpm.AddProgress();
+                        }
+                        if (TryGetComponent<ItemInteractableModifier>(out var imf))
+                        {
+                            imf.SetInteractable(true);
+                        }
+
                     }
                 }
 

@@ -16,6 +16,7 @@ namespace Items
         [SerializeField]
         protected InputReader inputReader;
 
+        [SerializeField]
         private NetworkVariable<bool> interactable = new(false);
         public NetworkVariable<bool> Interactable
         {

@@ -68,7 +68,7 @@ public class PuzzleEnemyController : NetworkBehaviour
             if (players.Length == 1)
             {
                 targetPlayer = players[0].transform;
-                potentialTarget = null;
+                potentialTarget = targetPlayer;
             }
             else
             {

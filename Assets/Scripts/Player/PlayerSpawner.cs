@@ -25,19 +25,44 @@ public class PlayerSpawner : NetworkBehaviour
     [SerializeField]
     Transform princessSpawnPoint;
 
+    [SerializeField]
+    bool useDevSpawnPoints = false;
+
+    [SerializeField]
+    Transform devKnightSpawnPoint;
+
+    [SerializeField]
+    Transform devPrincessSpawnPoint;
+
     [ServerRpc(RequireOwnership = false)] //server owns this object but client can request a spawn
     public void SpawnPlayerServerRpc(ulong clientId, ItemAccessbility playerType)
     {
         GameObject newPlayer;
         if (playerType == ItemAccessbility.knight)
         {
-            Debug.Log("Spawning knight at: "+knightSpawnPoint.position);
-            newPlayer = Instantiate(knightPrefab, knightSpawnPoint.position, knightSpawnPoint.rotation);
+            if (useDevSpawnPoints)
+            {
+                Debug.Log("Spawning knight at: " + devKnightSpawnPoint.position);
+                newPlayer = Instantiate(knightPrefab, devKnightSpawnPoint.position, devKnightSpawnPoint.rotation);
+            }
+            else
+            {
+                Debug.Log("Spawning knight at: " + knightSpawnPoint.position);
+                newPlayer = Instantiate(knightPrefab, knightSpawnPoint.position, knightSpawnPoint.rotation);
+            }
         }
         else
         {
-            Debug.Log("Spawning princess at: " + princessSpawnPoint.position);
-            newPlayer = Instantiate(princessPrefab, princessSpawnPoint.position, princessSpawnPoint.rotation);
+            if (useDevSpawnPoints)
+            {
+                Debug.Log("Spawning princess at: " + devPrincessSpawnPoint.position);
+                newPlayer = Instantiate(princessPrefab, devPrincessSpawnPoint.position, devPrincessSpawnPoint.rotation);
+            }
+            else
+            {
+                Debug.Log("Spawning princess at: " + princessSpawnPoint.position);
+                newPlayer = Instantiate(princessPrefab, princessSpawnPoint.position, princessSpawnPoint.rotation);
+            }
         }
         newPlayer.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
         //newPlayer.GetComponent<Player>().playerData.Value.ResetAll(true);
@@ -63,7 +88,7 @@ public class PlayerSpawner : NetworkBehaviour
         {
             if (e.playerId == 0)
             {
-                if(hostPlayerType == ItemAccessbility.knight)
+                if (hostPlayerType == ItemAccessbility.knight)
                     SpawnPlayerServerRpc(NetworkManager.LocalClientId, ItemAccessbility.knight);
                 else
                     SpawnPlayerServerRpc(NetworkManager.LocalClientId, ItemAccessbility.princess);

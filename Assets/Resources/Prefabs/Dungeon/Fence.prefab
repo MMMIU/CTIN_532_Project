@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 626445091
+  GlobalObjectIdHash: 890504389
   InScenePlacedSourceGlobalObjectIdHash: 1472249835
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -221,7 +221,7 @@ MonoBehaviour:
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
-  InLocalSpace: 0
+  InLocalSpace: 1
   Interpolate: 1
   SlerpPosition: 0
 --- !u!114 &191147178823956605
@@ -248,15 +248,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 153846a90e54a6e439c5784ee4557205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  move: {x: 0, y: 4, z: 0}
   liftDuration: 1
   liftEase: 19
   restoreToStart: 0
   startPos: {fileID: 5265813364071686541}
   restoreDuration: 3
-  useTargetPos: 0
   targetPos: {fileID: 4698612296207101947}
-  movingConstraints: 122
   idleConstraints: 122
 --- !u!95 &1683163494253045362
 Animator:

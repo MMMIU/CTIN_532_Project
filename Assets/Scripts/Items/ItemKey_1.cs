@@ -40,7 +40,7 @@ namespace Items
 
         private void OnTriggerExit(Collider other)
         {
-            if (Interactable.Value && other.CompareTag("Player"))
+            if (other.CompareTag("Player"))
             {
                 Player p = other.GetComponent<Player>();
                 if (p.IsLocalPlayer && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility))

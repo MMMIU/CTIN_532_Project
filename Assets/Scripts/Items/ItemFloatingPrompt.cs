@@ -17,7 +17,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
     private bool disableOnInteract = true;
 
     [SerializeField]
-    private bool reverseJudge = false;
+    private bool showWhenNotInteractable = false;
 
     private void Awake()
     {
@@ -38,7 +38,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
     private void OnInteractableChanged(bool oldValue, bool newValue)
     {
         Debug.Log("OnInteractableChanged: " + newValue);
-        bool judge = (disableOnInteract && !newValue) != reverseJudge;
+        bool judge = (disableOnInteract && !newValue) != showWhenNotInteractable;
         if (judge)
         {
             floatingPrompt.SetActive(false);
@@ -48,7 +48,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))!= reverseJudge;
+        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))!= showWhenNotInteractable;
         if (judge)
         {
             Player p = other.GetComponent<Player>();
@@ -61,7 +61,7 @@ public class ItemFloatingPrompt : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player")) != reverseJudge;
+        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player")) != showWhenNotInteractable;
         if (judge)
         {
             Player p = other.GetComponent<Player>();

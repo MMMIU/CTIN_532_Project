@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SkyBoxSGMat
+  m_Shader: {fileID: -6465566751694194690, guid: 20a5daa5f640ede43ad7bf088a47df48,
+    type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _BUILTIN_QueueControl: -1
+    - _BUILTIN_QueueOffset: 0
+    - _DayNightSlider: 0
+    - _HorizonBlend: 15
+    - _NadirBlend: 1
+    - _StarHeight: 320
+    - _StarPower: 30
+    - _Sunsize: 0.35
+    - _ZenithBlend: 1
+    m_Colors:
+    - _GroundColor: {r: 0.24705875, g: 0.10669317, b: 0, a: 0}
+    - _HorizonColor: {r: 0.34591186, g: 0.34591186, b: 0.34591186, a: 0}
+    - _NightSkyColor: {r: 0.12513337, g: 0.13234177, b: 0.23270425, a: 0}
+    - _SkyColor: {r: 0.37421376, g: 0.7405321, b: 1, a: 0}
+    - _SunColor: {r: 16, g: 8.52412, b: 0, a: 0}
+  m_BuildTextureStacks: []
+--- !u!114 &6052885754939301625
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 0

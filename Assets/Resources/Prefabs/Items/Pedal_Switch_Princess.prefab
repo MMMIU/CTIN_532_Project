@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5576134718717504232}
   - component: {fileID: 1623729217412721541}
   - component: {fileID: 1240010690419403139}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4841,7 +4841,7 @@ GameObject:
   - component: {fileID: 8989612638212951357}
   - component: {fileID: 4325523431084409904}
   - component: {fileID: 7598622643441152382}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EmissionPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4929,7 +4929,7 @@ GameObject:
   - component: {fileID: 6017438035972127192}
   - component: {fileID: 8364122737588127829}
   - component: {fileID: 6984130494676679813}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pedal_Switch_Princess
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -5064,11 +5064,14 @@ MonoBehaviour:
     item_uid: 0
     item_type: 0
     item_sub_id: 0
+    name: 
+    desc: 
     accessbility: 0
-    interactable: 0
+    init_interactable: 0
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
   emissionPlne: {fileID: 6130837821307939783}
   particles: {fileID: 1623729217412721541}
+  accessableByAll: 0
 --- !u!65 &8364122737588127829
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5116,7 +5119,7 @@ GameObject:
   - component: {fileID: 5591169752958602441}
   - component: {fileID: 7949675740830887495}
   - component: {fileID: 6970730584340086162}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

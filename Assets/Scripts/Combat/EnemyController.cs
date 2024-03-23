@@ -33,6 +33,7 @@ public class enemyController : NetworkBehaviour
     public int attacked = 0;
 
     public bool hitByPlayer = false;
+    public ItemAccessbility targetType = ItemAccessbility.princess;
     #endregion
 
     public override void OnNetworkSpawn()
@@ -51,7 +52,7 @@ public class enemyController : NetworkBehaviour
             }
             else
             {
-                if (players[0].GetComponent<Player>().playerType == ItemAccessbility.princess)
+                if (players[0].GetComponent<Player>().playerType == targetType)
                 {
                     targetPlayer = players[0].transform;
                 }
@@ -234,6 +235,11 @@ public class enemyController : NetworkBehaviour
 
             }
         }
+    }
+
+    public void startTtargetSetToKnight()
+    {
+        targetType = ItemAccessbility.knight;
     }
 
     //private void OnDrawGizmosSelected()

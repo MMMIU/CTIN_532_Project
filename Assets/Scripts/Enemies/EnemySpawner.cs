@@ -27,6 +27,7 @@ namespace Enemies
 
         [SerializeField]
         List<Transform> spawnPoints;
+        public int spawnerID;
 
         public override void OnNetworkSpawn()
         {
@@ -43,7 +44,7 @@ namespace Enemies
 
         private void OnSpawnEnemyEvent(EventBase ev)
         {
-            if (ev is EnemySpawnEvent enemySpawnEvent && enemySpawnEvent.playerType == GameManager.Instance.LocalPlayer.playerType)
+            if (ev is EnemySpawnEvent enemySpawnEvent && enemySpawnEvent.playerType == GameManager.Instance.LocalPlayer.playerType && enemySpawnEvent.spawnerID == spawnerID)
             {
                 SpawnEnemyServerRpc(enemySpawnEvent.enemyId, enemySpawnEvent.spawnPlace);
             }
@@ -80,6 +81,10 @@ namespace Enemies
             Transform spawnPoint = spawnPoints[spawnPlace];
             Debug.Log("Spawning enemy " + enemyId + " at " + spawnPoint.position);
             GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            if(spawnerID == 2)
+            {
+                enemy.GetComponent<enemyController>().startTtargetSetToKnight();
+            }
             NetworkObject networkObject = enemy.GetComponent<NetworkObject>();
             networkObject.Spawn();
         }

@@ -24,6 +24,8 @@ namespace Enemies
 
         [SerializeField]
         private int spawnPlace;
+        [SerializeField]
+        private int spawnerID;
 
         public override void OnNetworkSpawn()
         {
@@ -50,7 +52,7 @@ namespace Enemies
             if (!(GameManager.Instance.DevMode && !devActive) && other.CompareTag("Player"))
             {
                 SetActiveServerRpc(false);
-                new EnemySpawnEvent(other.GetComponent<Player>().playerType, enemyId, spawnPlace);
+                new EnemySpawnEvent(other.GetComponent<Player>().playerType, enemyId, spawnerID, spawnPlace);
             }
         }
 

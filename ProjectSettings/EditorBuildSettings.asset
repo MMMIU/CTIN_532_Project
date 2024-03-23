@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/HanoiTowerScene.unity
     guid: de12a6807a3f57f4baf433d303a67e16
+  - enabled: 1
+    path: Assets/Scenes/EndingScene.unity
+    guid: 8ba4bfd97dfbca64aae19813d0775e41
   m_configObjects: {}

@@ -1,5 +1,4 @@
 using Events;
-using Manager;
 using Managers;
 using Players;
 using System.Collections;
@@ -54,7 +53,7 @@ namespace Items
         {
             Debug.Log("OnInteract: " + GameManager.Instance.LocalPlayer.playerType);
             OnInteractServerRpc(GameManager.Instance.LocalPlayer.playerType);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -69,6 +68,7 @@ namespace Items
         {
             Debug.Log("GiveKeyToClientRpc: " + playerType);
             new KeyCollectEvent(itemDataItem.item_sub_id, playerType);
+            gameObject.SetActive(false);
         }
     }
 }

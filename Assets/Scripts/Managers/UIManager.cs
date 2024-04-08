@@ -9,7 +9,7 @@ using UnityEngine.Rendering.Universal;
 using Inputs;
 using static UnityEngine.Rendering.DebugUI;
 
-namespace Manager
+namespace Managers
 {
     public class UIManager : MonoBehaviour
     {
@@ -150,13 +150,13 @@ namespace Manager
                     var layerAttribute = objects[0] as UILayerAttribute;
                     layer = GetLayer(layerAttribute.layer);
                 }
-                
+
                 var panelObject = Instantiate(prefab, layer);
                 var panel = panelObject.GetComponent<T>();
                 panel.name = typeof(T).Name;
 
                 objects = typeof(T).GetCustomAttributes(typeof(UISaveDicAttribute), true);
-                if(objects?.Length > 0)
+                if (objects?.Length > 0)
                 {
                     saveToDic = (objects[0] as UISaveDicAttribute).saveDic;
                 }
@@ -224,6 +224,7 @@ namespace Manager
                 blockPanelStack.Remove(panel);
                 if (blockPanelStack.Count == 0)
                 {
+                    Debug.LogWarning("All panels closed");
                     inputReader.EnablePlayerInput();
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
@@ -254,6 +255,17 @@ namespace Manager
 
         public void Destroy(UIBase panel)
         {
+            panel?.OnUIDisable();
+            if (blockPanelStack.Contains(panel))
+            {
+                blockPanelStack.Remove(panel);
+                if (blockPanelStack.Count == 0)
+                {
+                    inputReader.EnablePlayerInput();
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+            }
             if (panelDic.ContainsValue(panel))
             {
                 panelDic.Remove(panel.GetType());
@@ -293,7 +305,7 @@ namespace Manager
 
         private void ShowPausePanel()
         {
-            if(blockPanelStack.Count == 0)
+            if (blockPanelStack.Count == 0)
             {
                 OpenPanel<UIPauseMenu>();
             }

@@ -11,6 +11,7 @@ using UnityEngine;
 using Unity.Services.Core;
 using Events;
 using Managers;
+using UI;
 
 public class NetConnector : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class NetConnector : MonoBehaviour
         }
     }
 
+    ulong knightClientId;
+
     private async void Start()
     {
         await UnityServices.InitializeAsync();
@@ -45,10 +48,24 @@ public class NetConnector : MonoBehaviour
 
             if (NetworkManager.Singleton.IsServer)
             {
-                new SpawnPlayerEvent(id);
-                connectedPlayers++;
-                if(connectedPlayers == 2)
+                if (connectedPlayers == 0)
                 {
+                    knightClientId = id;
+                    connectedPlayers++;
+                    if (!useInternet)
+                    {
+                        new SpawnPlayerEvent(id);
+                        UIManager.Instance.Destroy<UIStartMenu>();
+                    }
+                }
+                else
+                {
+                    if (useInternet)
+                    {
+                        new SpawnPlayerEvent(knightClientId);
+                    }
+                    new SpawnPlayerEvent(id);
+                    acceptIncomingConnections = false;
                     GameManager.Instance.StarGame();
                 }
             }
@@ -85,18 +102,12 @@ public class NetConnector : MonoBehaviour
             }
         }
         bool result = await StartClientWithRelay(joinCode);
-        if (result)
+        if (!result)
         {
-            Debug.Log("Client started");
-            new JoinCodeAssignEvent(true, joinCode);
-            return true;
-        }
-        else
-        {
-            Debug.Log("Client failed to start");
+            Debug.LogError("Client failed to start");
             new JoinCodeAssignEvent(false, "Client failed to start");
-            return false;
         }
+        return result;
     }
 
     public async Task<bool> StartHost()

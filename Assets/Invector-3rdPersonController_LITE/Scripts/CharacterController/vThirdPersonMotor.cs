@@ -168,6 +168,10 @@ namespace Invector.vCharacterController
         public virtual void MoveCharacter(Vector3 _direction)
         {
             // calculate input smooth
+            if(_rigidbody.isKinematic)
+            {
+                return;
+            }
             inputSmooth = Vector3.Lerp(inputSmooth, input, (isStrafing ? strafeSpeed.movementSmooth : freeSpeed.movementSmooth) * Time.deltaTime);
 
             if (!isGrounded || isJumping) return;

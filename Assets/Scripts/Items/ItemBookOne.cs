@@ -1,5 +1,4 @@
 using Events;
-using Manager;
 using Managers;
 using Players;
 using Quest;
@@ -53,8 +52,7 @@ namespace Items
 
         private void OnInteract()
         {
-            SetInteractableServerRpc(false);
-            UIManager.Instance.OpenPanel<UIBookReadPanel>();
+            UIManager.Instance.OpenPanel<UIBookReadPanel>(itemDataItem.desc);
         }
     }
 }

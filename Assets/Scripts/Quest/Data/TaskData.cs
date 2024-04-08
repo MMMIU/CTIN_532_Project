@@ -9,6 +9,7 @@ using Managers;
 using System.Linq;
 using Unity.Collections;
 using Events;
+using System.Security.Claims;
 
 namespace Quest
 {
@@ -81,7 +82,8 @@ namespace Quest
             {
                 Debug.Log("AddOrUpdateData " + itemData.task_chain_id + " " + itemData.task_sub_id);
                 m_taskDatas.Add(itemData);
-                new TaskAssignEvent(itemData, delayRound);
+                var cfg = TaskCfg.Instance.GetCfgItem(itemData.task_chain_id, itemData.task_sub_id);
+                new TaskAssignEvent(cfg, delayRound);
             }
             // sort, ensure main chain is first
             m_taskDatas.Sort((a, b) =>

@@ -1,4 +1,6 @@
 using Events;
+using Players;
+using Quest;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +11,18 @@ namespace Hanoi
     {
         private void OnTriggerEnter(Collider other)
         {
-            new PrincessSkillUpgradeEvent();
-            Destroy(gameObject);
+            if (other.CompareTag("Player") && other.TryGetComponent(out Player player) )
+            {
+                new PrincessSkillUpgradeEvent();
+                if(player.IsLocalPlayer)
+                {
+                    if (TryGetComponent(out QuestProgressModifier questProgressModifier))
+                    {
+                        questProgressModifier.AddProgress();
+                    }
+                    gameObject.SetActive(false);
+                }
+            }
         }
     }
 }

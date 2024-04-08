@@ -1,8 +1,10 @@
+using Quest;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class LockedDoor : MonoBehaviour
+public class LockedDoor : NetworkBehaviour
 {
     // Start is called before the first frame update
 
@@ -21,9 +23,27 @@ public class LockedDoor : MonoBehaviour
 
     public void TryOpen()
     {
-        if (Inventory.main.HasKey1())
+        if (Inventory.main.HasKey1)
         {
-            this.gameObject.SetActive(false);
+            UnlockServerRpc();
         }
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UnlockServerRpc()
+    {
+        UnlockClientRpc();
+        if (TryGetComponent(out QuestProgressModifier questProgressModifier))
+        {
+            questProgressModifier.AddProgress();
+        }
+    }
+
+    [ClientRpc]
+    public void UnlockClientRpc()
+    {
+        Destroy(gameObject);
+    }
+
+
 }

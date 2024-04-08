@@ -12,4 +12,14 @@ public class GetMainLightDirection : MonoBehaviour
     {
         skyboxMaterial.SetVector("_MainLightDirection", transform.forward);
     }
+
+    private void OnEnable()
+    {
+        skyboxMaterial.SetVector("_MainLightDirection", transform.forward);
+    }
+
+    private void OnDisable()
+    {
+        skyboxMaterial.SetVector("_MainLightDirection", new Vector3(0, 1, 0));
+    }
 }

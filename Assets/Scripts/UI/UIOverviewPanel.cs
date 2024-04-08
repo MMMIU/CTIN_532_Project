@@ -1,6 +1,6 @@
+using Cinemachine;
 using Events;
 using Inputs;
-using Manager;
 using Managers;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,10 +27,11 @@ namespace UI
         [SerializeField]
         private float countDown = 10f;
 
+        [SerializeField]
         private ClickableBase clickableObj;
 
-        private bool isActive = false;
-        private float startTime;
+        [SerializeField]
+        private float startTime = -1;
 
         public override void SetData(object data)
         {
@@ -42,49 +43,69 @@ namespace UI
         public override void OnUIEnable()
         {
             base.OnUIEnable();
-            isActive = false;
             new ClickableHintEvent(true);
             inputReader.CloseUIPanelEvent += Close;
             inputReader.MiddleClickEvent += ShowHideHintImage;
             inputReader.LeftClickStartEvent += DoClickStartEvent;
             inputReader.LeftClickEndEvent += DoClickEndEvent;
             inputReader.PointEvent += OnPointEvent;
+            // set mouse position to center but not locked
+            StartCoroutine(CenterCursor());
+            startTime = -1;
+            countDownText.text = "";
             StartCoroutine(StartCountDown());
+        }
+
+        IEnumerator CenterCursor()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            yield return null;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         IEnumerator StartCountDown()
         {
             yield return new WaitForSeconds(2);
             startTime = TimeManager.Instance.GetTimeUnScaled();
-            isActive = true;
+            inputReader.VCamMoveEvent += RotateVCam;
         }
 
         private void Update()
         {
-            if (!isActive)
+            if (startTime < 0)
             {
+                countDownText.text = "";
                 return;
             }
             float timeElapsed = TimeManager.Instance.GetTimeUnScaled() - startTime;
             float timeLeft = countDown - timeElapsed;
             if (timeLeft <= 0)
             {
-                timeLeft = 0;
+                timeLeft = -1;
+                Debug.LogWarning("Time's up!");
+                countDownText.text = "Time's up!";
                 Close();
             }
-            //10s Before Exit
-            countDownText.text = ((int)timeLeft).ToString() + "s Before Exit";
+            else
+            {
+                countDownText.text = ((int)timeLeft).ToString() + "s Before Exit";
+            }
         }
 
         public override void OnUIDisable()
         {
             new ClickableHintEvent(false);
+            base.OnUIDisable();
+        }
+
+        private void UnRegisterEvents()
+        {
             inputReader.CloseUIPanelEvent -= Close;
             inputReader.MiddleClickEvent -= ShowHideHintImage;
             inputReader.LeftClickStartEvent -= DoClickStartEvent;
             inputReader.LeftClickEndEvent -= DoClickEndEvent;
             inputReader.PointEvent -= OnPointEvent;
-            base.OnUIDisable();
+            inputReader.VCamMoveEvent -= RotateVCam;
         }
 
         private void OnPointEvent(Vector2 point)
@@ -146,25 +167,42 @@ namespace UI
 
         public override void Close()
         {
-            if (!isActive)
-            {
-                return;
-            }
-            isActive = false;
+            startTime = -1;
+            UnRegisterEvents();
+            new VCamChangeEvent();
             if (clickableObj != null)
             {
                 clickableObj.OnClickEnd();
                 clickableObj = null;
             }
-            new VCamChangeEvent();
-            // delay 2s before close
             StartCoroutine(DelayClose());
+            // delay 2s before close
         }
 
         IEnumerator DelayClose()
         {
             yield return new WaitForSeconds(2);
             base.Close();
+        }
+
+        private void RotateVCam(Vector2 delta)
+        {
+            CinemachineVirtualCamera vcam = VCamManager.Instance.CurrentVCam;
+            if (vcam == null)
+            {
+                return;
+            }
+
+            var rotation = vcam.transform.localRotation.eulerAngles;
+
+            float rotationSpeed = 0.1f;
+
+            float yaw = rotation.y + delta.x * rotationSpeed;
+            float pitch = rotation.x - delta.y * rotationSpeed;
+
+            pitch = Mathf.Clamp(pitch, 60f, 89f);
+
+            vcam.transform.localRotation = Quaternion.Euler(pitch, yaw, 0);
         }
     }
 }

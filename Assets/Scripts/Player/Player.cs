@@ -1,5 +1,4 @@
 using Cinemachine;
-using Manager;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -77,6 +76,8 @@ namespace Players
             playerData.OnValueChanged += OnPlayerDataChanged;
             EventManager.Instance.Subscribe<EnemyAttackEvent>(OnEnemyAttack);
             EventManager.Instance.Subscribe<PlayerHealEvent>(OnPlayerHeal);
+            EventManager.Instance.Subscribe<PlayerDeadEvent>(OnPlayerDead);
+            EventManager.Instance.Subscribe<PlayerRespawnEvent>(OnPlayerRespawn);
         }
 
         private void UnRegisterEvents()
@@ -84,6 +85,8 @@ namespace Players
             playerData.OnValueChanged -= OnPlayerDataChanged;
             EventManager.Instance.Unsubscribe<EnemyAttackEvent>(OnEnemyAttack);
             EventManager.Instance.Unsubscribe<PlayerHealEvent>(OnPlayerHeal);
+            EventManager.Instance.Unsubscribe<PlayerDeadEvent>(OnPlayerDead);
+            EventManager.Instance.Unsubscribe<PlayerRespawnEvent>(OnPlayerRespawn);
         }
 
         private void OnPlayerDataChanged(PlayerData oldValue, PlayerData newValue)
@@ -101,6 +104,7 @@ namespace Players
         {
             yield return new WaitForSeconds(2);
             inputReader.EnablePlayerInput();
+            UIManager.Instance.OpenPanel<UIWASD>();
             UIManager.Instance.OpenPanel<UIPlayerInGamePanel>();
         }
 
@@ -131,7 +135,6 @@ namespace Players
             Debug.Log("UseSpecialSkill");
             if (playerType == ItemAccessbility.princess)
             {
-                PrincessSkillOne();
             }
         }
     }

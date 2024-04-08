@@ -1,6 +1,5 @@
 using Events;
 using Items;
-using Manager;
 using Players;
 using Quest;
 using System.Collections;
@@ -27,6 +26,9 @@ namespace Managers
         Player localPlayer;
         [SerializeField]
         string localPlayerName;
+        
+        public bool gameover = false;
+
         public string LocalPlayerName { get => localPlayerName; set => localPlayerName = value; }
         public Player LocalPlayer { get => localPlayer; set => localPlayer = value; }
 
@@ -77,7 +79,6 @@ namespace Managers
 
         public void StarGame()
         {
-            NetConnector.Instance.acceptIncomingConnections = false;
             if(useQuestManager)
             {
                 QuestManager.Instance.StartQuestSequenceServerRpc();

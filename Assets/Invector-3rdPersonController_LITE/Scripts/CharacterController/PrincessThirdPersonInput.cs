@@ -1,4 +1,5 @@
-﻿using Inputs;
+﻿using Events;
+using Inputs;
 using System;
 using Unity.Netcode;
 using UnityEngine;
@@ -66,6 +67,15 @@ namespace Invector.vCharacterController
             //inputReader.EscEvent += InteractWithUI;
             inputReader.JumpEvent += JumpInput;
             inputReader.HealSkillEvent += HealInput;
+            EventManager.Instance.Subscribe<EnemyAttackEvent>(HitByEnemy);
+        }
+        private void HitByEnemy(EventBase baseEvent)
+        {
+            EnemyAttackEvent e = baseEvent as EnemyAttackEvent;
+            if (e.playerType == Items.ItemAccessbility.princess)
+            {
+                animator.Play("HitReaction");
+            }
         }
 
 
@@ -77,6 +87,7 @@ namespace Invector.vCharacterController
             //inputReader.EscEvent -= InteractWithUI;
             inputReader.JumpEvent -= JumpInput;
             inputReader.HealSkillEvent -= HealInput;
+            EventManager.Instance.Unsubscribe<EnemyAttackEvent>(HitByEnemy);
         }
 
         //public void InteractWithUI()

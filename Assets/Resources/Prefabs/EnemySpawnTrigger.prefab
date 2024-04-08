@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4107047246367166725}
   - component: {fileID: 1303197675963578362}
   - component: {fileID: 2182951158673768132}
+  - component: {fileID: 5541527131274795803}
   m_Layer: 0
   m_Name: EnemySpawnTrigger
   m_TagString: Untagged
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1050333518
+  GlobalObjectIdHash: 2114946437
   InScenePlacedSourceGlobalObjectIdHash: 3400485248
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -91,6 +92,20 @@ MonoBehaviour:
   devActive: 1
   isActive:
     m_InternalValue: 0
-  coll: {fileID: 0}
+  coll: {fileID: 4107047246367166725}
   enemyId: 2
   spawnPlace: 0
+  spawnerID: 0
+--- !u!114 &5541527131274795803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042600753865715026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711e9a8c8e226414eb23693f834f055e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests: []

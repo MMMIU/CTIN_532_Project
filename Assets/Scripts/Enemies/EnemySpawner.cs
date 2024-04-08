@@ -13,15 +13,6 @@ namespace Enemies
 {
     public class EnemySpawner : NetworkBehaviour
     {
-        private static EnemySpawner instance;
-        public static EnemySpawner Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
         [SerializeField]
         List<Pair<int, GameObject>> enemyPrefabs;
 
@@ -31,14 +22,13 @@ namespace Enemies
 
         public override void OnNetworkSpawn()
         {
-            instance = this;
-            EventManager.Instance.Subscribe(nameof(EnemySpawnEvent), OnSpawnEnemyEvent);
+            EventManager.Instance.Subscribe<EnemySpawnEvent>(OnSpawnEnemyEvent);
             base.OnNetworkSpawn();
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(EnemySpawnEvent), OnSpawnEnemyEvent);
+            EventManager.Instance.Unsubscribe<EnemySpawnEvent>(OnSpawnEnemyEvent);
             base.OnNetworkDespawn();
         }
 
@@ -81,9 +71,9 @@ namespace Enemies
             Transform spawnPoint = spawnPoints[spawnPlace];
             Debug.Log("Spawning enemy " + enemyId + " at " + spawnPoint.position);
             GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-            if(spawnerID == 2)
+            if (spawnerID == 2)
             {
-                enemy.GetComponent<enemyController>().startTtargetSetToKnight();
+                enemy.GetComponent<EnemyController>().startTtargetSetToKnight();
             }
             NetworkObject networkObject = enemy.GetComponent<NetworkObject>();
             networkObject.Spawn();

@@ -1,5 +1,4 @@
 using Inputs;
-using Manager;
 using Managers;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,12 +18,24 @@ namespace UI
         {
             base.OnUIEnable();
             inputReader.CloseUIPanelEvent += Close;
+            // set canvas group to interactable and block raycast
+            if (TryGetComponent<CanvasGroup>(out var canvasGroup))
+            {
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            }
         }
 
         public override void OnUIDisable()
         {
             base.OnUIDisable();
             inputReader.CloseUIPanelEvent -= Close;
+            // set canvas group to non interactable and not block raycast
+            if (TryGetComponent<CanvasGroup>(out var canvasGroup))
+            {
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            }
         }
 
         public void SetMasterVolume(float value)

@@ -1,6 +1,7 @@
 using Events;
 using Managers;
 using Players;
+using Quest;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -53,6 +54,10 @@ namespace Enemies
             {
                 SetActiveServerRpc(false);
                 new EnemySpawnEvent(other.GetComponent<Player>().playerType, enemyId, spawnerID, spawnPlace);
+                if(TryGetComponent(out QuestProgressModifier questProgressModifier))
+                {
+                    questProgressModifier.Assign();
+                }
             }
         }
 

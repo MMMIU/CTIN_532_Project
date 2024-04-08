@@ -1,5 +1,4 @@
 using Events;
-using Manager;
 using Managers;
 using Players;
 using Quest;
@@ -33,15 +32,22 @@ namespace Items
             base.OnNetworkDespawn();
         }
 
-        protected override void DoItemSetInteractableEvent(EventBase baseEvent)
+        //protected override void DoItemSetInteractableEvent(EventBase baseEvent)
+        //{
+        //    base.DoItemSetInteractableEvent(baseEvent);
+        //    if (baseEvent is ItemSetInteractableEvent e && e.item_uid == item_uid)
+        //    {
+        //        Debug.Log("ItemMazeGate DoItemSetInteractableEvent " + e.interactable);
+        //        //rb.constraints = e.interactable ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeRotation;
+        //        door.SetActive(!e.interactable);
+        //    }
+        //}
+
+        [ClientRpc]
+        protected override void SetInteractableClientRpc(bool interactable)
         {
-            base.DoItemSetInteractableEvent(baseEvent);
-            if (baseEvent is ItemSetInteractableEvent e && e.item_uid == item_uid)
-            {
-                Debug.Log("ItemMazeGate DoItemSetInteractableEvent " + e.interactable);
-                //rb.constraints = e.interactable ? RigidbodyConstraints.None : RigidbodyConstraints.FreezeRotation;
-                door.SetActive(!e.interactable);
-            }
+            Debug.Log("ItemMazeGate SetInteractableClientRpc " + interactable);
+            door.SetActive(!interactable);
         }
     }
 }

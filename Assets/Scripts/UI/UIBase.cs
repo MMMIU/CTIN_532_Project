@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Inputs;
-using Manager;
+using Managers;
 
 namespace UI
 {

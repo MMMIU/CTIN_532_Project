@@ -1,11 +1,12 @@
 using Inputs;
-using Manager;
 using Managers;
 using Quest;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UI;
 using UnityEngine;
+using Utils;
 
 namespace UI
 {
@@ -15,6 +16,17 @@ namespace UI
     {
         [SerializeField]
         private InputReader inputReader;
+
+        [SerializeField]
+        TextMeshProUGUI contentText;
+
+        public override void SetData(object data)
+        {
+            if(data is string content)
+            {
+                contentText.text = content;
+            }
+        }
 
         public override void OnUIEnable()
         {

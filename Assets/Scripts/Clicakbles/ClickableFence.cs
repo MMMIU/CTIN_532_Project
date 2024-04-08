@@ -113,13 +113,6 @@ public class ClickableFence : ClickableBase
         if (restoreToStart)
         {
             rb.isKinematic = true;
-            //fenceTween = transform.DOMove(startPosValue, restoreDuration)
-            //    .SetEase(liftEase)
-            //    .OnComplete(() =>
-            //    {
-            //        rb.constraints = (RigidbodyConstraints)idleConstraints;
-            //        rb.isKinematic = false;
-            //    });
             fenceTween = DOTween.To(() => transform.position, x => transform.position = x, startPosValue, restoreDuration)
                 .SetEase(liftEase)
                 .OnComplete(() =>

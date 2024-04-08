@@ -38,20 +38,22 @@ public class ItemFloatingPrompt : NetworkBehaviour
     private void OnInteractableChanged(bool oldValue, bool newValue)
     {
         Debug.Log("OnInteractableChanged: " + newValue);
-        bool judge = (disableOnInteract && !newValue) != showWhenNotInteractable;
+        bool judge = (disableOnInteract && !newValue);
         if (judge)
         {
             floatingPrompt.SetActive(false);
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player"))!= showWhenNotInteractable;
-        if (judge)
+        if(showWhenNotInteractable == itemBase.Interactable.Value)
         {
-            Player p = other.GetComponent<Player>();
+            return;
+        }
+
+        if (other.CompareTag("Player") && other.TryGetComponent(out Player p))
+        {
             if (p.IsLocalPlayer && (itemBase.itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemBase.itemDataItem.accessbility))
             {
                 floatingPrompt.SetActive(true);
@@ -61,10 +63,8 @@ public class ItemFloatingPrompt : NetworkBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        bool judge = ((!disableOnInteract || itemBase.Interactable.Value) && other.CompareTag("Player")) != showWhenNotInteractable;
-        if (judge)
+        if (other.CompareTag("Player") && other.TryGetComponent(out Player p))
         {
-            Player p = other.GetComponent<Player>();
             if (p.IsLocalPlayer && (itemBase.itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemBase.itemDataItem.accessbility))
             {
                 floatingPrompt.SetActive(false);

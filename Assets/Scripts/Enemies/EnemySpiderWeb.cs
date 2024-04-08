@@ -18,12 +18,12 @@ namespace Enemies
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            EventManager.Instance.Subscribe(nameof(KnightAttackEvent), DoTakeDamage);
+            EventManager.Instance.Subscribe<KnightAttackEvent>(DoTakeDamage);
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(KnightAttackEvent), DoTakeDamage);
+            EventManager.Instance.Unsubscribe<KnightAttackEvent>(DoTakeDamage);
             base.OnNetworkDespawn();
         }
 

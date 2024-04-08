@@ -37,7 +37,23 @@ namespace Quest
         public void StartQuestSequenceServerRpc()
         {
             Debug.Log("QuestManager.StartQuestSequenceServerRpc()");
+            StartGameClientRpc();
+            // assign first task after 2 seconds
             AssignTaskServerRpc(1, 1);
+            //StartCoroutine(AssignFirstTask());
+        }
+
+        private IEnumerator AssignFirstTask()
+        {
+            yield return new WaitForSeconds(2f);
+            AssignTaskServerRpc(1, 1);
+        }
+
+        [ClientRpc]
+        private void StartGameClientRpc()
+        {
+            Debug.Log("QuestManager.StartGameClientRpc()");
+            new GameStartEvent();
         }
 
         public void GetAllTasks()
@@ -52,6 +68,12 @@ namespace Quest
         public void AssignTaskServerRpc(int chainId, int subId, int delayRound = 0)
         {
             Debug.Log("QuestManager.AssignTask(" + chainId + ", " + subId + ")");
+            // if task is already on list, return
+            if (m_taskData.GetData(chainId, subId) != null)
+            {
+                Debug.LogWarning("TaskData.GetData(" + chainId + ", " + subId + ") is already on list.");
+                return;
+            }
             var newCfg = TaskCfg.Instance.GetCfgItem(chainId, subId);
             if (newCfg != null)
             {

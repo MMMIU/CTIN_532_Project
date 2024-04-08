@@ -148,9 +148,14 @@ MonoBehaviour:
     item_uid: 0
     item_type: 0
     item_sub_id: 0
+    name: 
+    desc: 
     accessbility: 0
-    interactable: 0
+    init_interactable: 0
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
+  interactable:
+    m_InternalValue: 0
+  cooldown: 40
 --- !u!135 &2843014669143673010
 SphereCollider:
   m_ObjectHideFlags: 0

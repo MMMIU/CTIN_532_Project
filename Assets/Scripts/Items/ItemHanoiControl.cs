@@ -1,5 +1,4 @@
 using Events;
-using Manager;
 using Managers;
 using Players;
 using Quest;
@@ -57,6 +56,10 @@ namespace Items
             {
                 hintShown = true;
                 UIManager.Instance.OpenPanel<UIHintMenu>(itemDataItem.desc);
+                if(TryGetComponent(out QuestProgressModifier questProgressModifier))
+                {
+                    questProgressModifier.Assign();
+                }
             }
             else
             {

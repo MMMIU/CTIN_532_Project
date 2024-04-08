@@ -25,15 +25,14 @@ namespace Items
             base.OnNetworkDespawn();
         }
 
-        private void DoItemSetInteractableEventServer(EventBase baseEvent)
+        [ClientRpc]
+        protected override void SetInteractableClientRpc(bool interactable)
         {
-            if (!IsServer) return;
-            ItemSetInteractableEvent e = baseEvent as ItemSetInteractableEvent;
-            Debug.Log("Server: Try Set: " + e.item_uid + "::DoItemSetInteractableEventServer: " + e.interactable);
-            if (e.item_uid == item_uid)
+            if(interactable)
             {
-                Debug.Log("Server: Item " + item_uid + "::DoItemSetInteractableEventServer: " + e.interactable);
-                SetInteractableServerRpc(e.interactable);
+                // set material DBlendFactor to 1
+                Material material = GetComponent<MeshRenderer>().material;
+                material.SetFloat("_DBlendFactor", 1);
             }
         }
     }

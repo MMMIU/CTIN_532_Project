@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4129606121
+  GlobalObjectIdHash: 290412658
   InScenePlacedSourceGlobalObjectIdHash: 1807029765
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -108,9 +108,9 @@ MonoBehaviour:
     type: 3}
   knightSpawnPoint: {fileID: 1027118299012428057}
   princessSpawnPoint: {fileID: 2812066165295408129}
-  useDevSpawnPoints: 0
-  devKnightSpawnPoint: {fileID: 0}
-  devPrincessSpawnPoint: {fileID: 0}
+  useDevSpawnPoints: 1
+  devKnightSpawnPoint: {fileID: 1247004379807599725}
+  devPrincessSpawnPoint: {fileID: 9037968998807523727}
 --- !u!1 &3216055953216294291
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,8 +135,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3216055953216294291}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 17.039001, y: 8.598, z: -4.68}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0.15, y: 13.04, z: -96.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -197,8 +197,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5842231479295296899}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 11.749001, y: 8.598, z: -4.6299934}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 3.64, y: 13.04, z: -94.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

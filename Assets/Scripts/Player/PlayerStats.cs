@@ -29,6 +29,24 @@ namespace Players
             }
         }
 
+        private void OnPlayerDead(PlayerDeadEvent e)
+        {
+            if (IsLocalPlayer && playerType == e.playerType)
+            {
+                Debug.Log("OnPlayerDead: " + e.playerType);
+            }
+        }
+
+        private void OnPlayerRespawn(PlayerRespawnEvent e)
+        {
+            if (IsLocalPlayer && playerType == e.playerType)
+            {
+                Debug.Log("OnPlayerRespawn: " + e.playerType);
+                PlayerRespawnServerRpc();
+            }
+        }
+
+
         [ServerRpc]
         public void InitPlayerServerRpc(string name)
         {
@@ -86,7 +104,7 @@ namespace Players
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void PlayerHealServerRpc(int heal)
+        public void PlayerHealServerRpc(float heal)
         {
             Debug.Log("PlayerHealServerRpc: " + heal);
             if (playerData.Value.playerDead)

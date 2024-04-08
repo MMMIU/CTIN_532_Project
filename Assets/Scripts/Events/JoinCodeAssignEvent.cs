@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UI;
 using Quest;
-using Manager;
+using Managers;
 namespace Events {
     public class JoinCodeAssignEvent : EventBase
     {

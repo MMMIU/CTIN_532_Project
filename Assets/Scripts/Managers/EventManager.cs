@@ -5,36 +5,41 @@ using Managers;
 
 namespace Events
 {
-    public partial class EventManager
+    public class Singleton<T> where T : new()
     {
-        private static EventManager instance = null;
-
-        private bool isDealingWithHandler = false;
-        private List<KeyValuePair<string, Action<EventBase>>> handlersToBeAdded = new();
-        private List<KeyValuePair<string, Action<EventBase>>> handlersToBeRemoved = new();
-
-
-        public static EventManager Instance
+        private static T instance;
+        public static T Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new EventManager();
+                    instance = new T();
+                    (instance as Singleton<T>).OnInitialize();
                 }
                 return instance;
             }
         }
 
-        private EventManager()
+        protected virtual void OnInitialize()
         {
-            isDealingWithHandler = false;
-            handlersToBeAdded = new();
-            handlersToBeRemoved = new();
+            Debug.Log("Singleton Initialized: " + typeof(T).Name);
         }
 
+        public void EagerInit()
+        {
+            return;
+        }
+    }
+
+    public partial class EventManager : Singleton<EventManager>
+    {
+        private bool isDealingWithHandler = false;
+        private List<KeyValuePair<string, Delegate>> handlersToBeAdded = new();
+        private List<KeyValuePair<string, Delegate>> handlersToBeRemoved = new();
+
         private List<EventBase> eventList = new();
-        private Dictionary<string, List<Action<EventBase>>> eventHandlers = new();
+        private Dictionary<string, List<Delegate>> eventHandlers = new();
 
         public void Tick()
         {
@@ -63,7 +68,7 @@ namespace Events
                     isDealingWithHandler = true;
                     foreach (var handler in eventHandlers[e.name])
                     {
-                        handler(e);
+                        handler.DynamicInvoke(e);
                     }
                     isDealingWithHandler = false;
                 }
@@ -79,11 +84,7 @@ namespace Events
 
         public void Subscribe<T>(Action<T> handler) where T : EventBase
         {
-            Subscribe(typeof(T).Name, (e) => handler((T)e));
-        }
-
-        public void Subscribe(string eventName, Action<EventBase> handler)
-        {
+            string eventName = typeof(T).Name;
             Debug.Log("Subscribing to event: " + eventName);
             if (isDealingWithHandler)
             {
@@ -99,11 +100,7 @@ namespace Events
 
         public void Unsubscribe<T>(Action<T> handler) where T : EventBase
         {
-            Unsubscribe(typeof(T).Name, (e) => handler((T)e));
-        }
-
-        public void Unsubscribe(string eventName, Action<EventBase> handler)
-        {
+            string eventName = typeof(T).Name;
             Debug.Log("Unsubscribing from event: " + eventName);
             if (isDealingWithHandler)
             {
@@ -113,6 +110,10 @@ namespace Events
             if (eventHandlers.ContainsKey(eventName))
             {
                 eventHandlers[eventName].Remove(handler);
+                if (eventHandlers[eventName].Count == 0)
+                {
+                    eventHandlers.Remove(eventName);
+                }
             }
         }
 
@@ -120,15 +121,35 @@ namespace Events
         {
             foreach (var pair in handlersToBeAdded)
             {
-                Subscribe(pair.Key, pair.Value);
+                if (!eventHandlers.ContainsKey(pair.Key))
+                {
+                    eventHandlers[pair.Key] = new List<Delegate>();
+                }
+                eventHandlers[pair.Key].Add(pair.Value);
             }
+
             foreach (var pair in handlersToBeRemoved)
             {
-                Unsubscribe(pair.Key, pair.Value);
+                if (eventHandlers.ContainsKey(pair.Key))
+                {
+                    var handlersList = eventHandlers[pair.Key];
+                    // assume no duplicate handlers
+                    if (handlersList.Contains(pair.Value))
+                    {
+                        handlersList.Remove(pair.Value);
+                        // if no handler left, remove the event
+                        if (handlersList.Count == 0)
+                        {
+                            eventHandlers.Remove(pair.Key);
+                        }
+                    }
+                }
             }
+
             handlersToBeAdded.Clear();
             handlersToBeRemoved.Clear();
         }
+
 
         public void ScheduleEvent(EventBase newEvent)
         {

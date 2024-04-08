@@ -12,12 +12,12 @@ namespace Enemies
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            EventManager.Instance.Subscribe(nameof(KnightAttackEvent), DoTakeDamage);
+            EventManager.Instance.Subscribe<KnightAttackEvent>(DoTakeDamage);
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(KnightAttackEvent), DoTakeDamage);
+            EventManager.Instance.Unsubscribe<KnightAttackEvent>(DoTakeDamage);
             base.OnNetworkDespawn();
         }
 
@@ -27,9 +27,13 @@ namespace Enemies
             // if gameobject is this
             if (e.other == gameObject)
             {
-                gameObject.GetComponent<Animator>().Play("Take Damage");
-                TakeDamageServerRpc(e.damage);
-                Debug.Log("Spider::DoTakeDamage::" + e.other + " " + e.damage + ". Health Remain: " + Health);
+                var currentEnemyController= gameObject.GetComponent<EnemyController>();
+                if (currentEnemyController)
+                {
+                    currentEnemyController.HitByPlayer();
+                    TakeDamageServerRpc(e.damage);
+                    Debug.Log("Spider::DoTakeDamage::" + e.other + " " + e.damage + ". Health Remain: " + Health);
+                }
             }
         }
 

@@ -25,6 +25,7 @@ public class HitDetectionForEnemy : NetworkBehaviour
                 return;
             }
             Debug.Log("Enemy Hit Player!");
+            other.gameObject.transform.LookAt(transform.position);
             new EnemyAttackEvent(type);
         }
     }

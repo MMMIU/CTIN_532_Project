@@ -12,6 +12,8 @@ namespace Quest
         [SerializeField]
         List<Pair<int, int>> quests;
 
+        bool assigned = false;
+
         public void AddProgress(int amout = 1)
         {
             foreach(var quest in quests)
@@ -30,8 +32,14 @@ namespace Quest
 
         public void Assign()
         {
+            if (assigned)
+            {
+                return;
+            }
+            assigned = true;
             foreach (var quest in quests)
             {
+                Debug.Log("Assigning quest: " + quest.First + " " + quest.Second);
                 QuestManager.Instance.AssignTaskServerRpc(quest.First, quest.Second);
             }
         }

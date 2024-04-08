@@ -1,7 +1,6 @@
 using Events;
 using Inputs;
 using Items;
-using Manager;
 using Managers;
 using Quest;
 using System.Collections;
@@ -50,7 +49,7 @@ namespace UI
         {
             closablePanel.SetActive(false);
             NetConnector.Instance.useInternet = useInternetToggle.isOn;
-            EventManager.Instance.Subscribe(nameof(JoinCodeAssignEvent), OnJoinCodeAssign);
+            EventManager.Instance.Subscribe<JoinCodeAssignEvent>(OnJoinCodeAssign);
             inputReader.OpenDevPanelEvent += ShowHideFloat;
             inputReader.CloseDevPanelEvent += ShowHideFloat;
         }
@@ -59,7 +58,7 @@ namespace UI
         {
             inputReader.OpenDevPanelEvent -= ShowHideFloat;
             inputReader.CloseDevPanelEvent -= ShowHideFloat;
-            EventManager.Instance.Unsubscribe(nameof(JoinCodeAssignEvent), OnJoinCodeAssign);
+            EventManager.Instance.Unsubscribe<JoinCodeAssignEvent>(OnJoinCodeAssign);
         }
 
 

@@ -45,7 +45,7 @@ public class BattleControl : NetworkBehaviour
     {
         if (IsClient && IsOwner)
         {
-            if (!animator.GetBool("IsGrounded")) return;
+            if (!animator.GetBool("IsGrounded") || animator.GetBool("Died")) return;
             if (!animator.GetBool("Attacking"))
             {
                 animator.SetFloat("InputHorizontal", 0f);

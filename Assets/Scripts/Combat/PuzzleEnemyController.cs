@@ -2,9 +2,13 @@ using Events;
 using Items;
 using Managers;
 using Players;
+using Quest;
+using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements.Experimental;
 
 public class PuzzleEnemyController : NetworkBehaviour
 {
@@ -52,6 +56,10 @@ public class PuzzleEnemyController : NetworkBehaviour
     public float lostSightChaseTime = 1.5f;
     [SerializeField]
     private float lostStightChaseTimeCount; // in use for checking
+    [SerializeField]
+    public bool Chasing = false;
+    [SerializeField]
+    private CapsuleCollider Horn;
     #endregion
 
     public override void OnNetworkSpawn()
@@ -99,6 +107,7 @@ public class PuzzleEnemyController : NetworkBehaviour
         for (int i = 0; i < walkPoints.Length; i++)
         {
             walkPoints[i] = wayPointsParentTransform.GetChild(i).transform.position;
+            Debug.Log(walkPoints[i]);
         }
         wayPointsParentTransform.gameObject.tag = "Untagged";
         lostStightChaseTimeCount = lostSightChaseTime;
@@ -108,6 +117,7 @@ public class PuzzleEnemyController : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         EventManager.Instance.Unsubscribe<KnightAttackEvent>(ResetTargetPlayer);
+        ChaseEndCheck();
         base.OnNetworkDespawn();
     }
     void Update()
@@ -123,12 +133,57 @@ public class PuzzleEnemyController : NetworkBehaviour
         if (!targetInSightRange && lostStightChaseTimeCount <= 0f && !targetInAttackRange) Patroling();
         if ((targetInSightRange || lostStightChaseTimeCount > 0f) && !targetInAttackRange)
         {
+            ChaseStartCheck();
             lostStightChaseTimeCount -=Time.deltaTime;
             agent.SetDestination(ChaseDestinationCreation());
             selfAnimator.SetFloat("Blend", Mathf.Clamp(agent.velocity.magnitude, 0, 1));
         }
         if (targetInAttackRange && targetInSightRange) AttackTarget();
     }
+
+    public void ChaseStartCheck()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+        if (!Chasing)
+        {
+            Chasing = true;
+            ChaseStartSycnClientRpc();
+            new EnemyChaseStart();
+        }
+    }
+
+    public void ChaseEndCheck()
+    {
+        if (!IsServer)
+        {
+            return;
+        }
+        if (Chasing)
+        {
+            Chasing = false;
+            ChaseEndSycnClientRpc();
+            new EnemyChaseEnd();
+        }
+    }
+
+
+    [ClientRpc]
+    void ChaseEndSycnClientRpc()
+    {
+        Chasing = false;
+        new EnemyChaseEnd();
+    }
+
+    [ClientRpc]
+    void ChaseStartSycnClientRpc()
+    {
+        Chasing = true;
+        new EnemyChaseStart();
+    }
+
 
     private bool TargetInSightCheck()
     {
@@ -150,8 +205,8 @@ public class PuzzleEnemyController : NetworkBehaviour
         //check if it can be see
         if (targetInSight)
         {
-            Physics.Raycast(raycastStartPoint.position, directionToTarget.normalized, out hit, sightRange);
-            targetInSight = targetInSight && hit.transform.gameObject.CompareTag("Player");
+            var isHit = Physics.Raycast(raycastStartPoint.position, directionToTarget.normalized, out hit, sightRange);
+            targetInSight = targetInSight && isHit && hit.transform.gameObject.CompareTag("Player");
         }
         //check in sight range
         bool potentialTargetInSight = directionToPotentialTarget.magnitude < sightRange 
@@ -159,8 +214,8 @@ public class PuzzleEnemyController : NetworkBehaviour
         //check if it can be see
         if (potentialTargetInSight)
         {
-            Physics.Raycast(raycastStartPoint.position, directionToPotentialTarget.normalized, out hit, sightRange);
-            potentialTargetInSight = potentialTargetInSight && hit.transform.gameObject.CompareTag("Player");
+            var isHit = Physics.Raycast(raycastStartPoint.position, directionToPotentialTarget.normalized, out hit, sightRange);
+            potentialTargetInSight = potentialTargetInSight && isHit && hit.transform.gameObject.CompareTag("Player");
         }
 
         if (potentialTargetInSight && targetInSight) 
@@ -214,6 +269,7 @@ public class PuzzleEnemyController : NetworkBehaviour
         {
             return;
         }
+        ChaseEndCheck();
         if (!walkPointSet) SearchWalkPoint();
         if (walkPointSet)
         {
@@ -284,6 +340,7 @@ public class PuzzleEnemyController : NetworkBehaviour
 
     private void AttackTarget()
     {
+        ChaseStartCheck();
         if (!IsServer)
         {
             return;
@@ -305,6 +362,18 @@ public class PuzzleEnemyController : NetworkBehaviour
         }
     }
 
+    public void SetAttackTrue()
+    {
+        selfAnimator.SetBool("Attack", true);
+        Horn.enabled = true;
+    }
+
+    public void SetAttackFalse()
+    {
+        selfAnimator.SetBool("Attack", false);
+        Horn.enabled = false;
+    }
+
     private void ResetAttack()
     {
         if (!IsServer)
@@ -314,16 +383,16 @@ public class PuzzleEnemyController : NetworkBehaviour
         alreadyAttacked = false;
     }
 
-    public void GotHit()
-    {
-        //selfAnimator.SetBool("Attack", false);
-        hitByPlayer = true;
-    }
+    //public void GotHit()
+    //{
+    //    //selfAnimator.SetBool("Attack", false);
+    //    hitByPlayer = true;
+    //}
 
-    public void HitReactionDone()
-    {
-        hitByPlayer = false;
-    }
+    //public void HitReactionDone()
+    //{
+    //    hitByPlayer = false;
+    //}
 
 
     private bool IsXOutBound(float x)
@@ -349,22 +418,22 @@ public class PuzzleEnemyController : NetworkBehaviour
 
     //}
 
-    [ServerRpc(RequireOwnership = false)]
-    void DeathServerRpc()
-    {
-        if (!IsServer)
-        {
-            return;
-        }
-        GetComponent<CapsuleCollider>().enabled = false;
-        DeathAnimClientRpc();
-    }
+    //[ServerRpc(RequireOwnership = false)]
+    //void DeathServerRpc()
+    //{
+    //    if (!IsServer)
+    //    {
+    //        return;
+    //    }
+    //    GetComponent<CapsuleCollider>().enabled = false;
+    //    DeathAnimClientRpc();
+    //}
 
-    [ClientRpc]
-    void DeathAnimClientRpc()
-    {
-        selfAnimator?.Play("Death");
-    }
+    //[ClientRpc]
+    //void DeathAnimClientRpc()
+    //{
+    //    selfAnimator?.Play("Death");
+    //}
 
     public void ResetTargetPlayer(EventBase baseE)
     {
@@ -376,27 +445,8 @@ public class PuzzleEnemyController : NetworkBehaviour
         KnightAttackEvent e = baseE as KnightAttackEvent;
         if (e.other == gameObject)
         {
-            if (targetPlayer.gameObject.GetComponent<Player>().playerType != ItemAccessbility.knight)
-            {
-                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-                if (players.Length == 1)
-                {
-                    targetPlayer = players[0].transform;
-                }
-                else
-                {
-                    if (players[0].GetComponent<Player>().playerType == ItemAccessbility.knight)
-                    {
-                        targetPlayer = players[0].transform;
-                    }
-                    else
-                    {
-                        targetPlayer = players[1].transform;
-                    }
-                }
-                playerAnimator = targetPlayer.gameObject.GetComponent<Animator>();
-
-            }
+            agent.Warp(walkPoints[0]);
+            currentWalkPointIndex = 0;
         }
     }
 

@@ -2,6 +2,7 @@ using Events;
 using Items;
 using Managers;
 using Players;
+using Quest;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;

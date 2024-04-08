@@ -1,7 +1,9 @@
-﻿using Inputs;
+﻿using Events;
+using Inputs;
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Invector.vCharacterController
 {
@@ -18,6 +20,7 @@ namespace Invector.vCharacterController
 
         private Vector2 movementValue = Vector2.zero;
         private Vector2 cameraValue = Vector2.zero;
+        public bool dead = false;
 
         #endregion
 
@@ -59,6 +62,18 @@ namespace Invector.vCharacterController
             //inputReader.EscEvent += InteractWithUI;
             inputReader.InteractionEvent += Interact;
             inputReader.JumpEvent += JumpInput;
+            EventManager.Instance.Subscribe<EnemyAttackEvent>(HitByEnemy);
+            EventManager.Instance.Subscribe<PlayerDeadEvent>(Dead);
+            EventManager.Instance.Subscribe<PlayerRespawnEvent>(Respawn);
+        }
+
+        private void HitByEnemy(EventBase baseEvent)
+        {
+            EnemyAttackEvent e = baseEvent as EnemyAttackEvent;
+            if(e.playerType == Items.ItemAccessbility.knight) 
+            { 
+                animator.Play("HitReaction"); 
+            }
         }
 
         public void UnRegisterEvent()
@@ -68,6 +83,48 @@ namespace Invector.vCharacterController
             inputReader.SprintEvent -= SprintInput;
             //inputReader.EscEvent -= InteractWithUI;
             inputReader.JumpEvent -= JumpInput;
+            EventManager.Instance.Unsubscribe<EnemyAttackEvent>(HitByEnemy);
+            EventManager.Instance.Unsubscribe<PlayerDeadEvent>(Dead);
+            EventManager.Instance.Unsubscribe<PlayerRespawnEvent>(Respawn);
+        }
+
+        private void Respawn(EventBase baseEvent)
+        {
+            PlayerRespawnEvent e = baseEvent as PlayerRespawnEvent;
+            if (e.playerType == Items.ItemAccessbility.knight)
+            {
+                GetComponent<Rigidbody>().isKinematic = false;
+                //this.gameObject.layer = LayerMask.NameToLayer("Player");
+                dead = false;
+                animator.SetBool("Died", false);
+            }
+        }
+
+        private void Dead(EventBase baseEvent)
+        {
+            if (IsLocalPlayer)
+            {
+                PlayerDeadEvent e = baseEvent as PlayerDeadEvent;
+                if (e.playerType == Items.ItemAccessbility.knight)
+                {
+                    GetComponent<Rigidbody>().isKinematic = true;
+                    this.gameObject.GetComponent<Collider>().enabled = false;
+                    dead = true;
+                    //this.gameObject.layer = LayerMask.NameToLayer("DeadPlayer");
+                    animator.Play("Death");
+                    animator.SetBool("Died", true);
+                    Invoke(nameof(ResetCollider), 2f);
+                }
+            }
+        }
+
+        private void ResetCollider()
+        {
+            if (!IsServer)
+            {
+                return;
+            }
+            this.gameObject.GetComponent<Collider>().enabled = true;
         }
 
         private void Interact()
@@ -156,7 +213,7 @@ namespace Invector.vCharacterController
             float x = movementValue.x;
             float z = movementValue.y;
 
-            if (animator.GetBool("Interruptible") && (x != 0 || z != 0))
+            if (animator.GetBool("Interruptible") && (x != 0 || z != 0) && !dead)
             {
                 if (animator.GetBool("Attacking"))
                 {
@@ -210,7 +267,10 @@ namespace Invector.vCharacterController
 
         protected virtual void SprintInput(bool isSprint)
         {
-            cc.Sprint(isSprint);
+            if (!dead)
+            {
+                cc.Sprint(isSprint);
+            }
         }
 
         /// <summary>
@@ -227,7 +287,7 @@ namespace Invector.vCharacterController
         /// </summary>
         protected virtual void JumpInput()
         {
-            if (JumpConditions())
+            if (JumpConditions() && !dead)
             {
                 if (animator.GetBool("Interruptible"))
                 {
@@ -241,6 +301,6 @@ namespace Invector.vCharacterController
             }
         }
 
-        #endregion       
+        #endregion
     }
 }

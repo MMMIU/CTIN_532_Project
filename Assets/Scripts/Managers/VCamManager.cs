@@ -19,6 +19,21 @@ namespace Managers
         [SerializeField]
         private Pair<string, CinemachineVirtualCamera> currentVCam;
 
+        public CinemachineVirtualCamera CurrentVCam
+        {
+            get
+            {
+                if (currentVCam != null)
+                {
+                    return currentVCam.Second;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
 
         public static VCamManager Instance { get; private set; }
 

@@ -1,5 +1,4 @@
 using Events;
-using Manager;
 using Managers;
 using Players;
 using Quest;
@@ -20,6 +19,8 @@ namespace Items
         [SerializeField]
         private float cooldown = 10f;
 
+        float timer = -1f;
+
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -31,9 +32,23 @@ namespace Items
             base.OnNetworkDespawn();
         }
 
+        private void Update()
+        {
+            if (timer < 0)
+            {
+                return;
+            }
+            timer += Time.deltaTime;
+            if (timer >= cooldown)
+            {
+                timer = -1f;
+                SetInteractableServerRpc(true);
+            }
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (Interactable.Value && other.CompareTag("Player"))
+            if (other.CompareTag("Player"))
             {
                 Player p = other.GetComponent<Player>();
                 if (p.IsLocalPlayer && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility))
@@ -45,10 +60,10 @@ namespace Items
 
         private void OnTriggerExit(Collider other)
         {
-            if (Interactable.Value && other.CompareTag("Player"))
+            if (other.CompareTag("Player"))
             {
                 Player p = other.GetComponent<Player>();
-                if (p.IsLocalPlayer && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility))
+                if (p.IsLocalPlayer)
                 {
                     inputReader.InteractionEvent -= OnInteract;
                 }
@@ -57,10 +72,15 @@ namespace Items
 
         private void OnInteract()
         {
+            if (timer >= 0f)
+            {
+                UIManager.Instance.OpenPanel<UIPopUpBar>().SetPopUpText("Still on cooldown, " + (int)(cooldown - timer) + " seconds remaining");
+                return;
+            }
             Debug.Log("ItemMazeEye OnInteract" + transform.position);
             UIManager.Instance.OpenPanel<UIOverviewPanel>(transform.position);
+            timer = 0f;
             SetInteractableServerRpc(false);
-            new ItemSetInteractableEvent(item_uid, true, cooldown);
         }
     }
 }

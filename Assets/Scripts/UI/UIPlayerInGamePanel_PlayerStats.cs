@@ -15,15 +15,10 @@ namespace UI
         [SerializeField]
         private Slider playerHealthSlider;
 
-        // player energy slider
-        [SerializeField]
-        private Slider playerEnergySlider;
-
         // methods to update player stats
         public void UpdatePlayerStats(float health, float maxHealth, float energy, float maxEnergy)
         {
             playerHealthSlider.value = health / maxHealth;
-            playerEnergySlider.value = energy / maxEnergy;
         }
 
         public void UpdatePlayerImage(Sprite playerSprite)
@@ -35,13 +30,5 @@ namespace UI
         {
             playerHealthSlider.value = health / maxHealth;
         }
-
-        public void UpdatePlayerEnergy(float energy, float maxEnergy)
-        {
-            playerEnergySlider.value = energy / maxEnergy;
-        }
-
-
-
     }
 }

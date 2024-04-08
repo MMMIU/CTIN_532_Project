@@ -10,10 +10,10 @@ namespace Events {
         public GameObject other;
         public int damage;
 
-        public KnightAttackEvent(GameObject other, int demage = 1, string name = nameof(KnightAttackEvent), float delay = 0f) : base(name, delay)
+        public KnightAttackEvent(GameObject other, int damage = 1, string name = nameof(KnightAttackEvent), float delay = 0f) : base(name, delay)
         {
             this.other = other;
-            this.damage = demage;
+            this.damage = damage;
         }
     }
 }

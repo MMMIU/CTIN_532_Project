@@ -28,25 +28,32 @@ namespace Items
         {
             this.interactable.Value = interactable;
             this.interactable.SetDirty(true);
+            SetInteractableClientRpc(interactable);
+        }
+
+        [ClientRpc]
+        protected virtual void SetInteractableClientRpc(bool interactable)
+        {
         }
 
 
         public override void OnNetworkSpawn()
         {
             itemDataItem = ItemLogic.Instance.GetItemData(item_uid);
-            EventManager.Instance.Subscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEvent);
+            EventManager.Instance.Subscribe<ItemSetInteractableEvent>(DoItemSetInteractableEvent);
             SetInteractableServerRpc(itemDataItem.init_interactable);
         }
 
         public override void OnNetworkDespawn()
         {
-            EventManager.Instance.Unsubscribe(nameof(ItemSetInteractableEvent), DoItemSetInteractableEvent);
+            EventManager.Instance.Unsubscribe<ItemSetInteractableEvent>(DoItemSetInteractableEvent);
         }
 
         protected virtual void DoItemSetInteractableEvent(EventBase baseEvent)
         {
             if(baseEvent is ItemSetInteractableEvent e && e.item_uid == item_uid)
             {
+                Debug.Log("Item " + item_uid + "DoItemSetInteractableEventServer: " + e.interactable);
                 SetInteractableServerRpc(e.interactable);
             }
         }

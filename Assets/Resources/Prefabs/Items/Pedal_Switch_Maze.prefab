@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3138162895
+  GlobalObjectIdHash: 93673449
   InScenePlacedSourceGlobalObjectIdHash: 3076797054
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -128,12 +128,16 @@ MonoBehaviour:
     item_uid: 0
     item_type: 0
     item_sub_id: 0
+    name: 
+    desc: 
     accessbility: 0
-    interactable: 0
+    init_interactable: 0
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
+  interactable:
+    m_InternalValue: 0
   emissionPlne: {fileID: 8847399063585998026}
   particles: {fileID: 8839178701405614022}
-  accessableByAll: 1
+  accessableByAll: 0
 --- !u!65 &6505980023362389653
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5142,7 +5146,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b17469c4aa5a38459345adace4c70a9, type: 2}
+  - {fileID: 2100000, guid: 16ddd05e77c84a744a56fc89c67ce040, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

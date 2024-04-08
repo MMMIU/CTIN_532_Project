@@ -1548,9 +1548,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 0.24705882370471955,
-        "g": 0.10669317841529846,
-        "b": 0.0,
+        "r": 0.11320751905441284,
+        "g": 0.050348348915576938,
+        "b": 0.003203967120498419,
         "a": 0.0
     },
     "isMainColor": false,
@@ -3096,9 +3096,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 0.3459118604660034,
-        "g": 0.3459118604660034,
-        "b": 0.3459118604660034,
+        "r": 0.25157225131988528,
+        "g": 0.2476166933774948,
+        "b": 0.2476166933774948,
         "a": 0.0
     },
     "isMainColor": false,
@@ -4411,7 +4411,7 @@
     "m_RefNameGeneratedByDisplayName": "MainLightDirection",
     "m_DefaultReferenceName": "_MainLightDirection",
     "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": false,
+    "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
     "m_DismissedVersion": 0,
@@ -4860,7 +4860,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.20000000298023225,
+    "m_Value": 0.30000001192092898,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,

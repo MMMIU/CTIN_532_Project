@@ -10,9 +10,11 @@ public class HitDetectionForPuzzleEnemy : NetworkBehaviour
 {
     // Start is called before the first frame update
     private Animator m_Animator;
+    public PuzzleEnemyController m_PuzzleEnemyController;
     public override void OnNetworkSpawn()
     {
         m_Animator = transform.root.GetComponent<Animator>();
+        m_PuzzleEnemyController = transform.root.GetComponent<PuzzleEnemyController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,6 +28,7 @@ public class HitDetectionForPuzzleEnemy : NetworkBehaviour
                 return;
             }
             Debug.Log("Puzzle Enemy Hit Player!");
+            m_PuzzleEnemyController.ChaseEndCheck();
             new PuzzleEnemyAttackEvent(type);
         }
     }

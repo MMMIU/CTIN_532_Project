@@ -43,7 +43,7 @@ namespace Items
             if (other.CompareTag("Player"))
             {
                 Player p = other.GetComponent<Player>();
-                if (p.IsLocalPlayer && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility))
+                if (p.IsLocalPlayer)
                 {
                     inputReader.InteractionEvent -= OnInteract;
                 }
@@ -52,6 +52,7 @@ namespace Items
 
         private void OnInteract()
         {
+            SFXManager.Instance.PlaySFX("interaction");
             UIManager.Instance.OpenPanel<UIBookReadPanel>(itemDataItem.desc);
         }
     }

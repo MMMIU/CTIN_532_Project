@@ -1,5 +1,7 @@
+using Enemies;
 using Events;
 using Items;
+using Managers;
 using Players;
 using Quest;
 using Unity.Netcode;
@@ -46,6 +48,7 @@ public class EnemyController : NetworkBehaviour
     [SerializeField]
     private CapsuleCollider Horn;
     public bool EnemyDied = false;
+    public AudioSource HurtSound;
     #endregion
 
     public override void OnNetworkSpawn()
@@ -80,6 +83,8 @@ public class EnemyController : NetworkBehaviour
         PastPosition = this.transform.position;
 
         TimeBetweenCheck = TimeIntervalForStuckCheck;
+
+        HurtSound = GetComponent<AudioSource>();
     }
 
 
@@ -92,7 +97,7 @@ public class EnemyController : NetworkBehaviour
     }
     void Update()
     {
-        if (!IsServer || !IsSpawned || EnemyDied)
+        if (!IsServer || !IsSpawned || EnemyDied || GameManager.Instance.gameover)
         {
             return;
         }
@@ -257,6 +262,7 @@ public class EnemyController : NetworkBehaviour
     {
         //selfAnimator.SetBool("Attack", false);
         hitByPlayer = true;
+        HurtSound.Play();
     }
 
     public void HitReactionDone()
@@ -286,7 +292,18 @@ public class EnemyController : NetworkBehaviour
 
     public void HitByPlayer()
     {
-        if (hitByPlayer) return;
+        if (EnemyDied)
+        {
+            return;
+        }
+        if (GetComponent<EnemyBase>().Health <= 0)
+        {
+            EnemyDied = true;
+            return;
+        }
+        if (hitByPlayer)  {
+            return;
+        }
         selfAnimator.Play("Take Damage");
     }
 

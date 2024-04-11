@@ -52,19 +52,15 @@ namespace Items
 
         private void OnInteract()
         {
-            if (!hintShown)
+            if(!hintShown)
             {
-                hintShown = true;
-                UIManager.Instance.OpenPanel<UIHintMenu>(itemDataItem.desc);
-                if(TryGetComponent(out QuestProgressModifier questProgressModifier))
+                if (TryGetComponent(out QuestProgressModifier questProgressModifier))
                 {
                     questProgressModifier.Assign();
                 }
             }
-            else
-            {
-                new HanoiControlStartEvent();
-            }
+            hintShown = true;
+            UIManager.Instance.OpenPanel<UIHintMenu>(itemDataItem.desc);
         }
     }
 }

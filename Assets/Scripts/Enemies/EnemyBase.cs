@@ -34,27 +34,17 @@ namespace Enemies
         [ServerRpc(RequireOwnership = false)]
         public virtual void TakeDamageServerRpc(int damage)
         {
-            if (health.Value <= 0)
-            {
-                return;
-            }
             health.Value -= damage;
             if (health.Value <= 0)
             {
-                DieClientRpc();
-                if(TryGetComponent<QuestProgressModifier>(out var questProgressModifier))
+                health.Value = 0;
+                gameObject.GetComponent<Animator>().Play("Die");
+                gameObject.GetComponent<Animator>().SetTrigger("die");
+                if (TryGetComponent<QuestProgressModifier>(out var questProgressModifier))
                 {
                     questProgressModifier.AddProgress();
                 }
             }
-        }
-
-        [ClientRpc]
-        public virtual void DieClientRpc()
-        {
-            Debug.Log("EnemyBase::DieClientRpc::" + enemyDataItem.Value.name);
-            this.gameObject.GetComponent<Animator>().Play("Die");
-            this.gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
         [ClientRpc]

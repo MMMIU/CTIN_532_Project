@@ -60,6 +60,7 @@ public class PuzzleEnemyController : NetworkBehaviour
     public bool Chasing = false;
     [SerializeField]
     private CapsuleCollider Horn;
+    public AudioSource HurtSound;
     #endregion
 
     public override void OnNetworkSpawn()
@@ -111,6 +112,7 @@ public class PuzzleEnemyController : NetworkBehaviour
         }
         wayPointsParentTransform.gameObject.tag = "Untagged";
         lostStightChaseTimeCount = lostSightChaseTime;
+        HurtSound = GetComponent<AudioSource>();
 
     }
 
@@ -122,7 +124,7 @@ public class PuzzleEnemyController : NetworkBehaviour
     }
     void Update()
     {
-        if (!IsServer || !IsSpawned || targetPlayer == null)
+        if (!IsServer || !IsSpawned || targetPlayer == null || GameManager.Instance.gameover)
         {
             return;
         }
@@ -445,6 +447,7 @@ public class PuzzleEnemyController : NetworkBehaviour
         KnightAttackEvent e = baseE as KnightAttackEvent;
         if (e.other == gameObject)
         {
+            HurtSound.Play();
             agent.Warp(walkPoints[0]);
             currentWalkPointIndex = 0;
         }

@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 803579676522933914}
   - component: {fileID: 3416649839203009878}
   - component: {fileID: 1087114746832433628}
-  - component: {fileID: 5122936217015161624}
-  - component: {fileID: 4526552657781919550}
   - component: {fileID: 8118953436899776826}
+  - component: {fileID: 4679615506723216635}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -51,8 +50,10 @@ MonoBehaviour:
   DevMode: 1
   localPlayer: {fileID: 0}
   localPlayerName: 
+  gameover: 0
   timeElapsed: 0
   timeScale: 1
+  useQuestManager: 1
 --- !u!114 &1087114746832433628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,111 +67,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClipList:
-  - name: bgm_normal
-    file: {fileID: 8300000, guid: f9187c311eb5aa54da857db12fd9c398, type: 3}
-  - name: bgm_fight
-    file: {fileID: 8300000, guid: 02cb1a4377acaac4da2e6bb47a733c17, type: 3}
-  musicAudioSource: {fileID: 5122936217015161624}
-  soundAudioSource: {fileID: 4526552657781919550}
+  - name: heal
+    file: {fileID: 8300000, guid: b87e890945b5f634c88c836efe18ab0f, type: 3}
+  - name: level_success
+    file: {fileID: 8300000, guid: 614d6788015d3b34da9c344503457912, type: 3}
+  - name: interaction
+    file: {fileID: 8300000, guid: 297e5dcdbe266004f950c5c21dd8d58a, type: 3}
+  soundAudioSource: {fileID: 4679615506723216635}
   mixer: {fileID: 24100000, guid: c8f7d6bb76e9e7d4092b2e5731ccec56, type: 2}
---- !u!82 &5122936217015161624
-AudioSource:
+--- !u!114 &8118953436899776826
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6469177178862746007}
   m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 513226755019855223, guid: c8f7d6bb76e9e7d4092b2e5731ccec56,
-    type: 2}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!82 &4526552657781919550
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b12212011d1282e40998f101a6aa59d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectedPlayers: 0
+  useInternet: 1
+  acceptIncomingConnections: 1
+--- !u!82 &4679615506723216635
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,18 +187,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8118953436899776826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6469177178862746007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b12212011d1282e40998f101a6aa59d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  connectedPlayers: 0
-  useInternet: 1
-  acceptIncomingConnections: 1

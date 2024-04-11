@@ -50,6 +50,7 @@ namespace Players
         {
             Debug.Log("HealPlayerClientRpc: " + playerType + " " + amount);
             new PlayerHealEvent(playerType, amount);
+            SFXManager.Instance.PlaySFX("heal");
         }
     }
 }

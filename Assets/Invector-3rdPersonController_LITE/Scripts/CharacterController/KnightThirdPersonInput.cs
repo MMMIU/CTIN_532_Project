@@ -49,7 +49,7 @@ namespace Invector.vCharacterController
 
         protected virtual void Update()
         {
-
+            FixRotation();
             InputHandle();                  // update the input methods
             cc.UpdateAnimator();            // updates the Animator Parameters
         }
@@ -70,7 +70,7 @@ namespace Invector.vCharacterController
         private void HitByEnemy(EventBase baseEvent)
         {
             EnemyAttackEvent e = baseEvent as EnemyAttackEvent;
-            if(e.playerType == Items.ItemAccessbility.knight) 
+            if(e.playerType == Items.ItemAccessbility.knight && !dead) 
             { 
                 animator.Play("HitReaction"); 
             }
@@ -207,6 +207,13 @@ namespace Invector.vCharacterController
             //JumpInput();
         }
 
+        public void FixRotation()
+        {
+            if (transform.eulerAngles.x != 0f || transform.eulerAngles.z != 0f)
+            {
+                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            }
+        }
 
         public virtual void MoveInput()
         {

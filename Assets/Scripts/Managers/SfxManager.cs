@@ -1,3 +1,4 @@
+using Events;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -14,9 +15,6 @@ public class SFXManager : MonoBehaviour
 
     [SerializeField]
     private List<SFXPair> audioClipList;
-
-    [SerializeField]
-    private AudioSource musicAudioSource;
 
     [SerializeField]
     private AudioSource soundAudioSource;
@@ -41,32 +39,26 @@ public class SFXManager : MonoBehaviour
         }
     }
 
-    public void PlayMusic(string name)
+    private void OnEnable()
     {
-        if (musicAudioSource == null)
-        {
-            Debug.LogWarning("No audio source set for SFXManager");
-            return;
-        }
-        if (audioClipList.Exists(sfx => sfx.name == name))
-        {
-            musicAudioSource.clip = audioClipList.Find(sfx => sfx.name == name).file;
-            musicAudioSource.Play();
-        }
-        else
-        {
-            Debug.LogWarning("No SFX found with name: " + name);
-        }
+        EventManager.Instance.Subscribe<TaskCompleteEvent>(OnTaskComplete);
     }
 
-    public void StopMusic()
+    private void OnDisable()
     {
-        if (musicAudioSource == null)
+        EventManager.Instance.Unsubscribe<TaskCompleteEvent>(OnTaskComplete);
+    }
+
+    private void OnTaskComplete(TaskCompleteEvent e)
+    {
+        if (e.taskDataItem.task_chain_id == 1 && e.taskDataItem.task_sub_id == 2)
         {
-            Debug.LogWarning("No audio source set for SFXManager");
-            return;
+            PlaySFX("level_success");
         }
-        musicAudioSource.Stop();
+        else if (e.taskDataItem.task_chain_id == 3 && e.taskDataItem.task_sub_id == 2)
+        {
+            PlaySFX("level_success");
+        }
     }
 
     public void PlaySFX(string name)

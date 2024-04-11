@@ -56,10 +56,6 @@ namespace Managers
             {
                 UIManager.Instance.OpenPanel<UIDev>();
             }
-            else
-            {
-                SFXManager.Instance.PlayMusic("bgm_normal");
-            }
             UIManager.Instance.OpenPanel<UIStartMenu>();
         }
 

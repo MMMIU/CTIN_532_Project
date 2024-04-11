@@ -544,7 +544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 5185
+    m_Bits: 136257
   m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2
@@ -694,6 +694,7 @@ MonoBehaviour:
       playerEnergy: 0
       playerMaxEnergy: 100
       playerDead: 0
+      playerUnstoppable: 0
   cinemachineVirtualCamera: {fileID: 6971819261028818847}
   playerNameText: {fileID: 3188284924411142344}
   playerType: 1
@@ -786,6 +787,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
   healing: 0
+  dead: 0
 --- !u!54 &4152986043997084627
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1102,7 +1104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  coll: {fileID: 0}
+  coll: {fileID: 6514008582977372861}
 --- !u!1 &3398121386858350833
 GameObject:
   m_ObjectHideFlags: 0

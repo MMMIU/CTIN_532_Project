@@ -133,6 +133,7 @@ namespace Hanoi
 
             if (endTower.DiskCount == disks.Length)
             {
+                SFXManager.Instance.PlaySFX("level_success");
                 Debug.Log("Game Over, You Win");
                 //winPanelGO.SetActive(true);
                 timerText.text = "You";

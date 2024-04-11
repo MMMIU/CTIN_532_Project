@@ -48,6 +48,10 @@ namespace Items
         {
             Debug.Log("ItemMazeGate SetInteractableClientRpc " + interactable);
             door.SetActive(!interactable);
+            if(interactable)
+            {
+                SFXManager.Instance.PlaySFX("level_success");
+            }
         }
     }
 }

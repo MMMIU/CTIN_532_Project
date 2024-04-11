@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6261447757176268048}
   - component: {fileID: 2395962904470986240}
   - component: {fileID: 2857874807681551667}
+  - component: {fileID: 8526201397220478560}
   m_Layer: 0
   m_Name: SpiderWeb_01
   m_TagString: Enemy
@@ -930,6 +931,20 @@ MonoBehaviour:
   quests:
   - First: 1
     Second: 3
+--- !u!114 &8526201397220478560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314720656342306689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92f7b722a678abe4abaf21db90900c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 6261447757176268048}
 --- !u!1001 &2572639114027814793
 PrefabInstance:
   m_ObjectHideFlags: 0

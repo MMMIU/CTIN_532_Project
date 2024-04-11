@@ -39,6 +39,7 @@ public class PrincessShield : NetworkBehaviour
         Debug.Log("ShieldUp");
         animator.SetBool("show", true);
         coll.enabled = true;
+        gameObject.GetComponentInParent<Player>().playerData.Value.playerUnstoppable = true;
     }
 
     public void ShieldDown(PrincessSkillDowngradeEvent baseEvent)

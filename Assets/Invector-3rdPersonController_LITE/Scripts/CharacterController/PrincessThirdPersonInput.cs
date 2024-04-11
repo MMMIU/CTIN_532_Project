@@ -21,6 +21,7 @@ namespace Invector.vCharacterController
         private Vector2 cameraValue = Vector2.zero;
 
         public bool healing = false;
+        public bool dead = false;
 
         #endregion
 
@@ -42,6 +43,7 @@ namespace Invector.vCharacterController
 
         protected virtual void FixedUpdate()
         {
+            if(dead) return;
             cc.UpdateMotor();               // updates the ThirdPersonMotor methods
             cc.ControlLocomotionType();     // handle the controller locomotion type and movespeed
             cc.ControlRotationType();       // handle the controller rotation type
@@ -49,7 +51,8 @@ namespace Invector.vCharacterController
 
         protected virtual void Update()
         {
-
+            if(dead) return;
+            FixRotation();
             InputHandle();                  // update the input methods
             cc.UpdateAnimator();            // updates the Animator Parameters
 
@@ -68,11 +71,12 @@ namespace Invector.vCharacterController
             inputReader.JumpEvent += JumpInput;
             inputReader.HealSkillEvent += HealInput;
             EventManager.Instance.Subscribe<EnemyAttackEvent>(HitByEnemy);
+            EventManager.Instance.Subscribe<PlayerDeadEvent>(Dead);
         }
         private void HitByEnemy(EventBase baseEvent)
         {
             EnemyAttackEvent e = baseEvent as EnemyAttackEvent;
-            if (e.playerType == Items.ItemAccessbility.princess)
+            if (e.playerType == Items.ItemAccessbility.princess && !dead)
             {
                 animator.Play("HitReaction");
             }
@@ -88,6 +92,7 @@ namespace Invector.vCharacterController
             inputReader.JumpEvent -= JumpInput;
             inputReader.HealSkillEvent -= HealInput;
             EventManager.Instance.Unsubscribe<EnemyAttackEvent>(HitByEnemy);
+            EventManager.Instance.Unsubscribe<PlayerDeadEvent>(Dead);
         }
 
         //public void InteractWithUI()
@@ -165,6 +170,13 @@ namespace Invector.vCharacterController
         }
 
 
+        public void FixRotation()
+        {
+            if (transform.eulerAngles.x != 0f || transform.eulerAngles.z != 0f)
+            {
+                transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
+            }
+        }
         public virtual void MoveInput()
         {
             float x = movementValue.x;
@@ -251,6 +263,23 @@ namespace Invector.vCharacterController
             if (JumpConditions())
             {
                 cc.Jump();
+            }
+        }
+
+        private void Dead(EventBase baseEvent)
+        {
+            if (IsLocalPlayer)
+            {
+                PlayerDeadEvent e = baseEvent as PlayerDeadEvent;
+                if (e.playerType == Items.ItemAccessbility.princess)
+                {
+                    GetComponent<Rigidbody>().isKinematic = true;
+                    this.gameObject.GetComponent<Collider>().enabled = false;
+                    dead = true;
+                    //this.gameObject.layer = LayerMask.NameToLayer("DeadPlayer");
+                    animator.Play("Death");
+                    animator.SetBool("Died", true);
+                }
             }
         }
 

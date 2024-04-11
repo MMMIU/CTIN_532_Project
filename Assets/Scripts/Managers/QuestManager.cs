@@ -28,6 +28,11 @@ namespace Quest
 
         private TaskData m_taskData = new TaskData();
 
+        public bool CheckTaskExist(int chainId, int subId)
+        {
+            return m_taskData.GetData(chainId, subId) != null;
+        }
+
         public TaskData TaskData
         {
             get => m_taskData;
@@ -41,12 +46,6 @@ namespace Quest
             // assign first task after 2 seconds
             AssignTaskServerRpc(1, 1);
             //StartCoroutine(AssignFirstTask());
-        }
-
-        private IEnumerator AssignFirstTask()
-        {
-            yield return new WaitForSeconds(2f);
-            AssignTaskServerRpc(1, 1);
         }
 
         [ClientRpc]

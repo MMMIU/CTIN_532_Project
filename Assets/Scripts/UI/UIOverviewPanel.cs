@@ -24,14 +24,14 @@ namespace UI
         [SerializeField]
         private TextMeshProUGUI countDownText;
 
-        [SerializeField]
-        private float countDown = 10f;
+        //[SerializeField]
+        //private float countDown = 10f;
 
         [SerializeField]
         private ClickableBase clickableObj;
 
-        [SerializeField]
-        private float startTime = -1;
+        //[SerializeField]
+        //private float startTime = -1;
 
         public override void SetData(object data)
         {
@@ -51,45 +51,45 @@ namespace UI
             inputReader.PointEvent += OnPointEvent;
             // set mouse position to center but not locked
             StartCoroutine(CenterCursor());
-            startTime = -1;
+            //startTime = -1;
             countDownText.text = "";
             StartCoroutine(StartCountDown());
         }
 
         IEnumerator CenterCursor()
         {
+            yield return new WaitForEndOfFrame();
             Cursor.lockState = CursorLockMode.Locked;
-            yield return null;
-            Cursor.lockState = CursorLockMode.None;
         }
 
         IEnumerator StartCountDown()
         {
             yield return new WaitForSeconds(2);
-            startTime = TimeManager.Instance.GetTimeUnScaled();
+            Cursor.lockState = CursorLockMode.None;
+            //startTime = TimeManager.Instance.GetTimeUnScaled();
             inputReader.VCamMoveEvent += RotateVCam;
         }
 
         private void Update()
         {
-            if (startTime < 0)
-            {
-                countDownText.text = "";
-                return;
-            }
-            float timeElapsed = TimeManager.Instance.GetTimeUnScaled() - startTime;
-            float timeLeft = countDown - timeElapsed;
-            if (timeLeft <= 0)
-            {
-                timeLeft = -1;
-                Debug.LogWarning("Time's up!");
-                countDownText.text = "Time's up!";
-                Close();
-            }
-            else
-            {
-                countDownText.text = ((int)timeLeft).ToString() + "s Before Exit";
-            }
+            //if (startTime < 0)
+            //{
+            //    countDownText.text = "";
+            //    return;
+            //}
+            //float timeElapsed = TimeManager.Instance.GetTimeUnScaled() - startTime;
+            //float timeLeft = countDown - timeElapsed;
+            //if (timeLeft <= 0)
+            //{
+            //    timeLeft = -1;
+            //    Debug.LogWarning("Time's up!");
+            //    countDownText.text = "Time's up!";
+            //    Close();
+            //}
+            //else
+            //{
+            //    countDownText.text = ((int)timeLeft).ToString() + "s Before Exit";
+            //}
         }
 
         public override void OnUIDisable()
@@ -167,7 +167,7 @@ namespace UI
 
         public override void Close()
         {
-            startTime = -1;
+            //startTime = -1;
             UnRegisterEvents();
             new VCamChangeEvent();
             if (clickableObj != null)

@@ -20,6 +20,7 @@ namespace Players
     {
         [SerializeField]
         private InputReader inputReader;
+
         public NetworkVariable<PlayerData> playerData = new();
 
         [SerializeField]

@@ -1953,6 +1953,7 @@ MonoBehaviour:
       playerEnergy: 0
       playerMaxEnergy: 100
       playerDead: 0
+      playerUnstoppable: 0
   cinemachineVirtualCamera: {fileID: 6765075641249948615}
   playerNameText: {fileID: 8171590583704229843}
   playerType: 0
@@ -10513,7 +10514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 5185
+    m_Bits: 136257
   m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2

@@ -29,7 +29,7 @@ namespace Items
             {
                 Debug.Log("OnTriggerEnter: " + other.tag);
                 Player p = other.GetComponent<Player>();
-                if (p.IsLocalPlayer && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility))
+                if (p.IsLocalPlayer)
                 {
                     Debug.Log("OnTriggerEnter: " + other.tag);
                     inputReader.InteractionEvent += OnInteract;
@@ -42,7 +42,7 @@ namespace Items
             if (other.CompareTag("Player"))
             {
                 Player p = other.GetComponent<Player>();
-                if (p.IsLocalPlayer && (itemDataItem.accessbility == ItemAccessbility.both || p.playerType == itemDataItem.accessbility))
+                if (p.IsLocalPlayer)
                 {
                     inputReader.InteractionEvent -= OnInteract;
                 }
@@ -69,6 +69,8 @@ namespace Items
             Debug.Log("GiveKeyToClientRpc: " + playerType);
             new KeyCollectEvent(itemDataItem.item_sub_id, playerType);
             gameObject.SetActive(false);
+            SFXManager.Instance.PlaySFX("interaction");
+            inputReader.InteractionEvent -= OnInteract;
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Players
         public float playerEnergy;
         public float playerMaxEnergy;
         public bool playerDead;
+        public bool playerUnstoppable;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
@@ -29,6 +30,7 @@ namespace Players
             serializer.SerializeValue(ref playerEnergy);
             serializer.SerializeValue(ref playerMaxEnergy);
             serializer.SerializeValue(ref playerDead);
+            serializer.SerializeValue(ref playerUnstoppable);
         }
 
         public string PlayerName { set { playerName = new FixedString32Bytes(value); } get { return playerName.Value.ToString(); } }

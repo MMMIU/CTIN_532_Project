@@ -240,6 +240,18 @@ namespace Managers
             }
         }
 
+        public void CloseAllBlockPanel(UIBase excludePanel)
+        {
+            List<UIBase> panels = new List<UIBase>(blockPanelStack);
+            foreach (var panel in panels)
+            {
+                if (panel != excludePanel)
+                {
+                    Close(panel);
+                }
+            }
+        }
+
         public void Destroy<T>() where T : UIBase
         {
             var type = typeof(T);
@@ -288,8 +300,8 @@ namespace Managers
             var type = typeof(T);
             if (!panelDic.TryGetValue(type, out var panel))
             {
-                Debug.LogError($"Panel not found: {type.Name}");
-                return default;
+                Debug.LogWarning($"Panel not found: {type.Name}");
+                return null;
             }
             else
             {

@@ -5,6 +5,7 @@ using Players;
 using Quest;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -32,16 +33,19 @@ namespace Puzzle
         private void OnPuzzleEnemyAttack(PuzzleEnemyAttackEvent e)
         {
             Debug.Log("PuzzleGameController::OnPuzzleEnemyAttack::" + e.playerType);
-            if (GameManager.Instance.LocalPlayer.playerType == ItemAccessbility.knight)
-            {
-                //SpawnKnightServerRpc();
-                GameManager.Instance.LocalPlayer.transform.position = knightSpawnPoint.position;
-            }
-            else if (GameManager.Instance.LocalPlayer.playerType == ItemAccessbility.princess)
-            {
-                //SpawnPrincessServerRpc();
-                GameManager.Instance.LocalPlayer.transform.position = princessSpawnPoint.position;
-            }
+            GameManager.Instance.LocalPlayer.transform.position = knightSpawnPoint.position;
+            UIOverviewPanel panel = UIManager.Instance.Get<UIOverviewPanel>();
+            panel?.Close();
+            //if (GameManager.Instance.LocalPlayer.playerType == ItemAccessbility.knight)
+            //{
+            //    //SpawnKnightServerRpc();
+            //    GameManager.Instance.LocalPlayer.transform.position = knightSpawnPoint.position;
+            //}
+            //else if (GameManager.Instance.LocalPlayer.playerType == ItemAccessbility.princess)
+            //{
+            //    //SpawnPrincessServerRpc();
+            //    GameManager.Instance.LocalPlayer.transform.position = princessSpawnPoint.position;
+            //}
         }
 
         [ServerRpc]

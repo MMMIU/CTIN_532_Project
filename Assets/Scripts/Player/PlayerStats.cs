@@ -1,8 +1,10 @@
 using Events;
 using Items;
 using Managers;
+using Quest;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -72,6 +74,11 @@ namespace Players
                 Debug.Log("PlayerTakeDamageServerRpc: Player is dead");
                 return;
             }
+            if(playerData.Value.playerUnstoppable)
+            {
+                Debug.LogWarning("PlayerTakeDamageServerRpc: Player is unstoppable");
+                return;
+            }
             Debug.Log("PlayerTakeDamageServerRpc: " + playerData.Value.PlayerName + " " + damage);
             playerData.Value.playerHealth -= damage;
             if (playerData.Value.playerHealth <= 0)
@@ -81,15 +88,48 @@ namespace Players
             }
             Debug.Log("PlayerTakeDamageServerRpc: " + playerData.Value.PlayerName + " " + playerData.Value.playerHealth);
             playerData.SetDirty(true);
-            playerData.OnValueChanged?.Invoke(null,playerData.Value);
+            playerData.OnValueChanged?.Invoke(null, playerData.Value);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetGameOverServerRpc(bool gameover)
+        {
+            GameManager.Instance.gameover |= gameover;
         }
 
         [ClientRpc]
         public void PlayerDeadClientRpc(ItemAccessbility playerType)
         {
-            if(playerType == playerData.Value.playerType)
+            // if player is princess, game over
+            if (playerType == ItemAccessbility.princess)
             {
                 new PlayerDeadEvent(playerType);
+                UIManager.Instance.OpenPanel<UIFallen>(playerType);
+                GameManager.Instance.gameover = true;
+                SetGameOverServerRpc(true);
+                return;
+            }
+            // if local player is knight, die
+            if (NetworkManager.Singleton.LocalClient.PlayerObject.GetComponentInChildren<Player>().playerType == ItemAccessbility.knight)
+            {
+                new PlayerDeadEvent(playerType);
+                UIManager.Instance.OpenPanel<UIFallen>(playerType);
+            }
+            // if local player is princess, game over or pop up message according to quest
+            else
+            {
+                if (QuestManager.Instance.CheckTaskExist(6, 1))
+                {
+                    UIManager.Instance.OpenPanel<UIPopUpBar>("Knight has been fallen...");
+                    return;
+                }
+                else
+                {
+                    UIManager.Instance.OpenPanel<UIFallen>(playerType);
+                    GameManager.Instance.gameover = true;
+                    SetGameOverServerRpc(true);
+                }
+
             }
         }
 
@@ -101,6 +141,14 @@ namespace Players
             playerData.Value.playerDead = false;
             playerData.SetDirty(true);
             playerData.OnValueChanged?.Invoke(null, playerData.Value);
+            PlayerRespawnClientRpc(playerData.Value.playerType);
+        }
+
+        [ClientRpc]
+        public void PlayerRespawnClientRpc(ItemAccessbility playerType)
+        {
+            Debug.Log("PlayerRespawnClientRpc: " + playerType);
+            UIManager.Instance.Close<UIFallen>();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -111,7 +159,7 @@ namespace Players
             {
                 return;
             }
-            if(playerData.Value.playerHealth == playerData.Value.playerMaxHealth)
+            if (playerData.Value.playerHealth == playerData.Value.playerMaxHealth)
             {
                 return;
             }

@@ -48,11 +48,11 @@ namespace Enemies
             base.TakeDamageServerRpc(damage);
         }
 
-        [ClientRpc]
-        public override void DieClientRpc()
-        {
-            animator.SetTrigger("die");
-        }
+        //[ClientRpc]
+        //public override void DieClientRpc()
+        //{
+        //    animator.SetTrigger("die");
+        //}
 
         public void OnDieAnimationEnd()
         {

@@ -16,10 +16,10 @@ namespace Items
 {
     public class ItemMazeEye : ItemBase
     {
-        [SerializeField]
-        private float cooldown = 10f;
+        //[SerializeField]
+        //private float cooldown = 10f;
 
-        float timer = -1f;
+        //float timer = -1f;
 
         public override void OnNetworkSpawn()
         {
@@ -34,16 +34,16 @@ namespace Items
 
         private void Update()
         {
-            if (timer < 0)
-            {
-                return;
-            }
-            timer += Time.deltaTime;
-            if (timer >= cooldown)
-            {
-                timer = -1f;
-                SetInteractableServerRpc(true);
-            }
+            //if (timer < 0)
+            //{
+            //    return;
+            //}
+            //timer += Time.deltaTime;
+            //if (timer >= cooldown)
+            //{
+            //    timer = -1f;
+            //    SetInteractableServerRpc(true);
+            //}
         }
 
         private void OnTriggerEnter(Collider other)
@@ -72,15 +72,16 @@ namespace Items
 
         private void OnInteract()
         {
-            if (timer >= 0f)
-            {
-                UIManager.Instance.OpenPanel<UIPopUpBar>().SetPopUpText("Still on cooldown, " + (int)(cooldown - timer) + " seconds remaining");
-                return;
-            }
+            //if (timer >= 0f)
+            //{
+            //    UIManager.Instance.OpenPanel<UIPopUpBar>().SetPopUpText("Still on cooldown, " + (int)(cooldown - timer) + " seconds remaining");
+            //    return;
+            //}
             Debug.Log("ItemMazeEye OnInteract" + transform.position);
             UIManager.Instance.OpenPanel<UIOverviewPanel>(transform.position);
-            timer = 0f;
-            SetInteractableServerRpc(false);
+            //timer = 0f;
+            SFXManager.Instance.PlaySFX("interaction");
+            //SetInteractableServerRpc(false);
         }
     }
 }

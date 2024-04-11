@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using TMPro;
 using UI;
 using UnityEngine;
+using USCG.Core.Telemetry;
 
 namespace Hanoi
 {
@@ -64,6 +65,8 @@ namespace Hanoi
         [SerializeField]
         Collider gameAreaCollider;
 
+        private MetricId _hanoiRecord;
+
         private void OnTriggerExit(Collider other)
         {
             // if player is out of game area, game over
@@ -73,14 +76,25 @@ namespace Hanoi
             }
         }
 
-        private void Start()
+        private void OnEnable()
         {
+            movesLeft = totalMoves;
             EventManager.Instance.Subscribe<HanoiControlStartEvent>(OnHanoiControlStartEvent);
+            _hanoiRecord = TelemetryManager.instance.CreateSampledMetric<string>("hanoiRecordMetric");
+        }
+
+        private void OnDisable()
+        {
+            EventManager.Instance.Unsubscribe<HanoiControlStartEvent>(OnHanoiControlStartEvent);
         }
 
         private void OnHanoiControlStartEvent(HanoiControlStartEvent e)
         {
             UnregisterEvents();
+            if (isStarted && movesLeft < totalMoves)
+            {
+                TelemetryManager.instance.AddMetricSample(_hanoiRecord, "ReStart " + (Time.time - startTime) + " " + movesLeft);
+            }
             StartGame();
         }
 
@@ -126,13 +140,14 @@ namespace Hanoi
             }
             // show player layer
             Camera.main.cullingMask |= playerLayer;
-            if(selectedDisk!=null||freeDisk!=null)
+            if (selectedDisk != null || freeDisk != null)
             {
                 UIManager.Instance.Close<UIAim>();
             }
 
             if (endTower.DiskCount == disks.Length)
             {
+                TelemetryManager.instance.AddMetricSample(_hanoiRecord, "Win " + (Time.time - startTime) + " " + movesLeft);
                 SFXManager.Instance.PlaySFX("level_success");
                 Debug.Log("Game Over, You Win");
                 //winPanelGO.SetActive(true);
@@ -142,6 +157,7 @@ namespace Hanoi
             }
             else
             {
+                TelemetryManager.instance.AddMetricSample(_hanoiRecord, "Lose " + (Time.time - startTime) + " " + movesLeft);
                 Debug.Log("Game Over, You Lose " + endTower.DiskCount);
                 //losePanelGO.SetActive(true);
                 timerText.text = "You";

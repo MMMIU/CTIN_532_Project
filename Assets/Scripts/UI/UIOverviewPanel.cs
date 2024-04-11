@@ -44,7 +44,6 @@ namespace UI
         {
             base.OnUIEnable();
             new ClickableHintEvent(true);
-            inputReader.CloseUIPanelEvent += Close;
             inputReader.MiddleClickEvent += ShowHideHintImage;
             inputReader.LeftClickStartEvent += DoClickStartEvent;
             inputReader.LeftClickEndEvent += DoClickEndEvent;
@@ -65,6 +64,7 @@ namespace UI
         IEnumerator StartCountDown()
         {
             yield return new WaitForSeconds(2);
+            inputReader.CloseUIPanelEvent += Close;
             Cursor.lockState = CursorLockMode.None;
             //startTime = TimeManager.Instance.GetTimeUnScaled();
             inputReader.VCamMoveEvent += RotateVCam;

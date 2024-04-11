@@ -4,7 +4,7 @@
     "item_type": "book",
     "item_sub_id": 1,
     "name": "book_1",
-    "desc": "Welcome, brave warriors.\n\nIt may have come to your attention that certain mechanisms within this dungeon, this book included, require the unique magic that you, the princess, possess for operation. Therefore, it is imperative that you relay this message to your knight:\n\nYour mission is straightforward: escape from this dungeon.\n\nBeyond these walls lies not the glimmer of gold or silver treasures, but the promise of freedom. You are to confront three challenges, each demanding cooperation to surmount. Knight, it is your duty to safeguard the princess; princess, your intellect is the key to unraveling the mysteries. Bear in mind, unity is our greatest strength.",
+    "desc": "Welcome, brave warriors.\n\nIt may have come to your attention that most mechanisms within this dungeon, all guide books included, require the unique magic that you, the princess, possess for operation. Therefore, it is imperative that you relay messages to your knight:\n\nYour mission is straightforward: escape from this dungeon.\n\nBeyond these walls lies not the glimmer of gold or silver treasures, but the promise of freedom. You are to confront three challenges, each demanding cooperation to surmount. Knight, it is your duty to safeguard the princess; princess, your intellect is the key to unraveling the mysteries. Bear in mind, unity is our greatest strength.",
     "accessbility": "princess",
     "init_interactable": "no"
   },
@@ -148,7 +148,7 @@
     "item_type": "hanoi_control",
     "item_sub_id": 1,
     "name": "hanoi_control",
-    "desc": "Move all disks to the rightmost tower without placing larger disks on smaller ones. \n\nPress and hold, then release the right mouse button to select a disk at the center crosshair. Click again to drop it. Adjust disk distance with the mouse wheel. \n\nComplete within time and move limits.",
+    "desc": "Move all disks to the rightmost tower without placing larger disks on smaller ones. \n\nPress and hold, then release the right mouse button to select a disk at the center crosshair. Click again to drop it. Adjust disk distance with the mouse scrollwheel. \n\nComplete within time and move limits.",
     "accessbility": "princess",
     "init_interactable": "yes"
   },
@@ -157,7 +157,7 @@
     "item_type": "book",
     "item_sub_id": 2,
     "name": "book_2",
-    "desc": "Well done, warriors, you are nearing victory. \n\nNow, the knight's mission to protect the princess is complete, and he may leave the dungeon via the stairs on the left to gain his freedom. Meanwhile, the princess can descend the stairs on the right to claim her reward!",
+    "desc": "Well done, warriors, you are nearing victory. \n\nNow, the knight's mission to protect the princess is complete, and he may leave the dungeon via the stairs on the left to gain his reward.\n\nMeanwhile, the princess can descend the stairs on the right to claim her reward!",
     "accessbility": "princess",
     "init_interactable": "yes"
   },
@@ -166,7 +166,7 @@
     "item_type": "book",
     "item_sub_id": 3,
     "name": "book_3",
-    "desc": "Watch out, a patrolling guard can teleport you back if attacked. However, if the knight hits it, the guard also gets teleported. So, please move together, do not separate.\n\nWhenever the princess uses thecontrol panel, she gains an aerial view. She needs to find the way out within a limited time and create a path by moving the fences inside the maze.\n\nPay attention to the boxes in the maze. Also please note that when the fence moves horizontally, it's unstoppable.",
+    "desc": "Watch out, a patrolling guard can teleport you back if attacked. However, if the knight hits it, the guard also gets teleported. So, please move together, do not separate.\n\nWhenever the princess uses thecontrol panel, she gains an aerial view. She needs to find the way out within a limited time and create a path by moving the fences inside the maze.\n\nPay attention to the boxes in the maze. Use the waypoints to guide your partner.",
     "accessbility": "princess",
     "init_interactable": "yes"
   },

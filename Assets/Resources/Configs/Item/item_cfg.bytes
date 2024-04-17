@@ -166,7 +166,7 @@
     "item_type": "book",
     "item_sub_id": 3,
     "name": "book_3",
-    "desc": "Watch out, a patrolling guard can teleport you back if attacked. However, if the knight hits it, the guard also gets teleported. So, please move together, do not separate.\n\nWhenever the princess uses the control panel, she gains an aerial view. She needs to find the way out within a limited time and create a path by moving the fences inside the maze.\n\nPay attention to the boxes in the maze. Use the waypoints to guide your partner.",
+    "desc": "Watch out, a patrolling guard can teleport you back if attacked. However, if the knight hits it, the guard also gets teleported. So, please move together, do not separate.\n\nWhenever the princess uses the control panel, she gains an aerial view. She needs to find the way out within a limited time and create a path by moving the fences inside the maze.\n\nTo lift the fence, the princess needs to press and hold the left mouse button on the fence.\n\nPay attention to the boxes in the maze. Use the waypoints to guide your partner.",
     "accessbility": "princess",
     "init_interactable": "yes"
   },

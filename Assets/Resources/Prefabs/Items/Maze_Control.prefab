@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2419261965613540430}
   - component: {fileID: 1451758328534674373}
   - component: {fileID: 2750931108580504987}
-  - component: {fileID: 1255325306845304412}
   - component: {fileID: 7331858742558389250}
   - component: {fileID: 1480693008947603956}
   - component: {fileID: 2843014669143673010}
+  - component: {fileID: 6208073400185735110}
   m_Layer: 0
   m_Name: Maze_Control
   m_TagString: Untagged
@@ -88,28 +88,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1255325306845304412
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 630642046094321907}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 93be39eaa153e3a4ea8d88a078d0c290, type: 3}
 --- !u!114 &7331858742558389250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,7 +133,6 @@ MonoBehaviour:
   inputReader: {fileID: 11400000, guid: 4bd3c0a6503ddb54a9105c822cef25ec, type: 2}
   interactable:
     m_InternalValue: 0
-  cooldown: 40
 --- !u!135 &2843014669143673010
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -177,6 +154,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.2072568
   m_Center: {x: 0.001437664, y: 0.75428104, z: 0.45297575}
+--- !u!65 &6208073400185735110
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630642046094321907}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5759954, y: 3.2617502, z: 0.60467935}
+  m_Center: {x: 0.0014300942, y: 1.6308751, z: 6.445077e-18}
 --- !u!1001 &8960459564357468034
 PrefabInstance:
   m_ObjectHideFlags: 0
